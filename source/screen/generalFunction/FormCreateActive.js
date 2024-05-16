@@ -9,93 +9,100 @@ import {
   TouchableOpacity,
   ScrollView,
   Modal,
-  Alert
+  Alert,
 } from "react-native";
 import React, { useState } from "react";
 import FontSize from "../../component/FontSize";
 import Color from "../../component/Color";
 import { screenWidth, screenHeight } from "../../component/DimensionsScreen";
 // import { DarkTheme } from "@react-navigation/native";
-import DatePicker from 'react-native-modern-datepicker'
-import moment from "moment"
+import DatePicker from "react-native-modern-datepicker";
+import moment from "moment";
 
 export default function FormCreateActive() {
-
   // Thời gian tổ chức
-  const today = new Date()
-  
+  const today = new Date();
+
   // ràng buộc deadline minimum tối thiểu là ngày hiện tại + 1
-  const todayFormat = moment(today.setDate(today.getDate() + 1)).format('YYYY/MM/DD')
+  const todayFormat = moment(today.setDate(today.getDate() + 1)).format(
+    "YYYY/MM/DD"
+  );
 
   // ngày tổ chức cách ngày hiện tại ít nhất 7 ngày
-  const convertDateOrganize = moment(today.setDate(today.getDate() + 7)).format('YYYY/MM/DD')
-  
+  const convertDateOrganize = moment(today.setDate(today.getDate() + 7)).format(
+    "YYYY/MM/DD"
+  );
 
-  const [nameActive, setNameActive] = useState()
+  const [nameActive, setNameActive] = useState();
 
-  const [openOrganize, setOpenOrganize] = useState(false) // open and close the modal
-  const [dateOrganize, setdateOrganize] = useState('DD/MM/YYYY')
-
+  const [openOrganize, setOpenOrganize] = useState(false); // open and close the modal
+  const [dateOrganize, setdateOrganize] = useState("DD/MM/YYYY");
 
   const handleOnPressOrganize = () => {
-    setOpenOrganize(!openOrganize)
-  }
+    setOpenOrganize(!openOrganize);
+  };
 
-  const [maxDateDeadLine, setMaxDateDeadLine] = useState()
+  const [maxDateDeadLine, setMaxDateDeadLine] = useState();
   const handleChangeOrganize = (propDate) => {
-    const reversedStrOrganize = propDate.split('/').reverse().join('/');
-    setdateOrganize(reversedStrOrganize)
-    
+    const reversedStrOrganize = propDate.split("/").reverse().join("/");
+    setdateOrganize(reversedStrOrganize);
+
     // khi user chọn thời gian tổ chức thì ta sẽ lấy thời gian user chọn
     // là propDate, sau đó ta dùng propDate để tạo object moment rồi lấy nó
     // subtract đi 3 ngày và format 'YYYY/MM/DD' sau đó dùng setMaxDateDeadLine
     // để cho maxDateDeadLine thay đổi và gán nó vào props maximumDate = {maxDateDeadLine}
     // của hạn chót đăng kí để giới hạn thời gian hạn chót đăng kí phải thấp
     // hơn thời gian tổ chức ít nhất 3 ngày
-    setMaxDateDeadLine(moment(propDate, 'YYYY/MM/DD').subtract(3, 'day').format('YYYY/MM/DD'))
-  }
+    setMaxDateDeadLine(
+      moment(propDate, "YYYY/MM/DD").subtract(3, "day").format("YYYY/MM/DD")
+    );
+  };
 
   // Hạn chót tham gia
-  const [openDeadLine, setOpenDeadLine] = useState(false) // open and close the modal
-  const [dateDeadLine, setdateDeadLine] = useState('DD/MM/YYYY')
+  const [openDeadLine, setOpenDeadLine] = useState(false); // open and close the modal
+  const [dateDeadLine, setdateDeadLine] = useState("DD/MM/YYYY");
 
   const handleOnPressDeadLine = () => {
     // bắt lỗi logic nếu chưa chọn tg tổ chức thì ko thêm hạn chót
     // đăng kí đươc
     if (dateOrganize === "DD/MM/YYYY") {
       Alert.alert("Thông báo", "Bạn chưa chọn thời gian tổ chức");
-    } 
-    else{
+    } else {
       setOpenDeadLine(!openDeadLine);
     }
-
-  }
+  };
 
   const handleChangeDeadLine = (propDate) => {
-    const reversedStrDeadLine = propDate.split('/').reverse().join('/');
-    setdateDeadLine(reversedStrDeadLine)
+    const reversedStrDeadLine = propDate.split("/").reverse().join("/");
+    setdateDeadLine(reversedStrDeadLine);
     // console.log(reversedStr)
-  }
+  };
 
   const navigateFormContinue = () => {
     // thiếu 1 trong 3 thông tin thì ko thể next
-    const date1 = moment(dateOrganize, 'DD/MM/YYYY');
-    const date2 = moment(dateDeadLine, 'DD/MM/YYYY').add(3, 'day');
+    const date1 = moment(dateOrganize, "DD/MM/YYYY");
+    const date2 = moment(dateDeadLine, "DD/MM/YYYY").add(3, "day");
 
     // console.log(date1, date2)
-    if(nameActive === '' || dateOrganize === 'DD/MM/YYYY' ||  dateDeadLine === 'DD/MM/YYYY'){
-      Alert.alert('Thông báo', 'Bạn vui lòng nhập đủ thông tin')
+    if (
+      nameActive === "" ||
+      dateOrganize === "DD/MM/YYYY" ||
+      dateDeadLine === "DD/MM/YYYY"
+    ) {
+      Alert.alert("Thông báo", "Bạn vui lòng nhập đủ thông tin");
     }
     // đk thứ 2 này là để ràng buộc nếu user đổi ngày tổ chức mà
     // quên đổi lại deadline cho hợp lệ thì khi ấn tiếp theo thì
     // sẽ đc hệ thống nhắc nhở
-    else if((date2.isAfter(date1, 'day'))){
-      Alert.alert('Thông báo', 'Hạn chót đăng kí trước ngày tổ chức tối thiểu 3 ngày')
+    else if (date2.isAfter(date1, "day")) {
+      Alert.alert(
+        "Thông báo",
+        "Hạn chót đăng kí trước ngày tổ chức tối thiểu 3 ngày"
+      );
+    } else {
+      Alert.alert("chuyển trang");
     }
-    else{
-      Alert.alert('chuyển trang')
-    }
-  }
+  };
 
   return (
     <View style={styles.container}>
@@ -208,10 +215,9 @@ export default function FormCreateActive() {
               style={styles.formActive}
               autoFocus={true}
               onChangeText={(nameActiveInput) => {
-                setNameActive(nameActiveInput)
+                setNameActive(nameActiveInput);
               }}
               value={nameActive}
-            
             ></TextInput>
           </View>
 
@@ -265,10 +271,10 @@ export default function FormCreateActive() {
                   <DatePicker
                     mode="calendar"
                     minimumDate={convertDateOrganize}
-                     // do ở trên mình convert string thành DD//MM/YYYY
+                    // do ở trên mình convert string thành DD//MM/YYYY
                     // nên sau đó trx khi đưa vào hệ thống sử lí mình
                     // phải convert ngược lại
-                    selected={dateOrganize.split('/').reverse().join('/')}
+                    selected={dateOrganize.split("/").reverse().join("/")}
                     onDateChange={handleChangeOrganize}
                   />
 
@@ -331,12 +337,12 @@ export default function FormCreateActive() {
                 <View style={styles.modalView}>
                   <DatePicker
                     mode="calendar"
-                    minimumDate ={todayFormat}
-                    maximumDate = {maxDateDeadLine}
+                    minimumDate={todayFormat}
+                    maximumDate={maxDateDeadLine}
                     // do ở trên mình convert string thành DD//MM/YYYY
                     // nên sau đó trx khi đưa vào hệ thống sử lí mình
                     // phải convert ngược lại
-                    selected={dateDeadLine.split('/').reverse().join('/')}
+                    selected={dateDeadLine.split("/").reverse().join("/")}
                     onDateChange={handleChangeDeadLine}
                   />
 
@@ -351,7 +357,13 @@ export default function FormCreateActive() {
             </Modal>
           </View>
 
-          <View style={{ flexDirection: "row", alignItems: 'center', justifyContent: 'space-between'}}>
+          <View
+            style={{
+              flexDirection: "row",
+              alignItems: "center",
+              justifyContent: "space-between",
+            }}
+          >
             <Text
               style={[styles.headerFormActive, { color: Color.colorRemove }]}
             >
@@ -383,8 +395,8 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     zIndex: 2,
-    width: (2/3) * screenWidth,
-    marginLeft: 90
+    width: (2 / 3) * screenWidth,
+    marginLeft: 90,
   },
   nameSchool: {
     fontSize: FontSize.sizeMain,
@@ -405,19 +417,19 @@ const styles = StyleSheet.create({
   },
 
   containerFormActive: {
-    width: '100%',
+    width: "100%",
     height: 100,
     marginBottom: 30,
     // borderWidth: 1,
-    justifyContent: 'center'
+    justifyContent: "center",
   },
 
   headerFormActive: {
-     fontSize: 20, 
-     fontWeight: '700',
-     color: Color.colorTextMain, 
-     marginBottom: 10,
-     marginRight: 4
+    fontSize: 20,
+    fontWeight: "700",
+    color: Color.colorTextMain,
+    marginBottom: 10,
+    marginRight: 4,
   },
 
   formActive: {
@@ -426,31 +438,31 @@ const styles = StyleSheet.create({
     color: Color.colorTextMain,
     borderBottomWidth: 1,
     borderBottomColor: Color.colorBorder,
-    paddingLeft: 20
+    paddingLeft: 20,
   },
 
   centeredView: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginTop: 22
+    justifyContent: "center",
+    alignItems: "center",
+    marginTop: 22,
   },
 
   modalView: {
     margin: 20,
-    backgroundColor: 'white',
+    backgroundColor: "white",
     borderRadius: 20,
-    width: '90%',
+    width: "90%",
     padding: 35,
-    alignItems: 'center',
-    shadowColor: '#000',
+    alignItems: "center",
+    shadowColor: "#000",
     shadowOffset: {
       width: 0,
-      height: 2
+      height: 2,
     },
     shadowOpacity: 0.25,
     shadowRadius: 4,
-    elevation: 5
+    elevation: 5,
   },
 
   btnDate: {
@@ -483,6 +495,6 @@ const styles = StyleSheet.create({
   resigter: {
     fontSize: FontSize.sizeSmall + 3,
     fontWeight: "600",
-    color: 'white',
+    color: "white",
   },
 });
