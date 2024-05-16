@@ -126,8 +126,21 @@ const MainComponent = ({navigation}) => {
   const changeIconPassword = () => setVisiblePassword(!visiblePassword)
 
   const verifyEmail = (email) => {
+    // regex email này chỉ cần trước @ có chữ và sau @ có chữ là ok
     let regex = new RegExp(/([!#-'*+-9=?A-Z^-~-]+(\.[!#-'*+-9=?A-Z^-~-]+)*|"([]!#-[^-~ \t]|(\\[\t -~]))+")@([!#-'*+-9=?A-Z^-~-]+(\.[!#-'*+-9=?A-Z^-~-]+)*|\[[\t -Z^-~]*])/)
-    if(regex.test(email)){ //todo
+    if(regex.test(email)){ 
+      return true
+    } 
+    return false
+  }
+
+  const [password, onChangePassword] = useState('')
+  const [isValidPassword, setIsValidPassword] = useState(false)
+  const verifyPassword = (password) => {
+    // regexPassword: Minimum eight characters, at least one uppercase letter, 
+    // one lowercase letter and one number:
+    let regexPassword = new RegExp(/(^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$)/)
+    if(regexPassword.test(password)){ 
       return true
     } 
     return false
@@ -177,7 +190,7 @@ const MainComponent = ({navigation}) => {
                 marginTop: 8,
               }}
             >
-              Email is invalid
+              Email chưa hợp lệ
             </Text>
           ) : (
             ""
@@ -190,7 +203,32 @@ const MainComponent = ({navigation}) => {
             placeholder="Password"
             placeholderTextColor={Color.colorTextMain}
             secureTextEntry={visiblePassword}
+            onChangeText={(password) => {
+              onChangePassword(password);
+              const isValidPw = verifyPassword(password);
+              isValidPw ? setIsValidPassword(true) : setIsValidPassword(false);
+            }}
+            // value này để hiển thị lên user
+            value={password}
           ></TextInput>
+
+          {isValidPassword === false ? (
+            <Text
+              style={{
+                top: 26,
+                position: 'absolute',
+                fontSize: 16,
+                color: "#ff5252",
+                fontWeight: "500",
+                marginTop: 8,
+              }}
+            >
+              Password chưa hợp lệ
+            </Text>
+          ) : (
+            ""
+          )}
+
           <TouchableOpacity onPress={changeIconPassword}>
             {visiblePassword ? (
               <Image
@@ -213,7 +251,7 @@ const MainComponent = ({navigation}) => {
 
       <View style={styles.containerBtnLoginFooter}>
         {/* onPress={navigateUITaps} */}
-        <TouchableOpacity style={styles.btnLogin} onPress ={navigateUITaps}>
+        <TouchableOpacity style={styles.btnLogin} onPress={navigateUITaps}>
           <Text style={styles.login}>LOGIN</Text>
         </TouchableOpacity>
 
@@ -233,7 +271,7 @@ const MainComponent = ({navigation}) => {
             position: "absolute",
             bottom: -190,
             right: -200,
-            zIndex: -1
+            zIndex: -1,
           }}
           resizeMode="contain"
         ></Image>

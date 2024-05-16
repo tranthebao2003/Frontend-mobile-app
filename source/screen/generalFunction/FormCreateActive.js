@@ -23,13 +23,13 @@ export default function FormCreateActive() {
 
   // Thời gian tổ chức
   const today = new Date()
+  
+  // ràng buộc deadline minimum tối thiểu là ngày hiện tại + 1
+  const todayFormat = moment(today.setDate(today.getDate() + 1)).format('YYYY/MM/DD')
+
   // ngày tổ chức cách ngày hiện tại ít nhất 7 ngày
-  const startDateOrganize = moment(today.setDate(today.getDate() + 7)).format('YYYY/MM/DD')
-
-
-  // hạn chót đăng kí phải nhỏ hơn ngày tổ chức ít  nhất 3 ngày
-  // startDateOrganize = moment(today.setDate(today.getDate() + 7)).format('YYYY/MM/DD')
-  // console.log(startDate)
+  const convertDateOrganize = moment(today.setDate(today.getDate() + 7)).format('YYYY/MM/DD')
+  
 
   const [nameActive, setNameActive] = useState()
 
@@ -41,12 +41,19 @@ export default function FormCreateActive() {
     setOpenOrganize(!openOrganize)
   }
 
+  const [maxDateDeadLine, setMaxDateDeadLine] = useState()
   const handleChangeOrganize = (propDate) => {
     const reversedStrOrganize = propDate.split('/').reverse().join('/');
     setdateOrganize(reversedStrOrganize)
-    // console.log(reversedStr)
+    
+    // khi user chọn thời gian tổ chức thì ta sẽ lấy thời gian user chọn
+    // là propDate, sau đó ta dùng propDate để tạo object moment rồi lấy nó
+    // subtract đi 3 ngày và format 'YYYY/MM/DD' sau đó dùng setMaxDateDeadLine
+    // để cho maxDateDeadLine thay đổi và gán nó vào props maximumDate = {maxDateDeadLine}
+    // của hạn chót đăng kí để giới hạn thời gian hạn chót đăng kí phải thấp
+    // hơn thời gian tổ chức ít nhất 3 ngày
+    setMaxDateDeadLine(moment(propDate, 'YYYY/MM/DD').subtract(3, 'day').format('YYYY/MM/DD'))
   }
-
 
   // Hạn chót tham gia
   const [openDeadLine, setOpenDeadLine] = useState(false) // open and close the modal
@@ -57,7 +64,8 @@ export default function FormCreateActive() {
     // đăng kí đươc
     if (dateOrganize === "DD/MM/YYYY") {
       Alert.alert("Thông báo", "Bạn chưa chọn thời gian tổ chức");
-    } else{
+    } 
+    else{
       setOpenDeadLine(!openDeadLine);
     }
 
@@ -71,9 +79,22 @@ export default function FormCreateActive() {
 
   const navigateFormContinue = () => {
     // thiếu 1 trong 3 thông tin thì ko thể next
+    const date1 = moment(dateOrganize, 'DD/MM/YYYY');
+    const date2 = moment(dateDeadLine, 'DD/MM/YYYY').add(3, 'day');
+
+    // console.log(date1, date2)
     if(nameActive === '' || dateOrganize === 'DD/MM/YYYY' ||  dateDeadLine === 'DD/MM/YYYY'){
       Alert.alert('Thông báo', 'Bạn vui lòng nhập đủ thông tin')
-    } 
+    }
+    // đk thứ 2 này là để ràng buộc nếu user đổi ngày tổ chức mà
+    // quên đổi lại deadline cho hợp lệ thì khi ấn tiếp theo thì
+    // sẽ đc hệ thống nhắc nhở
+    else if((date2.isAfter(date1, 'day'))){
+      Alert.alert('Thông báo', 'Hạn chót đăng kí trước ngày tổ chức tối thiểu 3 ngày')
+    }
+    else{
+      Alert.alert('chuyển trang')
+    }
   }
 
   return (
@@ -243,8 +264,11 @@ export default function FormCreateActive() {
                 <View style={styles.modalView}>
                   <DatePicker
                     mode="calendar"
-                    minimumDate={startDateOrganize}
-                    selected={dateOrganize}
+                    minimumDate={convertDateOrganize}
+                     // do ở trên mình convert string thành DD//MM/YYYY
+                    // nên sau đó trx khi đưa vào hệ thống sử lí mình
+                    // phải convert ngược lại
+                    selected={dateOrganize.split('/').reverse().join('/')}
                     onDateChange={handleChangeOrganize}
                   />
 
@@ -307,8 +331,12 @@ export default function FormCreateActive() {
                 <View style={styles.modalView}>
                   <DatePicker
                     mode="calendar"
-                    // maximumDate = {startDeadline}
-                    selected={dateDeadLine}
+                    minimumDate ={todayFormat}
+                    maximumDate = {maxDateDeadLine}
+                    // do ở trên mình convert string thành DD//MM/YYYY
+                    // nên sau đó trx khi đưa vào hệ thống sử lí mình
+                    // phải convert ngược lại
+                    selected={dateDeadLine.split('/').reverse().join('/')}
                     onDateChange={handleChangeDeadLine}
                   />
 
