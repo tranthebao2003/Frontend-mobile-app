@@ -9,6 +9,7 @@ import DetailActived from '../screen/user/detailActived/DetailActived'
 
 import { UITapDoanTruong } from '../screen/doanTruong/UITapDoanTruong';
 import DetailActiveDTruong from '../screen/doanTruong/detailActive/DetailActiveDoanTruong'
+import FormCreateActive2 from '../screen/generalFunction/FormCreateActive2';
 
 import { Provider } from 'react-redux';
 import { Store } from '../redux/store/Store';
@@ -31,6 +32,7 @@ export default RootElement = () =>{
           {/* For Đoàn trường */}
           <Stack.Screen name="uiTapDTruong" component={UITapDoanTruong} />
           <Stack.Screen name="detailActiveDTruong" component={DetailActiveDTruong} />
+          <Stack.Screen name="formCreateActive2" component={FormCreateActive2} />
         </Stack.Navigator>
       </NavigationContainer>
 

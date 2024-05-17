@@ -4,7 +4,6 @@ import KeyBoardReducer from "../reducers/KeyBoardReducer";
 import { thunk } from "redux-thunk";
 
 const rootReducer = combineReducers({
-    userData: UserReducers,
     keyboardShow: KeyBoardReducer
 })
 

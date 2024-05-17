@@ -18,8 +18,11 @@ import { screenWidth, screenHeight } from "../../component/DimensionsScreen";
 // import { DarkTheme } from "@react-navigation/native";
 import DatePicker from "react-native-modern-datepicker";
 import moment from "moment";
+import Dialog from 'react-native-dialog'
 
-export default function FormCreateActive() {
+export default function FormCreateActive(props) {
+  const {navigation} = props
+
   // Thời gian tổ chức
   const today = new Date();
 
@@ -62,11 +65,13 @@ export default function FormCreateActive() {
   const [openDeadLine, setOpenDeadLine] = useState(false); // open and close the modal
   const [dateDeadLine, setdateDeadLine] = useState("DD/MM/YYYY");
 
+  const [dialogHandleOnPressDeadLine, setDialogHandleOnPressDeadLine] = useState(false);
   const handleOnPressDeadLine = () => {
     // bắt lỗi logic nếu chưa chọn tg tổ chức thì ko thêm hạn chót
     // đăng kí đươc
     if (dateOrganize === "DD/MM/YYYY") {
-      Alert.alert("Thông báo", "Bạn chưa chọn thời gian tổ chức");
+      setDialogHandleOnPressDeadLine(true)
+      
     } else {
       setOpenDeadLine(!openDeadLine);
     }
@@ -78,6 +83,7 @@ export default function FormCreateActive() {
     // console.log(reversedStr)
   };
 
+  const [dialogNavigateFormContinue1, setDialogNavigateFormContinue1] = useState(false);
   const navigateFormContinue = () => {
     // thiếu 1 trong 3 thông tin thì ko thể next
     const date1 = moment(dateOrganize, "DD/MM/YYYY");
@@ -89,7 +95,7 @@ export default function FormCreateActive() {
       dateOrganize === "DD/MM/YYYY" ||
       dateDeadLine === "DD/MM/YYYY"
     ) {
-      Alert.alert("Thông báo", "Bạn vui lòng nhập đủ thông tin");
+      setDialogNavigateFormContinue1(true)
     }
     // đk thứ 2 này là để ràng buộc nếu user đổi ngày tổ chức mà
     // quên đổi lại deadline cho hợp lệ thì khi ấn tiếp theo thì
@@ -100,7 +106,7 @@ export default function FormCreateActive() {
         "Hạn chót đăng kí trước ngày tổ chức tối thiểu 3 ngày"
       );
     } else {
-      Alert.alert("chuyển trang");
+      navigation.navigate('formCreateActive2');
     }
   };
 
@@ -236,7 +242,7 @@ export default function FormCreateActive() {
               style={[
                 styles.formActive,
                 {
-                  width: 0.45 * screenWidth,
+                  width: 0.35 * screenWidth,
                   justifyContent: "center",
                 },
               ]}
@@ -303,13 +309,18 @@ export default function FormCreateActive() {
               style={[
                 styles.formActive,
                 {
-                  width: 0.45 * screenWidth,
+                  width: 0.35 * screenWidth,
                   justifyContent: "center",
                 },
               ]}
               onPress={handleOnPressDeadLine}
             >
-              <Text style={{ color: Color.colorTextMain, fontSize: 20 }}>
+              <Text
+                style={{
+                  color: Color.colorTextMain,
+                  fontSize: FontSize.sizeMain,
+                }}
+              >
                 {dateDeadLine}
               </Text>
               <Image
@@ -326,6 +337,45 @@ export default function FormCreateActive() {
                 }}
                 resizeMode="contain"
               ></Image>
+
+              <Dialog.Container
+                visible={dialogHandleOnPressDeadLine}
+                contentStyle={{
+                  backgroundColor: "#EEF7FF",
+                  borderRadius: 10,
+                  width: (1 / 2) * screenWidth + 150,
+                  height: (1 / 5) * screenHeight,
+                }}
+              >
+                <Dialog.Title
+                  style={{
+                    color: Color.colorTextMain,
+                    fontWeight: "700",
+                    fontSize: 20,
+                  }}
+                >
+                  Thông báo
+                </Dialog.Title>
+                <Dialog.Description
+                  style={{ color: "black", fontSize: FontSize.sizeSmall + 2 }}
+                >
+                  Bạn chưa chọn thời gian tổ chức!
+                </Dialog.Description>
+                <Dialog.Button
+                  label="Ok"
+                  onPress={() => setDialogHandleOnPressDeadLine(!dialogHandleOnPressDeadLine)}
+                  style={[
+                    styles.btnCancel,
+                    {
+                      width: 60,
+                      height: 40,
+                      fontWeight: '700',
+                      fontSize: FontSize.sizeMain,
+                      color: Color.colorTextMain,
+                    },
+                  ]}
+                />
+              </Dialog.Container>
             </TouchableOpacity>
 
             <Modal
@@ -375,6 +425,47 @@ export default function FormCreateActive() {
               onPress={navigateFormContinue}
             >
               <Text style={styles.resigter}>Tiếp theo</Text>
+
+              <Dialog.Container
+                visible={dialogNavigateFormContinue1}
+                contentStyle={{
+                  backgroundColor: "#EEF7FF",
+                  borderRadius: 10,
+                  width: (1 / 2) * screenWidth + 150,
+                  height: (1 / 5) * screenHeight,
+                }}
+              >
+                <Dialog.Title
+                  style={{
+                    color: Color.colorTextMain,
+                    fontWeight: "700",
+                    fontSize: 20,
+                  }}
+                >
+                  Thông báo
+                </Dialog.Title>
+                <Dialog.Description
+                  style={{ color: "black", fontSize: FontSize.sizeSmall + 2 }}
+                >
+                  Bạn vui lòng nhập đủ thông tin!
+                </Dialog.Description>
+                <Dialog.Button
+                  label="Ok"
+                  onPress={() => setDialogNavigateFormContinue1(!dialogNavigateFormContinue1)}
+                  style={[
+                    styles.btnCancel,
+                    {
+                      width: 60,
+                      height: 40,
+                      fontWeight: '700',
+                      fontSize: FontSize.sizeMain,
+                      color: Color.colorTextMain,
+                    },
+                  ]}
+                />
+              </Dialog.Container>
+
+
             </TouchableOpacity>
           </View>
         </ScrollView>
@@ -425,7 +516,7 @@ const styles = StyleSheet.create({
   },
 
   headerFormActive: {
-    fontSize: 20,
+    fontSize: FontSize.sizeMain,
     fontWeight: "700",
     color: Color.colorTextMain,
     marginBottom: 10,
@@ -438,7 +529,6 @@ const styles = StyleSheet.create({
     color: Color.colorTextMain,
     borderBottomWidth: 1,
     borderBottomColor: Color.colorBorder,
-    paddingLeft: 20,
   },
 
   centeredView: {

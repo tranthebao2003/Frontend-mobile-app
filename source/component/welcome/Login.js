@@ -111,33 +111,12 @@ const MainComponent = ({ navigation }) => {
   };
 
   const dispatch = useDispatch();
-  const { isSignedIn, userName } = useSelector((state) => state.userData);
-  const { usersSample } = useSelector((state) => state.userData);
-  // console.log(usersSample[0])
 
-  useEffect(() => {
-    dispatch(getUserBooks());
-  }, []);
-
-  // console.log(isSignedIn)
-  // console.log(userName)
-
-  const [email, onChangeEmail] = useState("");
-  const [isValidEmail, setValidEmail] = useState(false);
+  const [userName, setUserName] = useState("");
 
   const [visiblePassword, setVisiblePassword] = useState(true);
   const changeIconPassword = () => setVisiblePassword(!visiblePassword);
 
-  const verifyEmail = (email) => {
-    // regex email này chỉ cần trước @ có chữ và sau @ có chữ là ok
-    let regex = new RegExp(
-      /([!#-'*+-9=?A-Z^-~-]+(\.[!#-'*+-9=?A-Z^-~-]+)*|"([]!#-[^-~ \t]|(\\[\t -~]))+")@([!#-'*+-9=?A-Z^-~-]+(\.[!#-'*+-9=?A-Z^-~-]+)*|\[[\t -Z^-~]*])/
-    );
-    if (regex.test(email)) {
-      return true;
-    }
-    return false;
-  };
 
   const [password, onChangePassword] = useState("");
   const [isValidPassword, setIsValidPassword] = useState(false);
@@ -153,55 +132,34 @@ const MainComponent = ({ navigation }) => {
     return false;
   };
 
+
   const navigateForgotPassword = () => navigation.navigate("forgot");
   const navigateUITaps = () => {
-    if (user.position === "Sinh viên")
-      return navigation.navigate("uiTapSv", { user: user });
-    else if (user.position === "Đoàn trường")
-      return navigation.navigate("uiTapDTruong", { user: user });
-    else alert("rerewrwe");
-
-    //   ;
-    // else if (user.position === "Đoàn trường") {
-    //   return navigation.navigate("ScreenListDoanTruong", { user: user });
-    // }
+    // if (user.position === "Sinh viên")
+    //   return navigation.navigate("uiTapSv", { user: user });
+    // else if (user.position === "Đoàn trường")
+    //   return navigation.navigate("uiTapDTruong", { user: user });
+    // else alert("rerewrwe");
   };
 
   return (
     <View style={{ height: 0.6 * screenHeight, paddingHorizontal: 25 }}>
-      {/* email and password */}
+      {/* username and password */}
       <View style={styles.containerMain}>
         <View style={styles.containerUserName}>
           {/* nếu autoFocus = {true} thì khi component được gắn thì nó sẽ tự động focus */}
           <TextInput
             style={styles.username}
-            placeholder="Email"
+            placeholder="username"
             placeholderTextColor={Color.colorTextMain}
             autoFocus={true}
-            onChangeText={(email) => {
-              onChangeEmail(email);
-              const isValid = verifyEmail(email);
-              isValid ? setValidEmail(true) : setValidEmail(false);
+            autoCapitalize='none'
+            onChangeText={(username) => {
+              setUserName(username);
             }}
             // value này để hiển thị lên user
-            value={email}
+            value={userName}
           ></TextInput>
-
-          {isValidEmail === false ? (
-            <Text
-              style={{
-                height: 30,
-                fontSize: 16,
-                color: "#ff5252",
-                fontWeight: "500",
-                marginTop: 8,
-              }}
-            >
-              Email chưa hợp lệ
-            </Text>
-          ) : (
-            ""
-          )}
         </View>
 
         <View style={styles.containerPassword}>
@@ -258,7 +216,8 @@ const MainComponent = ({ navigation }) => {
 
       <View style={styles.containerBtnLoginFooter}>
         {/* onPress={navigateUITaps} */}
-        <TouchableOpacity style={styles.btnLogin} onPress={navigateUITaps}>
+        {/* () => dispatch(getUserBooks(username, password)) */}
+        <TouchableOpacity style={styles.btnLogin} onPress={() => console.log('chuyển trang')}>
           <Text style={styles.login}>LOGIN</Text>
         </TouchableOpacity>
 
