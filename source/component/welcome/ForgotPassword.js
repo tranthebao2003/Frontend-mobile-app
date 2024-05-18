@@ -14,6 +14,8 @@ import React, { useState } from 'react';
 import FontSize from '../FontSize';
 import Color from '../Color';
 import {screenWidth, screenHeight} from '../DimensionsScreen'
+import { useDispatch } from 'react-redux';
+import { LogoutAction } from '../../redux/action/UserAction';
 
 
 const ForgotPassword = (props) => {
@@ -96,6 +98,8 @@ return (
 const MainComponent = ({navigateLoginPassWord}) => {
 const [email, onChangeEmail] = useState('')
 const [isValidEmail, setValidEmail] = useState(false)
+ 
+const dispatch = useDispatch()
 
 const verifyEmail = (email) => {
   let regex = new RegExp(/([!#-'*+-9=?A-Z^-~-]+(\.[!#-'*+-9=?A-Z^-~-]+)*|"([]!#-[^-~ \t]|(\\[\t -~]))+")@([!#-'*+-9=?A-Z^-~-]+(\.[!#-'*+-9=?A-Z^-~-]+)*|\[[\t -Z^-~]*])/)
@@ -146,8 +150,12 @@ return (
     {/* btn login and forgot password */}
 
     <View style={styles.containerBtnLoginFooter}>
-      <TouchableOpacity style={styles.btnLogin} onPress={() => alert("lấy lại mk")}>
+      {/* <TouchableOpacity style={styles.btnLogin} onPress={() => alert("lấy lại mk")}>
         <Text style={styles.login}>CONTINUE</Text>
+      </TouchableOpacity> */}
+
+      <TouchableOpacity style={styles.btnLogin} onPress={() => dispatch(LogoutAction())}>
+        <Text style={styles.login}>LOGOUT TEST</Text>
       </TouchableOpacity>
     </View>
 

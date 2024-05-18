@@ -15,10 +15,7 @@ import Color from "../Color";
 import { screenWidth, screenHeight } from "../DimensionsScreen";
 import { useDispatch, useSelector } from "react-redux";
 import {
-  changeNameAction,
-  getUserBooks,
-  loginAction,
-  logoutAction,
+  LoginAction
 } from "../../redux/action/UserAction";
 
 const Login = (props) => {
@@ -110,7 +107,6 @@ const MainComponent = ({ navigation }) => {
     numberOfActived: 10,
   };
 
-  const dispatch = useDispatch();
 
   const [userName, setUserName] = useState("");
 
@@ -132,6 +128,7 @@ const MainComponent = ({ navigation }) => {
     return false;
   };
 
+  const dispatch = useDispatch()
 
   const navigateForgotPassword = () => navigation.navigate("forgot");
   const navigateUITaps = () => {
@@ -216,8 +213,7 @@ const MainComponent = ({ navigation }) => {
 
       <View style={styles.containerBtnLoginFooter}>
         {/* onPress={navigateUITaps} */}
-        {/* () => dispatch(getUserBooks(username, password)) */}
-        <TouchableOpacity style={styles.btnLogin} onPress={() => console.log('chuyển trang')}>
+        <TouchableOpacity style={styles.btnLogin} onPress={()=>dispatch(LoginAction(userName, password))}>
           <Text style={styles.login}>LOGIN</Text>
         </TouchableOpacity>
 
