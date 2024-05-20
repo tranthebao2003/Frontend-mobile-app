@@ -120,7 +120,7 @@ const MainComponent = ({ navigation }) => {
     // regexPassword: Minimum eight characters, at least one uppercase letter,
     // one lowercase letter and one number:
     let regexPassword = new RegExp(
-      /(^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$)/
+      /((?=^.{8,}$)((?=.*\d)|(?=.*\W+))(?![.\n])(?=.*[A-Z])(?=.*[a-z]).*$)/
     );
     if (regexPassword.test(password)) {
       return true;

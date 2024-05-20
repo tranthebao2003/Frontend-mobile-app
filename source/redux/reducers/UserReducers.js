@@ -1,7 +1,8 @@
-import { LOGIN, LOGOUT} from "../types/TypesUser"
+import { LOGIN, LOGOUT, LOGIN_ERROR} from "../types/TypesUser"
 
 const initialState = {
     authToken: null,
+    message: ''
 }
 
 
@@ -11,6 +12,8 @@ export default (state = initialState, { type, payload }) => {
       return { ...state, authToken: payload };
     case LOGOUT:
       return { ...state, authToken: payload };
+    case LOGIN_ERROR:
+      return { ...state, message: payload};
     default:
       return state;
   }

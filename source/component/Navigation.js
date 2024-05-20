@@ -11,8 +11,10 @@ import { UITapDoanTruong } from '../screen/doanTruong/UITapDoanTruong';
 import DetailActiveDTruong from '../screen/doanTruong/detailActive/DetailActiveDoanTruong'
 import FormCreateActive2 from '../screen/generalFunction/FormCreateActive2';
 import { useDispatch, useSelector } from 'react-redux';
-import {InitAction} from '../redux/action/UserAction'
+
 import { useEffect } from 'react';
+
+import SetAuthToken from "./headerAxios";
 
 const Stack = createNativeStackNavigator();
 
@@ -48,15 +50,8 @@ const MyStack = () => {
 
 export default RootElement = () =>{
     const {authToken} = useSelector(state => state.authReducer)
-    console.log(authToken)
-
-    // const dispatch = useDispatch()
-    // useEffect(() => {
-    //   () => {
-    //     dispatch(InitAction)
-    //   }
-    // }, [])
-    
+    console.log(authToken, ' màn hình navigation')
+    // await SetAuthToken()
     return (
       <NavigationContainer>
         {
