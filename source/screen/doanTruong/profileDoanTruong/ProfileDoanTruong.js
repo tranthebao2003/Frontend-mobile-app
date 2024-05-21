@@ -6,15 +6,27 @@ import {
   Image,
   ScrollView,
   ImageBackground,
+  TouchableOpacity
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import FontSize from "../../../component/FontSize";
 import Color from "../../../component/Color";
 import { screenWidth, screenHeight } from "../../../component/DimensionsScreen";
 import { UserLoginDoanTruong } from "../UITapDoanTruong";
-import { useContext } from "react";
+import { useContext, useState } from "react";
+import Dialog from "react-native-dialog";
 
 function ProfileDoanTruong() {
+  const [dialogCancel, setDialogCancel] = useState(false);
+  const showHideDialogCancel = () => {
+    setDialogCancel(!dialogCancel);
+  };
+
+  const [yesNotificationCancel, setYesNotificationCancel] = useState(false);
+    const yesBtnCancel = () => {
+      setDialogCancel(!dialogCancel);
+      setYesNotificationCancel(!yesNotificationCancel);
+    };
   const user = useContext(UserLoginDoanTruong);
   const {
     nameUser,
@@ -34,7 +46,13 @@ function ProfileDoanTruong() {
         resizeMode="cover"
         style={{ width: "100%", height: "120%" }}
       >
-        <ScrollView style={{ flex: 1, paddingHorizontal: 25, marginBottom: 2/10*screenHeight,}}>
+        <ScrollView
+          style={{
+            flex: 1,
+            paddingHorizontal: 25,
+            marginBottom: (2 / 10) * screenHeight,
+          }}
+        >
           <View
             style={{
               width: "100%",
@@ -129,11 +147,10 @@ function ProfileDoanTruong() {
             style={{
               width: "100%",
               marginVertical: 50,
-              height: 1/2*screenHeight,
+              height: (1 / 2) * screenHeight,
               backgroundColor: Color.colorBtn,
               borderRadius: 20,
               padding: 15,
-              
             }}
           >
             <Text style={styles.textLarge}>Profile</Text>
@@ -158,10 +175,13 @@ function ProfileDoanTruong() {
                 resizeMode="cover"
                 source={require("../../../resource/iconProfile/email.png")}
               />
-              <View style={{ width: '100%'}}>
+              <View style={{ width: "100%" }}>
                 <Text style={[styles.textLarge, { fontSize: 18 }]}>Email</Text>
                 <Text
-                  style={[styles.textMain, { fontWeight: 400, color: "black", width: '80%'}]}
+                  style={[
+                    styles.textMain,
+                    { fontWeight: 400, color: "black", width: "80%" },
+                  ]}
                 >
                   {email}
                 </Text>
@@ -234,6 +254,62 @@ function ProfileDoanTruong() {
               </View>
             </View>
           </View>
+
+          {/* btn logout*/}
+          <TouchableOpacity
+            style={styles.btnCancel}
+            onPress={showHideDialogCancel}
+          >
+            <Text style={[styles.resigter, { color: Color.colorRemove }]}>
+              Đăng xuất
+            </Text>
+            <Dialog.Container
+              visible={dialogCancel}
+              contentStyle={{
+                width: (3 / 4) * screenWidth,
+                height: (1 / 5) * screenHeight,
+              }}
+            >
+              <Dialog.Title
+                style={{ color: Color.colorTextMain, fontWeight: "700" }}
+              >
+                XÁC NHẬN
+              </Dialog.Title>
+              <Dialog.Description style={{ color: "black" }}>
+                Bạn có chắc muốn đăng xuất?
+              </Dialog.Description>
+              <Dialog.Button
+                label="No"
+                onPress={showHideDialogCancel}
+                style={{
+                  width: 60,
+                  height: 40,
+                  marginRight: 30,
+                  marginTop: 10,
+                  borderRadius: 5,
+                  fontWeight: 500,
+                  fontSize: 18,
+                  borderWidth: 1,
+                  borderColor: Color.colorRemove,
+                  color: Color.colorRemove,
+                }}
+              />
+              <Dialog.Button
+                label="Yes"
+                onPress={yesBtnCancel}
+                style={{
+                  width: 60,
+                  height: 40,
+                  marginTop: 10,
+                  marginRight: 50,
+                  borderRadius: 5,
+                  backgroundColor: "#d9ebfe",
+                  fontWeight: 500,
+                  fontSize: 18,
+                }}
+              />
+            </Dialog.Container>
+          </TouchableOpacity>
         </ScrollView>
       </ImageBackground>
     </SafeAreaView>
@@ -265,6 +341,38 @@ const styles = StyleSheet.create({
   textMain: {
     fontSize: FontSize.sizeSmall,
     fontWeight: "300",
+    color: Color.colorTextMain,
+  },
+
+  btnCancel: {
+    width: 85 * 2,
+    height: 30 * 1.6,
+    marginBottom: 60,
+    justifyContent: "center",
+    alignItems: "center",
+    alignSelf: 'flex-end',
+    borderWidth: 1,
+    borderRadius: 10,
+    borderColor: Color.colorRemove,
+  },
+
+  btnResigter: {
+    width: 85 * 2,
+    height: 30 * 1.6,
+    borderRadius: 10,
+    margin: 20,
+    backgroundColor: Color.colorBgUiTap,
+    justifyContent: "center",
+    alignItems: "center",
+    shadowColor: Color.colorTextMain,
+    shadowOffset: { width: 500, height: 500 },
+    shadowOpacity: 0.8,
+    elevation: 0.8,
+  },
+
+  resigter: {
+    fontSize: FontSize.sizeSmall + 6,
+    fontWeight: "700",
     color: Color.colorTextMain,
   },
 });

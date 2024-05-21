@@ -48,7 +48,7 @@ const SinhVien = () => {
 const DoanTruong = () => {
   return (
      // Đoàn trường
-    <Stack.Navigator screenOptions={{ headerShown: false }}>
+    <Stack.Navigator initialRouteName='uiTapDTruong' screenOptions={{ headerShown: false }}>
       <Stack.Screen name="uiTapDTruong" component={UITapDoanTruong} />
       <Stack.Screen name="detailActiveDTruong" component={DetailActiveDTruong}/>
       <Stack.Screen name="formCreateActive2" component={FormCreateActive2} />

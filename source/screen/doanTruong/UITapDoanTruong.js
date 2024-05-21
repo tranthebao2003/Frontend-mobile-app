@@ -6,6 +6,7 @@ import ProfileDoanTruong from "./profileDoanTruong/ProfileDoanTruong";
 import ScreenListDoanTruong from "./listActive/ScreenListDoanTruong";
 import ListActiveCreatedDT from "./listActiveCreated/ListActiveCreatedDT";
 import FormCreateActive from "../generalFunction/FormCreateActive";
+import HomeDoanTruong from './HomeDoanTruong';
 import { useSelector } from "react-redux";
 
 
@@ -42,6 +43,42 @@ function UITapDoanTruong(props) {
         },
       }}
     >
+
+       {/* list active */}
+       <Tab.Screen
+        name="homeDoanTruong"
+        component={HomeDoanTruong}
+        options={{
+          tabBarIcon: ({ focused }) => {
+            return (
+              <Image
+                source={require("../../resource/iconHomeDoanTruong/homeDoanTruong.png")}
+                style={{
+                  width: 25,
+                  height: 25,
+                  tintColor: focused ? Color.colorTextMain : Color.inactive,
+                  marginBottom: 5,
+                }}
+                resizeMode="cover"
+              ></Image>
+            );
+          },
+
+          tabBarLabel: ({ focused }) => {
+            return (
+              <Text
+                style={{
+                  fontSize: 14,
+                  color: focused ? Color.colorTextMain : Color.inactive,
+                  fontWeight: 600,
+                }}
+              >
+                Trang chủ
+              </Text>
+            );
+          },
+        }}
+      />
       
       {/* list active */}
       <Tab.Screen

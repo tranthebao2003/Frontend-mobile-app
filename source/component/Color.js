@@ -7,5 +7,6 @@ export default{
     inactive: 'rgb(129,129,129)',
     colorRemove: '#ff7a7a',
     colorDecorateStep: '#55a6ff',
-    colorBtnCreateActive: '#1fafb0'
+    colorBtnCreateActive: '#1fafb0',
+    colorBgIconHome: '#eaeaea'
 }

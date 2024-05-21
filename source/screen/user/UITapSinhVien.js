@@ -1,9 +1,9 @@
-import {createContext, useContext} from "react";
+import {createContext} from "react";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import { Image, KeyboardAvoidingView, Text } from "react-native";
+import { Image, Text } from "react-native";
 import Color from "../../component/Color";
 import Profile from "./profileSv/ProfileSv";
-import {ScreenList, showHideKeyboard} from "./listActive/ScreenList";
+import {ScreenList} from "./listActive/ScreenList";
 import ScreenListActived from "./listActived/ScreenListActived";
 import { useSelector } from "react-redux";
 
