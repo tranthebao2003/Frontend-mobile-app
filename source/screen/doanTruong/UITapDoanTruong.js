@@ -14,8 +14,17 @@ export const UserLoginDoanTruong = createContext()
 
 
 function UITapDoanTruong(props) {
-    // truyền thông tin user từ màn hình login qua
-  const {user} = props.route.params
+
+  const user = {
+      nameUser: "Trần Thế Bảo",
+      phone: "0377253857",
+      mssv: "n21dcpt008",
+      position: "Đoàn trường",
+      email: "n21dcpt008@student.ptithcm.edu.vn",
+      dateOfBirth: "22/2/2003",
+      // backend trả về cũng đc mà select count thui
+      numberOfActived: 10,
+    };
   const {showKeyBoard} = useSelector(state => state.keyboardShow)
   return (
     <UserLoginDoanTruong.Provider value={user}>

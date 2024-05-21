@@ -15,7 +15,7 @@ import FontSize from '../FontSize';
 import Color from '../Color';
 import {screenWidth, screenHeight} from '../DimensionsScreen'
 import { useDispatch } from 'react-redux';
-import { LogoutAction } from '../../redux/action/UserAction';
+import { LogoutAction } from '../../redux/action/LoginAction';
 
 
 const ForgotPassword = (props) => {

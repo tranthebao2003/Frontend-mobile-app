@@ -1,5 +1,5 @@
 import axios from "axios";
-import { LOGIN, LOGOUT } from "../types/TypesUser";
+import { LOGIN, LOGOUT } from "../types/TypesLogin";
 import AsyncStorage from "@react-native-async-storage/async-storage"
 
 

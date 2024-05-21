@@ -1,4 +1,4 @@
-import { LOGIN, LOGOUT, LOGIN_ERROR} from "../types/TypesUser"
+import { LOGIN, LOGOUT, LOGIN_ERROR} from "../types/TypesLogin"
 
 const initialState = {
     authToken: null,

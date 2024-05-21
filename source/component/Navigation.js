@@ -14,7 +14,12 @@ import { useDispatch, useSelector } from 'react-redux';
 
 import { useEffect } from 'react';
 
-import SetAuthToken from "./headerAxios";
+import SetAuthToken from "./SetAuthToken";
+
+import HandelJwtDecode from './JwtDecode';
+
+import AsyncStorage from '@react-native-async-storage/async-storage';
+
 
 const Stack = createNativeStackNavigator();
 
@@ -23,39 +28,81 @@ const AuthStack = () => {
   return(
     <Stack.Navigator screenOptions={{ headerShown: false }}>
       <Stack.Screen name="login" component={Login} />
+      <Stack.Screen name="forgot" component={ForgotPassword} />
     </Stack.Navigator>
   )
 }
 
-const MyStack = () => {
-  return (
+const SinhVien = () => {
+  return(
+    // Sinh viên
     <Stack.Navigator screenOptions={{ headerShown: false }}>
-      <Stack.Screen name="forgot" component={ForgotPassword} />
-
-      {/* For student */}
       <Stack.Screen name="uiTapSv" component={UITapSinhVien} />
       <Stack.Screen name="detailActive" component={DetailActive} />
       <Stack.Screen name="detailActived" component={DetailActived} />
+    </Stack.Navigator>
+  )
 
-      {/* For Đoàn trường */}
+};
+
+const DoanTruong = () => {
+  return (
+     // Đoàn trường
+    <Stack.Navigator screenOptions={{ headerShown: false }}>
       <Stack.Screen name="uiTapDTruong" component={UITapDoanTruong} />
-      <Stack.Screen
-        name="detailActiveDTruong"
-        component={DetailActiveDTruong}
-      />
+      <Stack.Screen name="detailActiveDTruong" component={DetailActiveDTruong}/>
       <Stack.Screen name="formCreateActive2" component={FormCreateActive2} />
     </Stack.Navigator>
   );
 }
 
+
+const getUserFromToken = async () => {
+  try {
+    // bắt buộc phải để let để mik có thể xóa 4 kí tự đầu của token
+    // để decode đc
+      let token = await AsyncStorage.getItem('token');
+      console.log('token getUserFromtoken: ', token)
+      if (token) {
+          console.log('token trong if: ', token)
+          const decodedToken = HandelJwtDecode(token);
+          return decodedToken;
+      }
+      return null;
+  } catch (err) {
+      return {
+          success: false,
+          message: err.message || 'Error retrieving token'
+      };
+  }
+};
+
 export default RootElement = () =>{
-    const {authToken} = useSelector(state => state.authReducer)
-    console.log(authToken, ' màn hình navigation')
-    // await SetAuthToken()
+    const { authToken } = useSelector((state) => state.authReducer);
+
+    useEffect(() => {
+      SetAuthToken();
+    }, [authToken]);
+
+    console.log (authToken, ' màn navigation')
+
+    // // objectA = JwtDecode(authToken)
+    // // console.log('object A: ', objectA)
+    // objectDecode = getUserFromToken()
+    // console.log('objectDecode ', objectDecode)
+
+  //   getUserFromToken().then(decodedToken => {
+  //     if (decodedToken && decodedToken.success) {
+  //         console.log('Decoded token data:', decodedToken.data);
+  //     } else {
+  //         console.log('Error:', decodedToken ? decodedToken.message : 'Token not found');
+  //     }
+  //  });
+
     return (
       <NavigationContainer>
         {
-          authToken === null ? <AuthStack/> : <MyStack/>
+          authToken === true ? <AuthStack/> : <DoanTruong/>
         }
       </NavigationContainer>
     );

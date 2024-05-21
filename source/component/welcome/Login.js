@@ -16,7 +16,7 @@ import { screenWidth, screenHeight } from "../DimensionsScreen";
 import { useDispatch, useSelector } from "react-redux";
 import {
   LoginAction
-} from "../../redux/action/UserAction";
+} from "../../redux/action/LoginAction";
 
 const Login = (props) => {
   const { navigation } = props;
@@ -96,17 +96,6 @@ const BannerComponent = ({}) => {
 };
 
 const MainComponent = ({ navigation }) => {
-  const user = {
-    nameUser: "Trần Thế Bảo",
-    phone: "0377253857",
-    mssv: "n21dcpt008",
-    position: "Đoàn trường",
-    email: "n21dcpt008@student.ptithcm.edu.vn",
-    dateOfBirth: "22/2/2003",
-    // backend trả về cũng đc mà select count thui
-    numberOfActived: 10,
-  };
-
 
   const [userName, setUserName] = useState("");
 
@@ -131,13 +120,6 @@ const MainComponent = ({ navigation }) => {
   const dispatch = useDispatch()
 
   const navigateForgotPassword = () => navigation.navigate("forgot");
-  const navigateUITaps = () => {
-    // if (user.position === "Sinh viên")
-    //   return navigation.navigate("uiTapSv", { user: user });
-    // else if (user.position === "Đoàn trường")
-    //   return navigation.navigate("uiTapDTruong", { user: user });
-    // else alert("rerewrwe");
-  };
 
   return (
     <View style={{ height: 0.6 * screenHeight, paddingHorizontal: 25 }}>
