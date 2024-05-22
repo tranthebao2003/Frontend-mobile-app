@@ -242,13 +242,14 @@ export default function FormCreateActive(props) {
               style={[
                 styles.formActive,
                 {
-                  width: 0.35 * screenWidth,
+                  width: dateOrganize == 'DD/MM/YYYY' ? 0.4 * screenWidth : 0.34 * screenWidth,
                   justifyContent: "center",
+                  
                 },
               ]}
               onPress={handleOnPressOrganize}
             >
-              <Text style={{ color: Color.colorTextMain, fontSize: 20 }}>
+              <Text style={{ color: Color.colorTextMain, fontSize: 20}}>
                 {dateOrganize}
               </Text>
               <Image
@@ -271,6 +272,7 @@ export default function FormCreateActive(props) {
               animationType="fade"
               transparent={true}
               visible={openOrganize}
+              
             >
               <View style={styles.centeredView}>
                 <View style={styles.modalView}>
@@ -309,7 +311,7 @@ export default function FormCreateActive(props) {
               style={[
                 styles.formActive,
                 {
-                  width: 0.35 * screenWidth,
+                  width: dateDeadLine == 'DD/MM/YYYY' ? 0.4 * screenWidth : 0.34 * screenWidth,
                   justifyContent: "center",
                 },
               ]}

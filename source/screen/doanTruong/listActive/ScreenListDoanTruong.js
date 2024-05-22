@@ -278,7 +278,7 @@ export default function ScreenListDoanTruong({navigation}) {
             shadowColor: 'black',
             shadowOffset: { width: 500, height: 500 },
             shadowOpacity: 1,
-            elevation: 0.8,
+            elevation: 2,
             zIndex: 2,
           }}
         >

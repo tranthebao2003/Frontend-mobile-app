@@ -7,24 +7,26 @@ import {
   ImageBackground,
   TouchableOpacity,
   FlatList,
-  Keyboard,
+  Modal,
 } from "react-native";
 import React, { useState, useEffect } from "react";
 import FontSize from "../../../component/FontSize";
 import Color from "../../../component/Color";
 import { screenWidth, screenHeight } from "../../../component/DimensionsScreen";
-import ActiveApproveItemDT from "./ActiveApproveItemDT";
+import OrganizedActiveItemDT from "./OrganizedActiveItemDT";
 import { useSelector, useDispatch } from "react-redux";
-import Dialog from "react-native-dialog";
+import DatePicker from "react-native-modern-datepicker";
+import moment from "moment";
 
-export default function ListActiveApprove({ navigation }) {
+export default function ListOrganizedActiveDT({ navigation }) {
   // ở đây chỉ bao gồm những hoạt động do đoàn trường tạo
   // do api trả về lun
+  // chỉ thống kê những hoạt động đã được phê duyệt và xảy ra rồi, tổ chức rồi
   const [active, setActive] = useState([
     {
       id: 1,
       stt: 1,
-      nameActive: "list active approve dt truyền qua detailaciveApproive",
+      nameActive: "Trăng cho em",
       timeOrganize: "3/2/2005",
       // deadline này là thuộc tính tính toán được
       deadline: "20/1/2005",
@@ -133,15 +135,14 @@ export default function ListActiveApprove({ navigation }) {
     },
   ]);
 
-  const [dialogCancel, setDialogCancel] = useState(false);
-  const showHideDialogCancel = () => {
-    setDialogCancel(!dialogCancel);
+  const [dateOrganize, setdateOrganize] = useState("DD/MM/YYYY");
+  const [openOrganize, setOpenOrganize] = useState(false); // open and close the modal
+  const handleOnPressOrganize = () => {
+    setOpenOrganize(!openOrganize);
   };
-
-  const [yesNotificationCancel, setYesNotificationCancel] = useState(false);
-  const yesBtnCancel = () => {
-    setDialogCancel(!dialogCancel);
-    setYesNotificationCancel(!yesNotificationCancel);
+  const handleChangeOrganize = (propDate) => {
+    const reversedStrOrganize = propDate.split("/").reverse().join("/");
+    setdateOrganize(reversedStrOrganize);
   };
 
   return (
@@ -165,33 +166,94 @@ export default function ListActiveApprove({ navigation }) {
         style={{ width: "100%", height: "120%", alignItems: "center" }}
       >
         <View style={styles.containerHeader}>
-          <Text style={styles.header}>Hoạt động chờ phê duyệt</Text>
-          <Image
-            source={require("../../../resource/iconLogin/lotLogo2.png")}
-            style={{
-              height: 80,
-              width: 80,
-              position: "absolute",
-              right: 30,
-              top: 30,
-              zIndex: 1,
-            }}
-            resizeMode="contain"
-          ></Image>
-          <Image
-            source={require("../../../resource/iconLogin/logo.png")}
-            style={{
-              height: 80,
-              width: 80,
-              position: "absolute",
-              right: 30,
-              top: 30,
-              borderRadius: 16,
-              zIndex: 2,
-              tintColor: Color.colorTextMain,
-            }}
-            resizeMode="contain"
-          ></Image>
+          <Text style={styles.header}>Thống kê hoạt động</Text>
+          <View style={styles.containerFormActive}>
+            <View style={{ flexDirection: "row" }}>
+              <Text style={styles.headerFormActive}>Thời gian tổ chức</Text>
+              <Text
+                style={[styles.headerFormActive, { color: Color.colorRemove }]}
+              >
+                (*)
+              </Text>
+            </View>
+
+            <TouchableOpacity
+              style={[
+                styles.formActive,
+                {
+                  width: dateOrganize == 'DD/MM/YYYY' ? 0.4 * screenWidth : 0.34 * screenWidth,
+                  justifyContent: "center",
+                  
+                },
+              ]}
+              onPress={handleOnPressOrganize}
+            >
+              <Text style={{ color: Color.colorTextMain, fontSize: 20}}>
+                {dateOrganize}
+              </Text>
+              <Image
+                source={require("../../../resource/iconFormCreateActive/triangleDowm.png")}
+                style={{
+                  height: 18,
+                  width: 18,
+                  position: "absolute",
+                  right: 0,
+                  top: "25%",
+                  borderRadius: 16,
+                  zIndex: 2,
+                  tintColor: Color.colorTextMain,
+                }}
+                resizeMode="contain"
+              ></Image>
+            </TouchableOpacity>
+
+            <Modal
+              animationType="fade"
+              transparent={true}
+              visible={openOrganize}
+              
+            >
+              <View style={styles.centeredView}>
+                <View style={styles.modalView}>
+                  <DatePicker
+                    mode="calendar"
+                    // minimumDate={convertDateOrganize}
+                    // do ở trên mình convert string thành DD//MM/YYYY
+                    // nên sau đó trx khi đưa vào hệ thống sử lí mình
+                    // phải convert ngược lại
+                    selected={dateOrganize.split("/").reverse().join("/")}
+                    onDateChange={handleChangeOrganize}
+                  />
+
+                  <TouchableOpacity
+                    onPress={handleOnPressOrganize}
+                    style={styles.btnDate}
+                  >
+                    <Text>Ok</Text>
+                  </TouchableOpacity>
+                </View>
+              </View>
+            </Modal>
+          </View>
+
+          <Modal animationType="fade" transparent={true} visible={openOrganize}>
+            <View style={styles.centeredView}>
+              <View style={styles.modalView}>
+                <DatePicker
+                  mode="calendar"
+                  selected={dateOrganize.split("/").reverse().join("/")}
+                  onDateChange={handleChangeOrganize}
+                />
+
+                <TouchableOpacity
+                  onPress={handleOnPressOrganize}
+                  style={styles.btnDate}
+                >
+                  <Text>Ok</Text>
+                </TouchableOpacity>
+              </View>
+            </View>
+          </Modal>
         </View>
 
         <View
@@ -214,7 +276,7 @@ export default function ListActiveApprove({ navigation }) {
             style={{
               width: "100%",
               flexDirection: "row",
-              alignItems: 'center'
+              alignItems: "center",
             }}
           >
             <Text
@@ -238,40 +300,38 @@ export default function ListActiveApprove({ navigation }) {
             >
               Tên hoạt động
             </Text>
-            
-            <View style ={{flex: 1}}>
-            <Text
-              style={{
-                color: Color.colorTextMain,
-                fontSize: FontSize.sizeMain,
-                fontWeight: 500,
-              }}
-            >
-              Đơn vị
-            </Text>
-            <Text
-              style={{
-                color: Color.colorTextMain,
-                fontSize: FontSize.sizeMain,
-                fontWeight: 500,
-              }}
-            >
-              tổ chức
-            </Text>
+
+            <View style={{ flex: 1 }}>
+              <Text
+                style={{
+                  color: Color.colorTextMain,
+                  fontSize: FontSize.sizeMain,
+                  fontWeight: 500,
+                }}
+              >
+                Đơn vị
+              </Text>
+              <Text
+                style={{
+                  color: Color.colorTextMain,
+                  fontSize: FontSize.sizeMain,
+                  fontWeight: 500,
+                }}
+              >
+                tổ chức
+              </Text>
             </View>
-            
-            
           </View>
 
           <FlatList
             style={{ flex: 1 }}
             data={active}
             renderItem={({ item }) => (
-              <ActiveApproveItemDT
+              <OrganizedActiveItemDT
                 activeApprove={item}
                 onPressItem={() => {
-                  navigation.navigate("detailActiveApprove", {
-                    detailActiveApprove: item,
+                  navigation.navigate("detailOrganizedActive", {
+                    detailOrganizedActive: item,
                   });
                 }}
               />
@@ -282,75 +342,13 @@ export default function ListActiveApprove({ navigation }) {
 
         {/* btn approve all */}
         <TouchableOpacity
-          style={styles.btnCancel}
-          onPress={showHideDialogCancel}
+          style={[styles.btnCancel, {borderWidth: dateOrganize == 'DD/MM/YYYY' ? 0 : 1, borderColor: Color.colorApproveAll}]}
+          onPress={() => alert("lọc hoạt động theo tháng, năm")}
+          disabled = {dateOrganize == 'DD/MM/YYYY' ? true : false}
         >
-          <Text style={[styles.resigter, { color: Color.colorApproveAll }]}>
-            Duyệt tất cả
+          <Text style={[styles.resigter, { color: dateOrganize == 'DD/MM/YYYY' ? 'gray' : Color.colorApproveAll }]}>
+            Lọc hoạt động
           </Text>
-          <Dialog.Container visible={dialogCancel}>
-            <Dialog.Title
-              style={{ color: Color.colorTextMain, fontWeight: "700", fontSize: FontSize.sizeMain}}
-            >
-              XÁC NHẬN
-            </Dialog.Title>
-            <Dialog.Description style={{ color: "black", fontSize: FontSize.sizeMain - 2}}>
-              Bạn có chắc muốn duyệt tất cả hoạt động ?
-            </Dialog.Description>
-            <Dialog.Button
-              label="No"
-              onPress={showHideDialogCancel}
-              style={[
-                styles.btnCancel,
-                {
-                  width: 60,
-                  height: 40,
-                  marginRight: 30,
-                  fontWeight: 500,
-                  fontSize: 18,
-                  color: Color.colorRemove,
-                  borderColor: Color.colorRemove
-                },
-              ]}
-            />
-            <Dialog.Button
-              label="Yes"
-              onPress={yesBtnCancel}
-              style={{
-                width: 60,
-                height: 40,
-                marginRight: 50,
-                borderRadius: 5,
-                backgroundColor: "#d9ebfe",
-                fontWeight: 500,
-                fontSize: 18,
-              }}
-            />
-          </Dialog.Container>
-          <Dialog.Container visible={yesNotificationCancel}>
-            <Dialog.Title
-              style={{ color: Color.colorTextMain, fontWeight: "700" }}
-            >
-              THÔNG BÁO
-            </Dialog.Title>
-            <Dialog.Description style={{ color: "black" }}>
-              Bạn đã xóa hoạt động thành công!
-            </Dialog.Description>
-            <Dialog.Button
-              label="Ok"
-              onPress={() => setYesNotificationCancel(!yesNotificationCancel)}
-              style={[
-                styles.btnCancel,
-                {
-                  width: 60,
-                  height: 40,
-                  marginRight: 30,
-                  fontWeight: 500,
-                  fontSize: 18,
-                },
-              ]}
-            />
-          </Dialog.Container>
         </TouchableOpacity>
       </ImageBackground>
     </View>
@@ -365,14 +363,18 @@ const styles = StyleSheet.create({
   containerHeader: {
     height: (1 / 6) * screenHeight,
     padding: 30,
+    paddingRight: 25,
     zIndex: 2,
     width: screenWidth,
+    flexDirection: 'row',
+    justifyContent: 'center',
   },
   header: {
     fontSize: FontSize.sizeHeader - 3,
     fontWeight: "600",
     color: Color.colorTextMain,
-    width: (2 / 4) * screenWidth,
+    width: (2 / 5) * screenWidth,
+    marginRight: 18
   },
 
   btnCancel: {
@@ -381,14 +383,68 @@ const styles = StyleSheet.create({
     margin: 20,
     justifyContent: "center",
     alignItems: "center",
-    borderWidth: 1,
     borderRadius: 10,
-    borderColor: Color.colorApproveAll,
   },
 
   resigter: {
     fontSize: FontSize.sizeSmall + 6,
     fontWeight: "700",
     color: Color.colorTextMain,
+  },
+
+  containerFormActive: {
+    justifyContent: "center",
+  },
+
+  headerFormActive: {
+    fontSize: FontSize.sizeMain,
+    fontWeight: "700",
+    color: Color.colorTextMain,
+    marginRight: 5,
+  },
+
+  formActive: {
+    fontSize: 20,
+    height: 40,
+    color: Color.colorTextMain,
+    borderBottomWidth: 1,
+    borderBottomColor: Color.colorBorder,
+  },
+
+  centeredView: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+
+  modalView: {
+    margin: 20,
+    backgroundColor: "white",
+    borderRadius: 10,
+    width: "90%",
+    padding: 35,
+    alignItems: "center",
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 4,
+    elevation: 5,
+  },
+
+  btnDate: {
+    width: 100,
+    height: 30,
+    borderRadius: 10,
+    margin: 20,
+    backgroundColor: Color.colorBgUiTap,
+    justifyContent: "center",
+    alignItems: "center",
+    shadowColor: Color.colorTextMain,
+    shadowOffset: { width: 500, height: 500 },
+    shadowOpacity: 0.8,
+    elevation: 0.8,
   },
 });

@@ -6,7 +6,6 @@ import {
   View,
   StatusBar,
   Image,
-  ScrollView,
   ImageBackground,
   TouchableOpacity,
 } from "react-native";
@@ -14,7 +13,7 @@ import { screenHeight, screenWidth } from "../../component/DimensionsScreen";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 function HomeDoanTruong(props) {
-  const {navigation} = props
+  const { navigation } = props;
   return (
     <SafeAreaView
       style={{
@@ -29,18 +28,17 @@ function HomeDoanTruong(props) {
       <ImageBackground
         source={require("../../resource/iconLogin/bg.png")}
         resizeMode="cover"
-        style={{ width: "100%", height: "120%" }}
+        style={{ width: "100%", height: "120%",}}
       >
+        
+        {/* banner */}
         <View
           style={{
             width: screenWidth,
             height: (1 / 3) * screenHeight,
-            // borderWidth: 1,
-            // borderRadius: 30,
             overflow: "hidden",
             justifyContent: "center",
             alignItems: "center",
-            // padding: 10
           }}
         >
           <Image
@@ -56,56 +54,117 @@ function HomeDoanTruong(props) {
         {/* content */}
         <View
           style={{
-            flex: 1,
-            borderWidth: 1,
-            padding: 60,
-            paddingHorizontal: 50,
+            width: screenWidth,
+            height: 0.35*screenHeight,
+            padding: 35,
+            alignItems: 'center',
           }}
         >
+          {/* three item top */}
           <View
             style={{
               width: "100%",
-              //   borderWidth: 5,
               justifyContent: "space-between",
               flexDirection: "row",
-              marginBottom: 60,
+              marginBottom: 40,
             }}
           >
-            <View style={{alignItems: 'center'}}>
-              <TouchableOpacity style={styles.containerIcon} onPress={() => navigation.navigate('screenListDoanTruong')}>
+            {/* list active */}
+            <View style={{ alignItems: "center" }}>
+              <TouchableOpacity
+                style={styles.containerIcon}
+                onPress={() => navigation.navigate("screenListDoanTruong")}
+              >
                 <Image
                   style={styles.icon}
                   resizeMode="cover"
                   source={require("../../resource/iconHomeDoanTruong/hoatDong.png")}
                 />
               </TouchableOpacity>
-              <Text style = {styles.bottomText}>Hoạt động</Text>
+              <Text style={styles.bottomText}>Hoạt động</Text>
             </View>
-            <View style={{alignItems: 'center',}}>
-              <TouchableOpacity style={styles.containerIcon}  onPress={() => navigation.navigate('listActiveCreatedDT')}>
+
+            {/* list actived */}
+            <View style={{ alignItems: "center" }}>
+              <TouchableOpacity
+                style={styles.containerIcon}
+                onPress={() => navigation.navigate("listActiveCreatedDT")}
+              >
                 <Image
                   style={styles.icon}
                   resizeMode="cover"
                   source={require("../../resource/iconHomeDoanTruong/taoHoatDong1.png")}
                 />
               </TouchableOpacity>
-              <Text style = {styles.bottomText}>Hoạt động</Text>
-              <Text style = {[styles.bottomText, {marginTop: -2}]}>đã tạo</Text>
+              <Text style={styles.bottomText}>Hoạt động</Text>
+              <Text style={[styles.bottomText, { marginTop: -2 }]}>đã tạo</Text>
             </View>
-            <View style={{alignItems: 'center'}}>
-              <TouchableOpacity style={styles.containerIcon}  onPress={() => navigation.navigate('listActiveApproveDT')}>
+
+            {/* list approve active  */}
+            <View style={{ alignItems: "center" }}>
+              <TouchableOpacity
+                style={styles.containerIcon}
+                onPress={() => navigation.navigate("listActiveApproveDT")}
+              >
                 <Image
                   style={styles.icon}
                   resizeMode="cover"
                   source={require("../../resource/iconHomeDoanTruong/pheDuyet.png")}
                 />
               </TouchableOpacity>
-              <Text style = {styles.bottomText}>Duyệt</Text>
-              <Text style = {[styles.bottomText, {marginTop: -2}]}>hoạt động</Text>
+              <Text style={styles.bottomText}>Duyệt</Text>
+              <Text style={[styles.bottomText, { marginTop: -2 }]}>
+                hoạt động
+              </Text>
             </View>
           </View>
 
-          
+          {/* two item bottom */}
+          <View
+            style={{
+              width: "95%",
+              justifyContent: "space-between",
+              flexDirection: "row",
+              marginBottom: 60,
+            }}
+          >
+            {/* filter active by month and year*/}
+            <View style={{ alignItems: "center" }}>
+              <TouchableOpacity
+                style={styles.containerIcon}
+                onPress={() => navigation.navigate("listOrganizedActiveDT")}
+              >
+                <Image
+                  style={styles.icon}
+                  resizeMode="cover"
+                  source={require("../../resource/iconHomeDoanTruong/filter1.png")}
+                />
+              </TouchableOpacity>
+              <Text style={styles.bottomText}>Thống kê hoạt động</Text>
+            </View>
+
+            {/* approve student */}
+            <View style={{ alignItems: "center" }}>
+              <TouchableOpacity
+                style={styles.containerIcon}
+                // navigation.navigate("listActiveCreatedDT")
+                onPress={() => alert('mai 23/5 làm phê duyệt sinh viên')}
+              >
+                <Image
+                  style={styles.icon}
+                  resizeMode="cover"
+                  source={require("../../resource/iconHomeDoanTruong/approveSV1.png")}
+                />
+              </TouchableOpacity>
+              <Text style={styles.bottomText}>Phê duyệt sinh viên</Text>
+            </View>
+          </View>
+        </View>
+
+        {/* posision, logo */}
+        <View style={styles.containerPositionLogo}>
+          <Text style={[styles.header, {fontWeight: '400'}]}>Chức vụ</Text>
+          <Text style={styles.header}>Đoàn trường</Text>
         </View>
       </ImageBackground>
     </SafeAreaView>
@@ -119,7 +178,8 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     borderRadius: 10,
-    elevation: 1.2
+    elevation: 2,
+    shadowColor: 'black'
   },
 
   icon: {
@@ -130,7 +190,25 @@ const styles = StyleSheet.create({
     fontSize: 15,
     marginTop: 10,
     color: Color.colorTextMain,
-    fontWeight: '400',
-  }
+    fontWeight: "400",
+  },
+
+  containerPositionLogo: {
+    width: 0.4*screenWidth,
+    marginLeft: 40,
+    marginTop: 25,
+    paddingVertical: 20,
+    paddingLeft: 20,
+    backgroundColor: Color.colorBgUiTap,
+    borderRadius: 10,
+    elevation: 2,
+    shadowColor: 'black',
+  },
+
+  header: {
+    fontSize: FontSize.sizeMain,
+    fontWeight: "600",
+    color: Color.colorTextMain,
+  },
 });
 export default HomeDoanTruong;
