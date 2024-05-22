@@ -7,13 +7,15 @@ import {
     ImageBackground,
     TextInput,
     FlatList,
+    Keyboard
   } from 'react-native';
-import React, { useState } from 'react';
+import React, { useState, useEffect} from 'react';
 import FontSize from '../../../component/FontSize';
 import Color from '../../../component/Color';
 import {screenWidth, screenHeight} from '../../../component/DimensionsScreen'
 import ActiveCreatedItemDT from './ActiveCreatedItemDT'
-import {useSelector} from 'react-redux'
+import {useSelector, useDispatch} from 'react-redux'
+import {showKeyBoardAction, hideKeyBoardAction} from '../../../redux/action/KeyBoardAction'
 
 
 export default function ListActiveCreatedDT({navigation}) {
@@ -97,6 +99,42 @@ export default function ListActiveCreatedDT({navigation}) {
         "giới thiệu lập trình đến các em nhỏ",
       status: 'registered'
     },
+    {
+      id: 5,
+      stt: 5,
+      nameActive: "Lập trình cho bé từ 10 đến 12 tuổi",
+      timeOrganize: "4/10/2005",
+      deadline: '12/12/2005',
+      location: "Học viện cơ sở quận 9 phòng 2A11",
+      quantityActived: 60,
+      organizer: "Đoàn trường",
+      timeCreateActive: '10/1/2005',
+      cost: 0,
+      personApprove: 'không có',
+      timeApprove: 'không có',
+      minNumber: 220,
+      description:
+        "giới thiệu lập trình đến các em nhỏ",
+      status: 'registered'
+    },
+    {
+      id: 6,
+      stt: 6,
+      nameActive: "Lập trình cho bé từ 10 đến 12 tuổi",
+      timeOrganize: "4/10/2005",
+      deadline: '12/12/2005',
+      location: "Học viện cơ sở quận 9 phòng 2A11",
+      quantityActived: 60,
+      organizer: "Đoàn trường",
+      timeCreateActive: '10/1/2005',
+      cost: 0,
+      personApprove: 'không có',
+      timeApprove: 'không có',
+      minNumber: 220,
+      description:
+        "giới thiệu lập trình đến các em nhỏ",
+      status: 'registered'
+    },
   ]);
 
 
@@ -108,6 +146,29 @@ export default function ListActiveCreatedDT({navigation}) {
   };
 
   const {showKeyBoard} = useSelector(state => state.keyboardShow)
+  const dispatch = useDispatch()
+  
+  // event keyboard: event là cho toàn màn hình nằm trong UITapDoanTruong.js là chỉ cần mình ấn vào 
+  // ô input ở scrren HĐ đã tham gia hay HĐ thì nó đều bắt đc keyboard
+
+  useEffect(() => {
+    const showSubscription = Keyboard.addListener('keyboardDidShow', () => {
+      dispatch(showKeyBoardAction())
+    });
+    const hideSubscription = Keyboard.addListener('keyboardDidHide', () => {
+      dispatch(hideKeyBoardAction())
+    });
+
+    // showSubscription.remove() và hideSubscription.remove() là các phương thức được 
+    // sử dụng để gỡ bỏ các hàm xử lý sự kiện đã được đăng ký trước đó thông qua addListener.
+    // Khi component bị unmount hoặc useEffect được gọi lại, các hàm xử lý sự kiện này 
+    // không còn cần thiết nữa, vì vậy chúng ta gọi remove() để loại bỏ chúng
+    return () => {
+      showSubscription.remove();
+      hideSubscription.remove();
+    };
+  }, []);
+ 
   return (
     <View style={styles.container}>
       <StatusBar style="auto" />

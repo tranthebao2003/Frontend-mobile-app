@@ -13,6 +13,7 @@ import FormCreateActive2 from '../screen/generalFunction/FormCreateActive2';
 import ScreenListDoanTruong from "../screen/doanTruong/listActive/ScreenListDoanTruong"
 import ListActiveCreatedDT from "../screen/doanTruong/listActiveCreated/ListActiveCreatedDT";
 import ListActiveApproveDT from "../screen/doanTruong/listActiveApprove/ListActiveApproveDT";
+import DetailActiveApprove from "../screen/doanTruong/detailActiveApprove/DetailActiveApprove";
 import { useDispatch, useSelector } from 'react-redux';
 
 import { useEffect } from 'react';
@@ -60,6 +61,7 @@ const DoanTruong = () => {
       <Stack.Screen name="detailActiveDTruong" component={DetailActiveDTruong}/>
      
       <Stack.Screen name="listActiveApproveDT" component={ListActiveApproveDT} />
+      <Stack.Screen name="detailActiveApprove" component={DetailActiveApprove} />
     </Stack.Navigator>
   );
 }

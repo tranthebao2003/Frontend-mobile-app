@@ -181,6 +181,7 @@ export default function ScreenListDoanTruong({navigation}) {
 
   const {showKeyBoard} = useSelector(state => state.keyboardShow)
   const dispatch = useDispatch()
+
   
   // event keyboard: event là cho toàn màn hình nằm trong UITapDoanTruong.js là chỉ cần mình ấn vào 
   // ô input ở scrren HĐ đã tham gia hay HĐ thì nó đều bắt đc keyboard

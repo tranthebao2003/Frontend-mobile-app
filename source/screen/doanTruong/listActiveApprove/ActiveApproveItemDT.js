@@ -4,7 +4,7 @@ import FontSize from "../../../component/FontSize";
 
 const ActiveApproveItemDT = (props) => {
 
-    const {stt, nameActive, timeOrganize} = props.active; // destructuring an object
+    const {stt, nameActive, organizer} = props.activeApprove; // destructuring an object
     const { onPressItem } = props;
     return (
       <TouchableOpacity
@@ -43,10 +43,10 @@ const ActiveApproveItemDT = (props) => {
           style={{
             flex: 2,
             backgroundColor: Color.colorBtn,
-            alignItems: "flex-end",
+            alignItems: "center",
           }}
         >
-          <Text style={styles.contentText}>{timeOrganize}</Text>
+          <Text style={styles.contentText}>{organizer}</Text>
         </View>
       </TouchableOpacity>
     );

@@ -8,5 +8,6 @@ export default{
     colorRemove: '#ff7a7a',
     colorDecorateStep: '#55a6ff',
     colorBtnCreateActive: '#1fafb0',
-    colorBgIconHome: '#eaeaea'
+    colorBgIconHome: '#eaeaea',
+    colorApproveAll: '#41B06E'
 }

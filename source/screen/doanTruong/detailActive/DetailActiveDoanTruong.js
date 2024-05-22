@@ -29,21 +29,9 @@ import {
       setDialogCancel(!dialogCancel);
       setYesNotificationCancel(!yesNotificationCancel);
     };
-  
-    // btn resigter
-    const [dialogResigter, setDialogRegister] = useState(false);
-    const showHideDialogRegister = () => {
-      setDialogRegister(!dialogResigter);
-    };
 
     const navigateFormEdit = () => {
         alert('chuyển sang form edit hoạt động')
-      };
-  
-    const [yesNotificationResigter, setYesNotificationResigter] = useState(false);
-    const yesBtnResigter = () => {
-      setDialogRegister(!dialogResigter);
-      setYesNotificationResigter(!yesNotificationResigter);
     };
   
   
@@ -484,7 +472,7 @@ import {
                 >
                   XÁC NHẬN
                 </Dialog.Title>
-                <Dialog.Description style={{ color: "black" }}>
+                <Dialog.Description style={{ color: "black", fontSize: FontSize.sizeMain - 2}}>
                   Bạn có chắc muốn xóa hoạt động này?
                 </Dialog.Description>
                 <Dialog.Button
