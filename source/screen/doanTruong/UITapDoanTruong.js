@@ -70,7 +70,7 @@ function UITapDoanTruong(props) {
                 style={{
                   fontSize: 14,
                   color: focused ? Color.colorTextMain : Color.inactive,
-                  fontWeight: 600,
+                  fontWeight: '600',
                 }}
               >
                 Trang chủ
@@ -80,41 +80,6 @@ function UITapDoanTruong(props) {
         }}
       />
       
-      {/* list active */}
-      <Tab.Screen
-        name="screenListDTruong"
-        component={ScreenListDoanTruong}
-        options={{
-          tabBarIcon: ({ focused }) => {
-            return (
-              <Image
-                source={require("../../resource/iconUITap/listActive.png")}
-                style={{
-                  width: 25,
-                  height: 25,
-                  tintColor: focused ? Color.colorTextMain : Color.inactive,
-                  marginBottom: 5,
-                }}
-                resizeMode="cover"
-              ></Image>
-            );
-          },
-
-          tabBarLabel: ({ focused }) => {
-            return (
-              <Text
-                style={{
-                  fontSize: 14,
-                  color: focused ? Color.colorTextMain : Color.inactive,
-                  fontWeight: 600,
-                }}
-              >
-                Hoạt động
-              </Text>
-            );
-          },
-        }}
-      />
 
        {/* form create active */}
        <Tab.Screen
@@ -142,46 +107,10 @@ function UITapDoanTruong(props) {
                 style={{
                   fontSize: 14,
                   color: focused ? Color.colorTextMain : Color.inactive,
-                  fontWeight: 600,
+                  fontWeight: '600',
                 }}
               >
                 Tạo HĐ
-              </Text>
-            );
-          },
-        }}
-      />
-
-       {/* list active created */}
-       <Tab.Screen
-        name="listActiveCreatedDT"
-        component={ListActiveCreatedDT}
-        options={{
-          tabBarIcon: ({ focused }) => {
-            return (
-              <Image
-                source={require("../../resource/iconUITap/activeCreated.png")}
-                style={{
-                  width: 25,
-                  height: 25,
-                  tintColor: focused ? Color.colorTextMain : Color.inactive,
-                  marginBottom: 5,
-                }}
-                resizeMode="cover"
-              ></Image>
-            );
-          },
-
-          tabBarLabel: ({ focused }) => {
-            return (
-              <Text
-                style={{
-                  fontSize: 14,
-                  color: focused ? Color.colorTextMain : Color.inactive,
-                  fontWeight: 600,
-                }}
-              >
-                HĐ đã tạo
               </Text>
             );
           },
@@ -214,7 +143,7 @@ function UITapDoanTruong(props) {
                 style={{
                   fontSize: 14,
                   color: focused ? Color.colorTextMain : Color.inactive,
-                  fontWeight: 600,
+                  fontWeight: '600',
                 }}
               >
                 Tôi

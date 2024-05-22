@@ -14,6 +14,7 @@ import { screenHeight, screenWidth } from "../../component/DimensionsScreen";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 function HomeDoanTruong(props) {
+  const {navigation} = props
   return (
     <SafeAreaView
       style={{
@@ -53,75 +54,58 @@ function HomeDoanTruong(props) {
         </View>
 
         {/* content */}
-        <View style={{ flex: 1, borderWidth: 1, padding: 60,  paddingHorizontal: 50}}>
+        <View
+          style={{
+            flex: 1,
+            borderWidth: 1,
+            padding: 60,
+            paddingHorizontal: 50,
+          }}
+        >
           <View
             style={{
               width: "100%",
-            //   borderWidth: 5,
+              //   borderWidth: 5,
               justifyContent: "space-between",
-              alignItems: "center",
               flexDirection: "row",
-              marginBottom: 60
+              marginBottom: 60,
             }}
           >
-            <TouchableOpacity style={styles.containerIcon}>
-              <Image
-                style={styles.icon}
-                resizeMode="cover"
-                source={require("../../resource/iconProfile/user.png")}
-              />
-            </TouchableOpacity>
-
-            <TouchableOpacity style={styles.containerIcon}>
-              <Image
-                style={styles.icon}
-                resizeMode="contain"
-                source={require("../../resource/iconProfile/user.png")}
-              />
-            </TouchableOpacity>
-
-            <TouchableOpacity style={styles.containerIcon}>
-              <Image
-                style={styles.icon}
-                resizeMode="contain"
-                source={require("../../resource/iconProfile/user.png")}
-              />
-            </TouchableOpacity>
+            <View style={{alignItems: 'center'}}>
+              <TouchableOpacity style={styles.containerIcon} onPress={() => navigation.navigate('screenListDoanTruong')}>
+                <Image
+                  style={styles.icon}
+                  resizeMode="cover"
+                  source={require("../../resource/iconHomeDoanTruong/hoatDong.png")}
+                />
+              </TouchableOpacity>
+              <Text style = {styles.bottomText}>Hoạt động</Text>
+            </View>
+            <View style={{alignItems: 'center',}}>
+              <TouchableOpacity style={styles.containerIcon}  onPress={() => navigation.navigate('listActiveCreatedDT')}>
+                <Image
+                  style={styles.icon}
+                  resizeMode="cover"
+                  source={require("../../resource/iconHomeDoanTruong/taoHoatDong1.png")}
+                />
+              </TouchableOpacity>
+              <Text style = {styles.bottomText}>Hoạt động</Text>
+              <Text style = {[styles.bottomText, {marginTop: -2}]}>đã tạo</Text>
+            </View>
+            <View style={{alignItems: 'center'}}>
+              <TouchableOpacity style={styles.containerIcon}  onPress={() => navigation.navigate('listActiveApproveDT')}>
+                <Image
+                  style={styles.icon}
+                  resizeMode="cover"
+                  source={require("../../resource/iconHomeDoanTruong/pheDuyet.png")}
+                />
+              </TouchableOpacity>
+              <Text style = {styles.bottomText}>Duyệt</Text>
+              <Text style = {[styles.bottomText, {marginTop: -2}]}>hoạt động</Text>
+            </View>
           </View>
 
-          <View
-            style={{
-              width: "100%",
-            //   borderWidth: 5,
-              justifyContent: "space-between",
-              alignItems: "center",
-              flexDirection: "row",
-            }}
-          >
-            <TouchableOpacity style={styles.containerIcon}>
-              <Image
-                style={styles.icon}
-                resizeMode="cover"
-                source={require("../../resource/iconProfile/user.png")}
-              />
-            </TouchableOpacity>
-
-            <TouchableOpacity style={styles.containerIcon}>
-              <Image
-                style={styles.icon}
-                resizeMode="contain"
-                source={require("../../resource/iconProfile/user.png")}
-              />
-            </TouchableOpacity>
-
-            <TouchableOpacity style={styles.containerIcon}>
-              <Image
-                style={styles.icon}
-                resizeMode="contain"
-                source={require("../../resource/iconProfile/user.png")}
-              />
-            </TouchableOpacity>
-          </View>
+          
         </View>
       </ImageBackground>
     </SafeAreaView>
@@ -131,7 +115,7 @@ const styles = StyleSheet.create({
   containerIcon: {
     width: 65,
     height: 65,
-    backgroundColor: "white",
+    backgroundColor: Color.colorBgUiTap,
     justifyContent: "center",
     alignItems: "center",
     borderRadius: 10,
@@ -141,7 +125,12 @@ const styles = StyleSheet.create({
   icon: {
     width: 45,
     height: 45,
-    tintColor: Color.colorTextMain,
+  },
+  bottomText: {
+    fontSize: 15,
+    marginTop: 10,
+    color: Color.colorTextMain,
+    fontWeight: '400',
   }
 });
 export default HomeDoanTruong;

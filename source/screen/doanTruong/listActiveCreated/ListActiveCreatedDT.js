@@ -7,7 +7,6 @@ import {
     ImageBackground,
     TextInput,
     FlatList,
-    TouchableOpacity
   } from 'react-native';
 import React, { useState } from 'react';
 import FontSize from '../../../component/FontSize';
@@ -170,7 +169,7 @@ export default function ListActiveCreatedDT({navigation}) {
         </View>
 
         <View style={styles.containerHeader}>
-          <Text style={styles.header}>Hoạt động hiện có</Text>
+          <Text style={styles.header}>Hoạt động đã tạo</Text>
         </View>
 
         <View
@@ -229,7 +228,7 @@ export default function ListActiveCreatedDT({navigation}) {
 
           {filteredActives().length > 0 ? (
             <FlatList
-              style={{flex: 1,  marginBottom: showKeyBoard ? 95 : 200}}
+              style={{flex: 1,  marginBottom: showKeyBoard ? 95 : 150}}
               data={filteredActives()}
               renderItem={({ item }) => (
                 <ActiveCreatedItemDT
