@@ -32,7 +32,8 @@ import {
         ngaySinh: '22/03/2003',
         diaChi: 'xã đồi 61, trảng bom đồng nai',
         maLop: 'D21CQPT01-N',
-        chucVu: 'không'
+        chucVu: 'không',
+        nameActive: 'Trăng cho em'
       },
   
       {
@@ -46,7 +47,8 @@ import {
         ngaySinh: '15/04/2003',
         diaChi: 'phường Hòa Khánh, quận Liên Chiểu, Đà Nẵng',
         maLop: 'D21CQPT01-N',
-        chucVu: 'không'
+        chucVu: 'không',
+        nameActive: 'Trăng cho em'
     },
     {
         id: 3,
@@ -59,7 +61,8 @@ import {
         ngaySinh: '03/05/2003',
         diaChi: 'phường Bình Hòa, thành phố Thuận An, Bình Dương',
         maLop: 'D21CQPT01-N',
-        chucVu: 'không'
+        chucVu: 'không',
+        nameActive: 'Mùa hè xanh'
     },
     {
         id: 4,
@@ -72,7 +75,8 @@ import {
         ngaySinh: '18/06/2003',
         diaChi: 'phường An Phú, quận 2, TP Hồ Chí Minh',
         maLop: 'D21CQPT01-N',
-        chucVu: 'không'
+        chucVu: 'không',
+        nameActive: 'Đoán hình'
     },
     {
         id: 5,
@@ -85,7 +89,8 @@ import {
         ngaySinh: '29/07/2003',
         diaChi: 'phường 9, quận Phú Nhuận, TP Hồ Chí Minh',
         maLop: 'D21CQPT01-N',
-        chucVu: 'không'
+        chucVu: 'không',
+        nameActive: 'Trăng cho em'
     },
     {
         id: 6,
@@ -98,7 +103,8 @@ import {
         ngaySinh: '10/08/2003',
         diaChi: 'xã Xuân Hưng, huyện Xuân Lộc, Đồng Nai',
         maLop: 'D21CQPT01-N',
-        chucVu: 'không'
+        chucVu: 'không',
+        nameActive: 'Tiếp sức mùa thì'
     }
     ]);
   
@@ -182,7 +188,8 @@ import {
               style={{
                 width: "100%",
                 flexDirection: "row",
-                alignItems: 'center'
+                alignItems: 'center',
+                justifyContent: 'space-between'
               }}
             >
               <Text
@@ -190,24 +197,11 @@ import {
                   color: Color.colorTextMain,
                   fontSize: FontSize.sizeMain,
                   fontWeight: 500,
-                  marginRight: 50,
                 }}
               >
-                MSSV
-              </Text>
-  
-              <Text
-                style={{
-                  color: Color.colorTextMain,
-                  fontSize: FontSize.sizeMain,
-                  fontWeight: 500,
-                  marginRight: 30,
-                }}
-              >
-                Tên sinh viên
+                Mã số sinh viên
               </Text>
               
-              <View style ={{flex: 1}}>
               <Text
                 style={{
                   color: Color.colorTextMain,
@@ -217,7 +211,6 @@ import {
               >
                  Tên hoạt động
               </Text>
-              </View>
               
               
             </View>
@@ -228,11 +221,11 @@ import {
               renderItem={({ item }) => (
                 <ApproveSvItem
                   approveSv={item}
-                //   onPressItem={() => {
-                //     navigation.navigate("detailActiveApprove", {
-                //       detailActiveApprove: item,
-                //     });
-                //   }}
+                  onPressItem={() => {
+                    navigation.navigate("detailApproveSv", {
+                      detailApproveSv: item,
+                    });
+                  }}
                 />
               )}
               keyExtractor={(item) => item.id}
@@ -329,7 +322,7 @@ import {
     },
     header: {
       fontSize: FontSize.sizeHeader - 3,
-      fontWeight: "600",
+      fontWeight: "700",
       color: Color.colorTextMain,
       width: (2 / 4) * screenWidth,
     },

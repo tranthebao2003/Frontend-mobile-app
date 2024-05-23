@@ -17,6 +17,7 @@ import DetailActiveApprove from "../screen/doanTruong/detailActiveApprove/Detail
 import ListOrganizedActiveDT from "../screen/doanTruong/listOrganizedActive/ListOrganizedActiveDT";
 import DetailOrganizedActive from "../screen/doanTruong/detailOrganizedActive/DetailOrganizedActive";
 import ListApproveSv from "../screen/doanTruong/listApproveSv/ListApproveSv";
+import DetailApproveSv from "../screen/doanTruong/detailApproveSv/DetailApproveSv";
 import { useDispatch, useSelector } from 'react-redux';
 
 import { useEffect } from 'react';
@@ -70,6 +71,7 @@ const DoanTruong = () => {
       <Stack.Screen name="detailOrganizedActive" component={DetailOrganizedActive} />
 
       <Stack.Screen name="listApproveSv" component={ListApproveSv} />
+      <Stack.Screen name="detailApproveSv" component={DetailApproveSv} />
     </Stack.Navigator>
   );
 }

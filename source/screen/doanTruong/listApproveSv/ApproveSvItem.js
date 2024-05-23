@@ -4,7 +4,7 @@ import FontSize from "../../../component/FontSize";
 
 const ApproveSvItem = (props) => {
 
-    const {mssv, ho, ten} = props.approveSv; // destructuring an object
+    const {mssv, ho, ten, nameActive} = props.approveSv; // destructuring an object
     const { onPressItem } = props;
     return (
       <TouchableOpacity
@@ -18,35 +18,25 @@ const ApproveSvItem = (props) => {
           borderColor: Color.colorTextMain,
           paddingTop: 26,
           paddingBottom: 13,
+          justifyContent: 'space-between'
         }}
       >
         <View
           style={{
-            flex: 2,
             marginRight: 15
           }}
         >
           <Text style={styles.contentText}>{mssv}</Text>
         </View>
 
-        <View
-          style={{
-            flex: 3,
-            backgroundColor: Color.colorBtn,
-            paddingRight: 5,
-          }}
-        >
-          <Text style={styles.contentText}>{ho + ' ' + ten}</Text>
-        </View>
 
         <View
           style={{
-            flex: 2,
             backgroundColor: Color.colorBtn,
             alignItems: "center",
           }}
         >
-          {/* <Text style={styles.contentText}>{organizer}</Text> */}
+          <Text style={styles.contentText}>{nameActive}</Text>
         </View>
       </TouchableOpacity>
     );
