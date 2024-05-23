@@ -39,6 +39,7 @@ function HomeDoanTruong(props) {
             overflow: "hidden",
             justifyContent: "center",
             alignItems: "center",
+            opacity: 0.4
           }}
         >
           <Image
@@ -58,6 +59,8 @@ function HomeDoanTruong(props) {
             height: 0.35*screenHeight,
             padding: 35,
             alignItems: 'center',
+            borderWidth: 0.15,
+            borderColor: Color.colorTextMain
           }}
         >
           {/* three item top */}
@@ -163,8 +166,49 @@ function HomeDoanTruong(props) {
 
         {/* posision, logo */}
         <View style={styles.containerPositionLogo}>
-          <Text style={[styles.header, {fontWeight: '400'}]}>Chức vụ</Text>
+        <Image
+          source={require("../../resource/iconHomeDoanTruong/chucVu1.png")}
+          style={{
+            height: 42,
+            width: 55,
+            position: "absolute",
+            left: 10,
+            top: 8,
+            borderRadius: 16,
+            zIndex: 2,
+          }}
+          resizeMode="contain"
+        ></Image>
           <Text style={styles.header}>Đoàn trường</Text>
+        </View>
+
+        <View style={{width: '100%',}}>
+        <Image
+          source={require("../../resource/iconLogin/lotLogo2.png")}
+          style={{
+            height: 68,
+            width: 68,
+            position: "absolute",
+            right: 42,
+            bottom: 0,
+            borderRadius: 8,
+            zIndex: 1,
+          }}
+          resizeMode="contain"
+        ></Image>
+        <Image
+          source={require("../../resource/iconLogin/logo.png")}
+          style={{
+            height: 60,
+            width: 60,
+            position: "absolute",
+            right: 45,
+            bottom: 2,
+            borderRadius: 16,
+            zIndex: 2,
+          }}
+          resizeMode="contain"
+        ></Image>
         </View>
       </ImageBackground>
     </SafeAreaView>
@@ -194,7 +238,7 @@ const styles = StyleSheet.create({
   },
 
   containerPositionLogo: {
-    width: 0.4*screenWidth,
+    width: 0.8*screenWidth,
     marginLeft: 40,
     marginTop: 25,
     paddingVertical: 20,
@@ -209,6 +253,7 @@ const styles = StyleSheet.create({
     fontSize: FontSize.sizeMain,
     fontWeight: "600",
     color: Color.colorTextMain,
+    marginLeft: 50
   },
 });
 export default HomeDoanTruong;

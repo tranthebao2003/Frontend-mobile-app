@@ -188,7 +188,6 @@ export default function ListActiveApprove({ navigation }) {
               top: 30,
               borderRadius: 16,
               zIndex: 2,
-              tintColor: Color.colorTextMain,
             }}
             resizeMode="contain"
           ></Image>
