@@ -39,7 +39,7 @@ function HomeDoanTruong(props) {
             overflow: "hidden",
             justifyContent: "center",
             alignItems: "center",
-            opacity: 0.4
+            opacity: 0.6
           }}
         >
           <Image

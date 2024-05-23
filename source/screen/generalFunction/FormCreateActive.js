@@ -10,8 +10,9 @@ import {
   ScrollView,
   Modal,
   Alert,
+  Keyboard
 } from "react-native";
-import React, { useState } from "react";
+import React, { useState, useEffect} from "react";
 import FontSize from "../../component/FontSize";
 import Color from "../../component/Color";
 import { screenWidth, screenHeight } from "../../component/DimensionsScreen";
@@ -19,6 +20,8 @@ import { screenWidth, screenHeight } from "../../component/DimensionsScreen";
 import DatePicker from "react-native-modern-datepicker";
 import moment from "moment";
 import Dialog from 'react-native-dialog'
+import {useDispatch } from "react-redux";
+import {showKeyBoardAction, hideKeyBoardAction} from '../../redux/action/KeyBoardAction'
 
 export default function FormCreateActive(props) {
   const {navigation} = props
@@ -110,6 +113,31 @@ export default function FormCreateActive(props) {
     }
   };
 
+
+  // xử lí keyboard
+  const dispatch = useDispatch()
+  
+  // event keyboard: event là cho toàn màn hình nằm trong UITapDoanTruong.js là chỉ cần mình ấn vào 
+  // ô input ở scrren HĐ đã tham gia hay HĐ thì nó đều bắt đc keyboard
+
+  useEffect(() => {
+    const showSubscription = Keyboard.addListener('keyboardDidShow', () => {
+      dispatch(showKeyBoardAction())
+    });
+    const hideSubscription = Keyboard.addListener('keyboardDidHide', () => {
+      dispatch(hideKeyBoardAction())
+    });
+
+    // showSubscription.remove() và hideSubscription.remove() là các phương thức được 
+    // sử dụng để gỡ bỏ các hàm xử lý sự kiện đã được đăng ký trước đó thông qua addListener.
+    // Khi component bị unmount hoặc useEffect được gọi lại, các hàm xử lý sự kiện này 
+    // không còn cần thiết nữa, vì vậy chúng ta gọi remove() để loại bỏ chúng
+    return () => {
+      showSubscription.remove();
+      hideSubscription.remove();
+    };
+  }, []);
+
   return (
     <View style={styles.container}>
       <StatusBar style="auto" />
@@ -146,11 +174,10 @@ export default function FormCreateActive(props) {
               height: 75,
               width: 75,
               position: "absolute",
-              left: screenWidth / 10 - 25,
-              top: 12,
+              left: screenWidth / 10 - 27,
+              top: 13,
               borderRadius: 16,
               zIndex: 2,
-              tintColor: Color.colorTextMain,
             }}
             resizeMode="contain"
           ></Image>

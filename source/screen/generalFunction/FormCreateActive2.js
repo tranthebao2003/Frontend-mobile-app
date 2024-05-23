@@ -8,13 +8,15 @@ import {
   TextInput,
   TouchableOpacity,
   ScrollView,
-  Alert
+  Alert,
+  Keyboard
 } from "react-native";
-import React, { useState } from "react";
+import React, { useState, useEffect} from "react";
 import FontSize from "../../component/FontSize";
 import Color from "../../component/Color";
 import { screenWidth, screenHeight } from "../../component/DimensionsScreen";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch} from "react-redux";
+import {showKeyBoardAction, hideKeyBoardAction} from '../../redux/action/KeyBoardAction'
 
 export default function FormCreateActive2() {
   const [location, setLocation] = useState('');
@@ -28,7 +30,26 @@ export default function FormCreateActive2() {
   const [description, setDescription] = useState('');
 
   const {showKeyBoard} = useSelector(state => state.keyboardShow)
-  
+
+  // xử lí keyboard
+  const dispatch = useDispatch()
+  useEffect(() => {
+    const showSubscription = Keyboard.addListener('keyboardDidShow', () => {
+      dispatch(showKeyBoardAction())
+    });
+    const hideSubscription = Keyboard.addListener('keyboardDidHide', () => {
+      dispatch(hideKeyBoardAction())
+    });
+
+    // showSubscription.remove() và hideSubscription.remove() là các phương thức được 
+    // sử dụng để gỡ bỏ các hàm xử lý sự kiện đã được đăng ký trước đó thông qua addListener.
+    // Khi component bị unmount hoặc useEffect được gọi lại, các hàm xử lý sự kiện này 
+    // không còn cần thiết nữa, vì vậy chúng ta gọi remove() để loại bỏ chúng
+    return () => {
+      showSubscription.remove();
+      hideSubscription.remove();
+    };
+  }, []);
 
   const navigateCreateActive = () => {
     if (location === "" || organizer === "") {

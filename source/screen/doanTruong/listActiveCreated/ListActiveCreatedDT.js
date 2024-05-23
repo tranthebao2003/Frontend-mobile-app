@@ -159,10 +159,6 @@ export default function ListActiveCreatedDT({navigation}) {
       dispatch(hideKeyBoardAction())
     });
 
-    // showSubscription.remove() và hideSubscription.remove() là các phương thức được 
-    // sử dụng để gỡ bỏ các hàm xử lý sự kiện đã được đăng ký trước đó thông qua addListener.
-    // Khi component bị unmount hoặc useEffect được gọi lại, các hàm xử lý sự kiện này 
-    // không còn cần thiết nữa, vì vậy chúng ta gọi remove() để loại bỏ chúng
     return () => {
       showSubscription.remove();
       hideSubscription.remove();

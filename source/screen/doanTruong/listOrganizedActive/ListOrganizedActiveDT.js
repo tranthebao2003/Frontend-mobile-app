@@ -309,16 +309,7 @@ export default function ListOrganizedActiveDT({ navigation }) {
                   fontWeight: 500,
                 }}
               >
-                Đơn vị
-              </Text>
-              <Text
-                style={{
-                  color: Color.colorTextMain,
-                  fontSize: FontSize.sizeMain,
-                  fontWeight: 500,
-                }}
-              >
-                tổ chức
+                Ngày tổ chức
               </Text>
             </View>
           </View>
