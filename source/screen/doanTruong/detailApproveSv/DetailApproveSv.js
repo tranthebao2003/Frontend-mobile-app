@@ -32,10 +32,8 @@ export default function DetailApproveSv(props) {
     chucVu,
   } = props.route.params.detailApproveSv;
 
-  // btn cancel
+  // btn no approve
   const [dialogCancel, setDialogCancel] = useState(false);
-
-  const [changeText, setChangeText] = useState('Không duyệt')
 
   const showHideDialogCancel = () => {
     setDialogCancel(!dialogCancel);
@@ -45,6 +43,31 @@ export default function DetailApproveSv(props) {
   const yesBtnCancel = () => {
     setDialogCancel(!dialogCancel);
     setYesNotificationCancel(!yesNotificationCancel);
+  };
+
+  // btn remove
+  const [changeText, setChangeText] = useState("Không duyệt");
+  const [dialogRemove, setDialogRemove] = useState(false);
+  const showHideDialogRemove = () => {
+    setDialogRemove(!dialogRemove);
+  };
+
+  const [yesNotificationRemove, setYesNotificationRemove] = useState(false);
+  const yesBtnRemove = () => {
+    // let save
+    setDialogRemove(!dialogRemove);
+    setYesNotificationRemove(!yesNotificationRemove);
+
+    // mik phải để cho nó hiện thông báo tầm 3s trước khi chuyển text
+    // nếu ko nó sẽ bị lỗi ấn đồng ý duyệt thì nó lại nhảy ra 
+    // dialog xóa sv thành công
+
+   
+    setTimeout(() => {
+      setYesNotificationRemove(false)
+      setChangeText("Không duyệt");
+    },2500)
+   
   };
 
   // btn approve
@@ -57,6 +80,7 @@ export default function DetailApproveSv(props) {
   const yesBtnApprove = () => {
     setDialogApprove(!dialogApprove);
     setYesNotificationApprove(!yesNotificationApprove);
+    setChangeText("Xóa sinh viên");
   };
 
   return (
@@ -156,7 +180,7 @@ export default function DetailApproveSv(props) {
             style={{
               width: "100%",
               alignItems: "center",
-              justifyContent: 'space-between',
+              justifyContent: "space-between",
               marginTop: 20,
               flexDirection: "row",
               borderTopWidth: 0.5,
@@ -178,7 +202,7 @@ export default function DetailApproveSv(props) {
                 backgroundColor: Color.colorBtn,
               }}
             >
-              <Text style={styles.contentText}>{ho + ' ' + ten}</Text>
+              <Text style={styles.contentText}>{ho + " " + ten}</Text>
             </View>
           </View>
         </View>
@@ -374,92 +398,183 @@ export default function DetailApproveSv(props) {
             justifyContent: "center",
           }}
         >
-          {/* btn cancel */}
-          <TouchableOpacity
-            style={styles.btnCancel}
-            onPress={showHideDialogCancel}
-          >
-            <Text style={[styles.resigter, { color: Color.colorRemove }]}>
-              {changeText}
-            </Text>
-            <Dialog.Container visible={dialogCancel}>
-              <Dialog.Title
-                style={{ color: Color.colorTextMain, fontWeight: "700" }}
-              >
-                XÁC NHẬN
-              </Dialog.Title>
-              <Dialog.Description
-                style={{ color: "black", fontSize: FontSize.sizeMain - 2 }}
-              >
-                Bạn có chắc không duyệt sinh viên này?
-              </Dialog.Description>
-              <Dialog.Button
-                label="No"
-                onPress={showHideDialogCancel}
-                style={[
-                  styles.btnCancel,
-                  {
+          {changeText === "Xóa sinh viên" ? (
+            // remove sinh viên khỏi hđ
+            <TouchableOpacity
+              style={styles.btnCancel}
+              onPress={showHideDialogRemove}
+            >
+              <Text style={[styles.resigter, { color: Color.colorRemove }]}>
+                Xóa sinh viên
+              </Text>
+              <Dialog.Container visible={dialogRemove}>
+                <Dialog.Title
+                  style={{ color: Color.colorTextMain, fontWeight: "700" }}
+                >
+                  XÁC NHẬN
+                </Dialog.Title>
+                <Dialog.Description
+                  style={{ color: "black", fontSize: FontSize.sizeMain - 2 }}
+                >
+                  Bạn có muốn xóa sinh viên này khỏi hoạt động?
+                </Dialog.Description>
+                <Dialog.Button
+                  label="No"
+                  onPress={showHideDialogRemove}
+                  style={[
+                    styles.btnCancel,
+                    {
+                      width: 60,
+                      height: 40,
+                      marginRight: 30,
+                      fontWeight: 500,
+                      fontSize: 18,
+                      color: Color.colorRemove,
+                    },
+                  ]}
+                />
+                <Dialog.Button
+                  label="Yes"
+                  onPress={yesBtnRemove}
+                  style={{
                     width: 60,
                     height: 40,
-                    marginRight: 30,
+                    marginRight: 50,
+                    borderRadius: 5,
+                    backgroundColor: "#d9ebfe",
                     fontWeight: 500,
                     fontSize: 18,
-                    color: Color.colorRemove,
-                  },
-                ]}
-              />
-              <Dialog.Button
-                label="Yes"
-                onPress={yesBtnCancel}
-                style={{
-                  width: 60,
-                  height: 40,
-                  marginRight: 50,
-                  borderRadius: 5,
-                  backgroundColor: "#d9ebfe",
-                  fontWeight: 500,
-                  fontSize: 18,
-                }}
-              />
-            </Dialog.Container>
-            <Dialog.Container visible={yesNotificationCancel}>
-              <Dialog.Title
-                style={{
-                  color: Color.colorTextMain,
-                  fontWeight: "700",
-                  fontSize: FontSize.sizeMain - 2,
-                }}
-              >
-                THÔNG BÁO
-              </Dialog.Title>
-              <Dialog.Description
-                style={{ color: "black", fontSize: FontSize.sizeMain - 2 }}
-              >
-                Bạn đã từ chối duyệt thành công!
-              </Dialog.Description>
-              <Dialog.Button
-                label="Ok"
-                onPress={() => setYesNotificationCancel(!yesNotificationCancel)}
-                style={[
-                  styles.btnCancel,
-                  {
+                  }}
+                />
+              </Dialog.Container>
+              <Dialog.Container visible={yesNotificationRemove}>
+                <Dialog.Title
+                  style={{
+                    color: Color.colorTextMain,
+                    fontWeight: "700",
+                    fontSize: FontSize.sizeMain - 2,
+                  }}
+                >
+                  THÔNG BÁO
+                </Dialog.Title>
+                <Dialog.Description
+                  style={{ color: "black", fontSize: FontSize.sizeMain - 2 }}
+                >
+                  Bạn đã xóa sinh viên thành công !
+                </Dialog.Description>
+              </Dialog.Container>
+            </TouchableOpacity>
+          ) : (
+            // ko duyệt
+            <TouchableOpacity
+              style={styles.btnCancel}
+              onPress={showHideDialogCancel}
+            >
+              <Text style={[styles.resigter, { color: Color.colorRemove }]}>
+                Không duyệt
+              </Text>
+              <Dialog.Container visible={dialogCancel}>
+                <Dialog.Title
+                  style={{ color: Color.colorTextMain, fontWeight: "700" }}
+                >
+                  XÁC NHẬN
+                </Dialog.Title>
+                <Dialog.Description
+                  style={{ color: "black", fontSize: FontSize.sizeMain - 2 }}
+                >
+                  Bạn có chắc không duyệt sinh viên này ?
+                </Dialog.Description>
+                <Dialog.Button
+                  label="No"
+                  onPress={showHideDialogCancel}
+                  style={[
+                    styles.btnCancel,
+                    {
+                      width: 60,
+                      height: 40,
+                      marginRight: 30,
+                      fontWeight: 500,
+                      fontSize: 18,
+                      color: Color.colorRemove,
+                    },
+                  ]}
+                />
+                <Dialog.Button
+                  label="Yes"
+                  onPress={yesBtnCancel}
+                  style={{
                     width: 60,
                     height: 40,
-                    marginRight: 30,
+                    marginRight: 50,
+                    borderRadius: 5,
+                    backgroundColor: "#d9ebfe",
                     fontWeight: 500,
                     fontSize: 18,
-                  },
-                ]}
-              />
-            </Dialog.Container>
-          </TouchableOpacity>
+                  }}
+                />
+              </Dialog.Container>
+              <Dialog.Container visible={yesNotificationCancel}>
+                <Dialog.Title
+                  style={{
+                    color: Color.colorTextMain,
+                    fontWeight: "700",
+                    fontSize: FontSize.sizeMain - 2,
+                  }}
+                >
+                  THÔNG BÁO
+                </Dialog.Title>
+                <Dialog.Description
+                  style={{ color: "black", fontSize: FontSize.sizeMain - 2 }}
+                >
+                  Bạn đã không duyệt sinh viên thành công!
+                </Dialog.Description>
+                <Dialog.Button
+                  label="Ok"
+                  onPress={() =>
+                    setYesNotificationCancel(!yesNotificationCancel)
+                  }
+                  style={[
+                    styles.btnCancel,
+                    {
+                      width: 60,
+                      height: 40,
+                      marginRight: 30,
+                      fontWeight: 500,
+                      fontSize: 18,
+                    },
+                  ]}
+                />
+              </Dialog.Container>
+            </TouchableOpacity>
+          )}
 
           {/* btn approve */}
           <TouchableOpacity
-            style={styles.btnResigter}
+            style={[
+              styles.btnResigter,
+              {
+                backgroundColor:
+                  changeText === "Xóa sinh viên"
+                    ? "#f1f1f1"
+                    : Color.colorBgUiTap,
+              },
+            ]}
             onPress={showHideDialogApprove}
+            disabled={changeText === "Xóa sinh viên" ? true : false}
           >
-            <Text style={styles.resigter}>Duyệt</Text>
+            <Text
+              style={[
+                styles.resigter,
+                {
+                  color:
+                    changeText === "Xóa sinh viên"
+                      ? "#bababa"
+                      : Color.colorTextMain,
+                },
+              ]}
+            >
+              Duyệt
+            </Text>
             <Dialog.Container visible={dialogApprove}>
               <Dialog.Title
                 style={{ color: Color.colorTextMain, fontWeight: "700" }}
@@ -488,6 +603,7 @@ export default function DetailApproveSv(props) {
               />
               <Dialog.Button
                 label="Yes"
+                // call api, sau đó chuyển ko duyệt thành xóa
                 onPress={yesBtnApprove}
                 style={{
                   width: 60,
@@ -517,7 +633,9 @@ export default function DetailApproveSv(props) {
               </Dialog.Description>
               <Dialog.Button
                 label="Ok"
-                onPress={() => setYesNotificationApprove(!yesNotificationApprove)}
+                onPress={() =>
+                  setYesNotificationApprove(!yesNotificationApprove)
+                }
                 style={[
                   styles.btnCancel,
                   {
@@ -577,7 +695,6 @@ const styles = StyleSheet.create({
     height: 30 * 1.6,
     borderRadius: 10,
     margin: 20,
-    backgroundColor: Color.colorBgUiTap,
     justifyContent: "center",
     alignItems: "center",
     shadowColor: Color.colorTextMain,
@@ -589,6 +706,5 @@ const styles = StyleSheet.create({
   resigter: {
     fontSize: FontSize.sizeSmall + 6,
     fontWeight: "700",
-    color: Color.colorTextMain,
   },
 });
