@@ -122,7 +122,7 @@ export default RootElement = () =>{
     return (
       <NavigationContainer>
         {
-          authToken === true ? <AuthStack/> : <DoanTruong/>
+          authToken === true ? <AuthStack/> : <SinhVien/>
         }
       </NavigationContainer>
     );
