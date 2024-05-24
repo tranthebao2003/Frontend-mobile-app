@@ -96,11 +96,10 @@ export default function FormCreateActive2() {
               height: 75,
               width: 75,
               position: "absolute",
-              left: screenWidth / 10 - 25,
+              left: screenWidth / 10 - 27,
               top: 12,
               borderRadius: 16,
               zIndex: 2,
-              tintColor: Color.colorTextMain,
             }}
             resizeMode="contain"
           ></Image>

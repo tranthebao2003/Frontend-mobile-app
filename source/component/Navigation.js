@@ -1,12 +1,23 @@
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
+
+// Xác minh
 import Login from '../component/welcome/Login';
 import ForgotPassword from '../component/welcome/ForgotPassword';
 
+// Sinh viên
 import {UITapSinhVien} from '../screen/user/UITapSinhVien'
 import DetailActive from '../screen/user/detailActive/DetailActive'
 import DetailActived from '../screen/user/detailActived/DetailActived'
 
+// Trưởng câu lạc bộ
+import { UITapTruongCLB } from '../screen/truongCLB/UITapTruongCLB';
+import  ListActiveTruongCLB  from '../screen/truongCLB/listActiveTruongCLB/ListActiveTruongCLB';
+import  DetailActiveTruongCLB  from '../screen/truongCLB/detailActiveTruongCLB/DetailActiveTruongCLB';
+
+import  ListActiveCreatedTruongCLB  from '../screen/truongCLB//listActiveCreatedTruongCLB/ListActiveCreatedTruongCLB';
+
+// Đoàn trường
 import { UITapDoanTruong } from '../screen/doanTruong/UITapDoanTruong';
 import DetailActiveDTruong from '../screen/doanTruong/detailActive/DetailActiveDoanTruong'
 import FormCreateActive2 from '../screen/generalFunction/FormCreateActive2';
@@ -18,14 +29,14 @@ import ListOrganizedActiveDT from "../screen/doanTruong/listOrganizedActive/List
 import DetailOrganizedActive from "../screen/doanTruong/detailOrganizedActive/DetailOrganizedActive";
 import ListApproveSv from "../screen/doanTruong/listApproveSv/ListApproveSv";
 import DetailApproveSv from "../screen/doanTruong/detailApproveSv/DetailApproveSv";
-import { useDispatch, useSelector } from 'react-redux';
 
+
+
+import { useDispatch, useSelector } from 'react-redux';
 import { useEffect } from 'react';
 
 import SetAuthToken from "./SetAuthToken";
-
 import HandelJwtDecode from './JwtDecode';
-
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 
@@ -41,6 +52,7 @@ const AuthStack = () => {
   )
 }
 
+
 const SinhVien = () => {
   return(
     // Sinh viên
@@ -53,16 +65,33 @@ const SinhVien = () => {
 
 };
 
+const TruongCLB = () => {
+  return(
+    // Trưởng câu lạc bộ, bí thứ
+    <Stack.Navigator initialRouteName='uiTapTruongCLB' screenOptions={{ headerShown: false }}>
+      <Stack.Screen name="uiTapTruongCLB" component={UITapTruongCLB} />
+      <Stack.Screen name="formCreateActive2" component={FormCreateActive2} />
+
+      <Stack.Screen name="listActiveTruongCLB" component={ListActiveTruongCLB} />
+      <Stack.Screen name="detailActiveTruongCLB" component={DetailActiveTruongCLB} />
+
+      <Stack.Screen name="listActiveCreatedTruongCLB" component={ListActiveCreatedTruongCLB} />
+    </Stack.Navigator>
+  )
+
+};
+
 const DoanTruong = () => {
   return (
      // Đoàn trường
     <Stack.Navigator initialRouteName='uiTapDTruong' screenOptions={{ headerShown: false }}>
       <Stack.Screen name="uiTapDTruong" component={UITapDoanTruong} />
       <Stack.Screen name="formCreateActive2" component={FormCreateActive2} />
-      <Stack.Screen name="listActiveCreatedDT" component={ListActiveCreatedDT} />
 
       <Stack.Screen name="screenListDoanTruong" component={ScreenListDoanTruong} />
       <Stack.Screen name="detailActiveDTruong" component={DetailActiveDTruong}/>
+
+      <Stack.Screen name="listActiveCreatedDT" component={ListActiveCreatedDT} />
      
       <Stack.Screen name="listActiveApproveDT" component={ListActiveApproveDT} />
       <Stack.Screen name="detailActiveApprove" component={DetailActiveApprove} />
@@ -122,7 +151,7 @@ export default RootElement = () =>{
     return (
       <NavigationContainer>
         {
-          authToken === true ? <AuthStack/> : <SinhVien/>
+          authToken === true ? <AuthStack/> : <TruongCLB/>
         }
       </NavigationContainer>
     );

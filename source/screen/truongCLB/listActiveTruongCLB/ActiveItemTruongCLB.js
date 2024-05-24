@@ -2,9 +2,9 @@ import { Text, View, StyleSheet, TouchableOpacity } from "react-native";
 import Color from "../../../component/Color";
 import FontSize from "../../../component/FontSize";
 
-const OrganizedActiveItemDT = (props) => {
+const ActiveItemTruongCLB = (props) => {
 
-    const {stt, nameActive, timeOrganize} = props.activeOrganized; // destructuring an object
+    const {stt, nameActive, timeOrganize} = props.active; // destructuring an object
     const { onPressItem } = props;
     return (
       <TouchableOpacity
@@ -43,7 +43,7 @@ const OrganizedActiveItemDT = (props) => {
           style={{
             flex: 2,
             backgroundColor: Color.colorBtn,
-            alignItems: "center",
+            alignItems: "flex-end",
           }}
         >
           <Text style={styles.contentText}>{timeOrganize}</Text>
@@ -61,4 +61,4 @@ const OrganizedActiveItemDT = (props) => {
     }
   })
   
-  export default OrganizedActiveItemDT;
+  export default ActiveItemTruongCLB;

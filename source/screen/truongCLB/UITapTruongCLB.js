@@ -2,20 +2,20 @@ import { createContext, useState } from "react";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { Image, Text } from "react-native";
 import Color from "../../component/Color";
-import ProfileDoanTruong from "./profileDoanTruong/ProfileDoanTruong";
+import ProfileTruongCLB from "./profileTruongCLB/ProfileTruongCLB";
 import FormCreateActive from "../generalFunction/FormCreateActive";
-import HomeDoanTruong from "./HomeDoanTruong";
+import HomeTruongCLB from "./HomeTruongCLB";
 import { useSelector } from "react-redux";
 
 const Tab = createBottomTabNavigator();
-export const UserLoginDoanTruong = createContext();
+export const UserLoginTruongCLB = createContext();
 
-function UITapDoanTruong(props) {
+function UITapTruongCLB(props) {
   const user = {
-    nameUser: "Trần Thế Bảo",
+    nameUser: "Trần Thế Hải",
     phone: "0377253857",
     mssv: "n21dcpt008",
-    position: "Đoàn trường",
+    position: "Trưởng clb",
     email: "n21dcpt008@student.ptithcm.edu.vn",
     dateOfBirth: "22/2/2003",
     // backend trả về cũng đc mà select count thui
@@ -23,9 +23,9 @@ function UITapDoanTruong(props) {
   };
   const { showKeyBoard } = useSelector((state) => state.keyboardShow);
   return (
-    <UserLoginDoanTruong.Provider value={user}>
+    <UserLoginTruongCLB.Provider value={user}>
       <Tab.Navigator
-        initialRouteName="homeDoanTruong"
+        initialRouteName="homeTruongCLB"
         screenOptions={{
           headerShown: false,
           // tabBarActiveTintColor: Color.colorTextMain,
@@ -40,8 +40,8 @@ function UITapDoanTruong(props) {
       >
         {/* list active */}
         <Tab.Screen
-          name="homeDoanTruong"
-          component={HomeDoanTruong}
+          name="homeTruongCLB"
+          component={HomeTruongCLB}
           options={{
             tabBarIcon: ({ focused }) => {
               return (
@@ -112,8 +112,8 @@ function UITapDoanTruong(props) {
 
         {/* Profile đoàn trường */}
         <Tab.Screen
-          name="profileDTruong"
-          component={ProfileDoanTruong}
+          name="profileTruongCLB"
+          component={ProfileTruongCLB}
           options={{
             tabBarIcon: ({ focused }) => {
               return (
@@ -146,8 +146,8 @@ function UITapDoanTruong(props) {
           }}
         />
       </Tab.Navigator>
-    </UserLoginDoanTruong.Provider>
+    </UserLoginTruongCLB.Provider>
   );
 }
 
-export { UITapDoanTruong };
+export { UITapTruongCLB };
