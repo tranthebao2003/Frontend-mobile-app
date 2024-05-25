@@ -18,6 +18,8 @@ import {
   // - ListView from a map of objects
   // - FlatList
   export default function DetailActiveDoanTruong(props) {
+    const {navigation} = props
+
     // btn cancel
     const [dialogCancel, setDialogCancel] = useState(false);
     const showHideDialogCancel = () => {
@@ -31,7 +33,15 @@ import {
     };
 
     const navigateFormEdit = () => {
-        alert('chuyển sang form edit hoạt động')
+      navigation.navigate("from1EditActiveDoanTruong", {
+        nameActiveFromDetail: nameActive,
+        timeOrganizeFromDetail: timeOrganize,
+        deadlineFromDetail: deadline,
+        locationFromDetail: location,
+        organizerFromDetail: organizer,
+        costFromDetail: cost,
+        descriptionFromDetail: description
+      });
     };
   
   
@@ -46,7 +56,6 @@ import {
       cost,
       personApprove,
       timeApprove,
-      minNumber,
       description,
       status,
     } = props.route.params.detailActiveDTruong;
@@ -400,30 +409,6 @@ import {
                 }}
               >
                 {timeApprove}
-              </Text>
-            </View>
-
-            {/* minNumber */}
-            <View style={{ width: "100%", marginBottom: 20 }}>
-              <Text
-                style={{
-                  color: Color.colorTextMain,
-                  fontSize: FontSize.sizeMain,
-                  fontWeight: 500,
-                  marginRight: 20,
-                }}
-              >
-                Số lượng sinh viên tối thiểu
-              </Text>
-
-              <Text
-                style={{
-                  color: Color.colorTextMain,
-                  fontSize: FontSize.sizeMain,
-                  fontWeight: 400,
-                }}
-              >
-                {minNumber}
               </Text>
             </View>
 

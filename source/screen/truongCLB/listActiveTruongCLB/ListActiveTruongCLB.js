@@ -142,7 +142,7 @@ export default function ListActiveTruongCLB({navigation}) {
       deadline: '1/8/2005',
       location: "Học viện cơ sở quận 1",
       quantityActived: 25,
-      organizer: "Quỹ học bổng cho trẻ em nghèo",
+      organizer: "Trưởng câu lạc bộ",
       timeCreateActive: '10/2/2010',
       cost: 200000,
       personApprove: 'Ms Cường',

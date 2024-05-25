@@ -17,8 +17,11 @@ import Color from "../../component/Color";
 import { screenWidth, screenHeight } from "../../component/DimensionsScreen";
 import { useSelector, useDispatch} from "react-redux";
 import {showKeyBoardAction, hideKeyBoardAction} from '../../redux/action/KeyBoardAction'
+import { CommonActions } from "@react-navigation/native";
 
-export default function FormCreateActive2() {
+export default function FormCreateActive2(props) {
+  const {navigation} = props
+
   const [location, setLocation] = useState('');
 
   const [organizer, setOrganizer] = useState('');
@@ -55,7 +58,28 @@ export default function FormCreateActive2() {
     if (location === "" || organizer === "") {
       Alert.alert("Thông báo", "Bạn vui lòng nhập đủ thông tin");
     } else {
+
+      // dispatch này nó nằm trong navigation để gửi action navigation
+      //  lên navigator chứ ko liên quan j đến redux
       Alert.alert("chuyển trang");
+
+      //navigation.dispatch: Used to send a navigation action to the navigator.
+      //CommonActions.reset: Resets the navigation state, replacing the current stack with a new one.
+
+      // index: 0 nghĩa là chỉ định cái screen trong array routes phía dưới
+      // routes: là 1 mảng chứa các đối tượng screen và index = 0 chính là trang chủ
+
+      // tóm lại code phía dưới sẽ reset stack cũ thay bằng stack mới hoàn toàn
+      // mục đích để tăng hiệu năng, xóa những state trong stack cũ ko sử dụng
+      // đến
+      navigation.dispatch(
+        CommonActions.reset(
+          {
+            index: 0,
+            routes: [{name: 'uiTapTruongCLB'}]
+          }
+        )
+      )
     }
   };
 

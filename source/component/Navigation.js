@@ -23,6 +23,9 @@ import  DetailApproveSvTruongCLB  from '../screen/truongCLB/detailApproveSvTruon
 import  ListThongKeHoatDong  from '../screen/truongCLB/thongKeHoatDong/ListThongKeHoatDong';
 import  DetailThongKeHoatDong  from '../screen/truongCLB/detailThongKeHoatDong/DetailThongKeHoatDong';
 
+import  From1EditActiveTruongCLB  from '../screen/truongCLB/editActiveTruongCLB/From1EditActiveTruongCLB';
+import  From2EditActiveTruongCLB  from '../screen/truongCLB/editActiveTruongCLB/From2EditActiveTruongCLB';
+
 // Đoàn trường
 import { UITapDoanTruong } from '../screen/doanTruong/UITapDoanTruong';
 import DetailActiveDTruong from '../screen/doanTruong/detailActive/DetailActiveDoanTruong'
@@ -35,6 +38,9 @@ import ListOrganizedActiveDT from "../screen/doanTruong/listOrganizedActive/List
 import DetailOrganizedActive from "../screen/doanTruong/detailOrganizedActive/DetailOrganizedActive";
 import ListApproveSv from "../screen/doanTruong/listApproveSv/ListApproveSv";
 import DetailApproveSv from "../screen/doanTruong/detailApproveSv/DetailApproveSv";
+
+import From1EditActiveDoanTruong from "../screen/doanTruong/editActiveDoanTruong/From1EditActiveDoanTruong";
+import From2EditActiveDoanTruong from "../screen/doanTruong/editActiveDoanTruong/From2EditActiveDoanTruong";
 
 
 
@@ -88,6 +94,9 @@ const TruongCLB = () => {
 
       <Stack.Screen name="listThongKeHoatDong" component={ListThongKeHoatDong} />
       <Stack.Screen name="detailThongKeHoatDong" component={DetailThongKeHoatDong} />
+
+      <Stack.Screen name="from1EditActiveTruongCLB" component={From1EditActiveTruongCLB} />
+      <Stack.Screen name="from2EditActiveTruongCLB" component={From2EditActiveTruongCLB} />
     </Stack.Navigator>
   )
 
@@ -113,6 +122,9 @@ const DoanTruong = () => {
 
       <Stack.Screen name="listApproveSv" component={ListApproveSv} />
       <Stack.Screen name="detailApproveSv" component={DetailApproveSv} />
+
+      <Stack.Screen name="from1EditActiveDoanTruong" component={From1EditActiveDoanTruong} />
+      <Stack.Screen name="from2EditActiveDoanTruong" component={From2EditActiveDoanTruong} />
     </Stack.Navigator>
   );
 }
@@ -163,7 +175,7 @@ export default RootElement = () =>{
     return (
       <NavigationContainer>
         {
-          authToken === true ? <AuthStack/> : <TruongCLB/>
+          authToken === true ? <AuthStack/> : <DoanTruong/>
         }
       </NavigationContainer>
     );

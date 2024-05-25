@@ -160,7 +160,7 @@ export default function ScreenListDoanTruong({navigation}) {
       deadline: '13/2/2005',
       location: "Học viện cơ sở quận 10",
       quantityActived: 100,
-      organizer: "Trung tâm hỗ trợ giáo dục",
+      organizer: "Đoàn trường",
       timeCreateActive: '10/2/2001',
       cost: 0,
       personApprove: 'Thế Hải',
