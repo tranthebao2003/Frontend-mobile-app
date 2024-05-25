@@ -20,6 +20,9 @@ import  ListActiveCreatedTruongCLB  from '../screen/truongCLB/listActiveCreatedT
 import  ListApproveSvTruongCLB  from '../screen/truongCLB/listApproveSvTruongCLB/ListApproveSvTruongCLB';
 import  DetailApproveSvTruongCLB  from '../screen/truongCLB/detailApproveSvTruongCLB/DetailApproveSvTruongCLB';
 
+import  ListThongKeHoatDong  from '../screen/truongCLB/thongKeHoatDong/ListThongKeHoatDong';
+import  DetailThongKeHoatDong  from '../screen/truongCLB/detailThongKeHoatDong/DetailThongKeHoatDong';
+
 // Đoàn trường
 import { UITapDoanTruong } from '../screen/doanTruong/UITapDoanTruong';
 import DetailActiveDTruong from '../screen/doanTruong/detailActive/DetailActiveDoanTruong'
@@ -82,6 +85,9 @@ const TruongCLB = () => {
 
       <Stack.Screen name="listApproveSvTruongCLB" component={ListApproveSvTruongCLB} />
       <Stack.Screen name="detailApproveSvTruongCLB" component={DetailApproveSvTruongCLB} />
+
+      <Stack.Screen name="listThongKeHoatDong" component={ListThongKeHoatDong} />
+      <Stack.Screen name="detailThongKeHoatDong" component={DetailThongKeHoatDong} />
     </Stack.Navigator>
   )
 

@@ -63,16 +63,16 @@ function HomeTruongCLB(props) {
             borderColor: Color.colorTextMain
           }}
         >
-          {/* three item top */}
+          {/* two item Top */}
           <View
             style={{
-              width: "80%",
+              width: "97%",
               justifyContent: "space-between",
               flexDirection: "row",
-              marginBottom: 25,
+              marginBottom: 50,
             }}
           >
-            {/* list active */}
+            {/* filter active by month and year*/}
             <View style={{ alignItems: "center" }}>
               <TouchableOpacity
                 style={styles.containerIcon}
@@ -84,11 +84,11 @@ function HomeTruongCLB(props) {
                   source={require("../../resource/iconHomeDoanTruong/hoatDong.png")}
                 />
               </TouchableOpacity>
-              <Text style={styles.bottomText}>Hoạt động</Text>
+              <Text style={styles.bottomText}>Danh sách hoạt động</Text>
             </View>
 
-            {/* list actived */}
-            <View style={{ alignItems: "center" }}>
+            {/* approve student */}
+            <View style={{ alignItems: "center", marginRight: 10}}>
               <TouchableOpacity
                 style={styles.containerIcon}
                 onPress={() => navigation.navigate("listActiveCreatedTruongCLB")}
@@ -99,8 +99,7 @@ function HomeTruongCLB(props) {
                   source={require("../../resource/iconHomeDoanTruong/taoHoatDong1.png")}
                 />
               </TouchableOpacity>
-              <Text style={styles.bottomText}>Hoạt động</Text>
-              <Text style={[styles.bottomText, { marginTop: -2 }]}>đã tạo</Text>
+              <Text style={styles.bottomText}>Hoạt động đã tạo</Text>
             </View>
           </View>
 
@@ -117,7 +116,7 @@ function HomeTruongCLB(props) {
             <View style={{ alignItems: "center" }}>
               <TouchableOpacity
                 style={styles.containerIcon}
-                onPress={() => navigation.navigate("listOrganizedActiveDT")}
+                onPress={() => navigation.navigate("listThongKeHoatDong")}
               >
                 <Image
                   style={styles.icon}
@@ -140,7 +139,7 @@ function HomeTruongCLB(props) {
                   source={require("../../resource/iconHomeDoanTruong/approveSV1.png")}
                 />
               </TouchableOpacity>
-              <Text style={styles.bottomText}>Phê duyệt sinh viên</Text>
+              <Text style={styles.bottomText}> phê duyệt sinh viên</Text>
             </View>
           </View>
         </View>

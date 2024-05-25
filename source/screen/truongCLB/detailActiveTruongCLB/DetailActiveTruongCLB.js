@@ -453,7 +453,7 @@ import {
           </View>
 
           {/* buttons */}
-          <View
+          {organizer === "Trưởng câu lạc bộ" ? ( <View
             style={{
               width: "100%",
               flexDirection: "row",
@@ -461,18 +461,23 @@ import {
             }}
           >
             {/* btn cancel */}
+
             <TouchableOpacity
               style={styles.btnCancel}
               onPress={showHideDialogCancel}
             >
-              <Text style={[styles.resigter, {color: Color.colorRemove}]}>Xóa</Text>
+              <Text style={[styles.resigter, { color: Color.colorRemove }]}>
+                Xóa
+              </Text>
               <Dialog.Container visible={dialogCancel}>
                 <Dialog.Title
                   style={{ color: Color.colorTextMain, fontWeight: "700" }}
                 >
                   XÁC NHẬN
                 </Dialog.Title>
-                <Dialog.Description style={{ color: "black", fontSize: FontSize.sizeMain - 2}}>
+                <Dialog.Description
+                  style={{ color: "black", fontSize: FontSize.sizeMain - 2 }}
+                >
                   Bạn có chắc muốn xóa hoạt động này?
                 </Dialog.Description>
                 <Dialog.Button
@@ -486,7 +491,7 @@ import {
                       marginRight: 30,
                       fontWeight: 500,
                       fontSize: 18,
-                      color: Color.colorRemove
+                      color: Color.colorRemove,
                     },
                   ]}
                 />
@@ -532,19 +537,17 @@ import {
               </Dialog.Container>
             </TouchableOpacity>
 
-            {/* btn remove hoạt động do đoàn trường tạo */}
-            {/* ở đây chỉnh là trưởng clb vì của chính mình tạo mới có quyền sửa */}
-            {organizer === "Đoàn trường" ? (
-              <TouchableOpacity
-                style={styles.btnResigter}
-                onPress={navigateFormEdit}
-              >
-                <Text style={styles.resigter}>Sửa</Text>
-              </TouchableOpacity>
-            ) : (
-              ""
-            )}
-          </View>
+            {/* btn remove hoạt động do trưởng clb tạo */}
+            {/* ở đây chỉnh là trưởng clb vì của chính mình tạo mới có quyền sửa, xóa */}
+
+            <TouchableOpacity
+              style={styles.btnResigter}
+              onPress={navigateFormEdit}
+            >
+              <Text style={styles.resigter}>Sửa</Text>
+            </TouchableOpacity>
+          </View>) : ''}
+         
         </ImageBackground>
       </ScrollView>
     );

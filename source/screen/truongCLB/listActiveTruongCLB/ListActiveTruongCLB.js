@@ -160,7 +160,7 @@ export default function ListActiveTruongCLB({navigation}) {
       deadline: '13/2/2005',
       location: "Học viện cơ sở quận 10",
       quantityActived: 100,
-      organizer: "Trung tâm hỗ trợ giáo dục",
+      organizer: "Trưởng câu lạc bộ",
       timeCreateActive: '10/2/2001',
       cost: 0,
       personApprove: 'Thế Hải',
@@ -328,9 +328,9 @@ export default function ListActiveTruongCLB({navigation}) {
               renderItem={({ item }) => (
                 <ActiveItemTruongCLB
                   active={item}
-                  // onPressItem={() => {
-                  //   navigation.navigate('detailActiveTruongCLB', {detailActiveTruongCLB : item});
-                  // }}
+                  onPressItem={() => {
+                    navigation.navigate('detailActiveTruongCLB', {detailActiveTruongCLB : item});
+                  }}
                 />
               )}
               keyExtractor={(item) => item.id}
