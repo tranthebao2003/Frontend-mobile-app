@@ -319,7 +319,7 @@ export default function ListOrganizedActiveDT({ navigation }) {
             data={active}
             renderItem={({ item }) => (
               <OrganizedActiveItemDT
-                activeApprove={item}
+                activeOrganized={item}
                 onPressItem={() => {
                   navigation.navigate("detailOrganizedActive", {
                     detailOrganizedActive: item,

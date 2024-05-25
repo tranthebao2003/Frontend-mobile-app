@@ -328,9 +328,9 @@ export default function ListActiveTruongCLB({navigation}) {
               renderItem={({ item }) => (
                 <ActiveItemTruongCLB
                   active={item}
-                  onPressItem={() => {
-                    navigation.navigate('detailActiveTruongCLB', {detailActiveTruongCLB : item});
-                  }}
+                  // onPressItem={() => {
+                  //   navigation.navigate('detailActiveTruongCLB', {detailActiveTruongCLB : item});
+                  // }}
                 />
               )}
               keyExtractor={(item) => item.id}

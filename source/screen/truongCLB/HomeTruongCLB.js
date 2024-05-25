@@ -66,10 +66,10 @@ function HomeTruongCLB(props) {
           {/* three item top */}
           <View
             style={{
-              width: "100%",
+              width: "80%",
               justifyContent: "space-between",
               flexDirection: "row",
-              marginBottom: 40,
+              marginBottom: 25,
             }}
           >
             {/* list active */}
@@ -102,24 +102,6 @@ function HomeTruongCLB(props) {
               <Text style={styles.bottomText}>Hoạt động</Text>
               <Text style={[styles.bottomText, { marginTop: -2 }]}>đã tạo</Text>
             </View>
-
-            {/* list approve active  */}
-            <View style={{ alignItems: "center" }}>
-              <TouchableOpacity
-                style={styles.containerIcon}
-                onPress={() => navigation.navigate("listActiveApproveDT")}
-              >
-                <Image
-                  style={styles.icon}
-                  resizeMode="cover"
-                  source={require("../../resource/iconHomeDoanTruong/pheDuyet.png")}
-                />
-              </TouchableOpacity>
-              <Text style={styles.bottomText}>Duyệt</Text>
-              <Text style={[styles.bottomText, { marginTop: -2 }]}>
-                hoạt động
-              </Text>
-            </View>
           </View>
 
           {/* two item bottom */}
@@ -150,7 +132,7 @@ function HomeTruongCLB(props) {
             <View style={{ alignItems: "center" }}>
               <TouchableOpacity
                 style={styles.containerIcon}
-                onPress={() => navigation.navigate("listApproveSv")}
+                onPress={() => navigation.navigate("listApproveSvTruongCLB")}
               >
                 <Image
                   style={styles.icon}
