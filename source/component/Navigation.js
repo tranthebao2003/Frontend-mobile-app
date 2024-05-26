@@ -43,6 +43,8 @@ import From1EditActiveDoanTruong from "../screen/doanTruong/editActiveDoanTruong
 import From2EditActiveDoanTruong from "../screen/doanTruong/editActiveDoanTruong/From2EditActiveDoanTruong";
 
 
+// Admin
+import { UITapAdmin } from '../screen/admin/UITapAdmin';
 
 import { useDispatch, useSelector } from 'react-redux';
 import { useEffect } from 'react';
@@ -129,6 +131,14 @@ const DoanTruong = () => {
   );
 }
 
+const Admin = () => {
+  return(
+    <Stack.Navigator initialRouteName='uiTapAdmin' screenOptions={{ headerShown: false }}>
+      <Stack.Screen name="uiTapAdmin" component={UITapAdmin} />
+    </Stack.Navigator>
+  )
+ 
+}
 
 const getUserFromToken = async () => {
   try {
@@ -175,7 +185,7 @@ export default RootElement = () =>{
     return (
       <NavigationContainer>
         {
-          authToken === true ? <AuthStack/> : <DoanTruong/>
+          authToken === true ? <AuthStack/> : <Admin/>
         }
       </NavigationContainer>
     );
