@@ -3,7 +3,7 @@ import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { Image, Text } from "react-native";
 import Color from "../../component/Color";
 import ProfileDoanTruong from "./profileDoanTruong/ProfileDoanTruong";
-import FormCreateActive from "../generalFunction/FormCreateActive";
+import FormCreateActiveDT from "./formCreateActive/FormCreateActiveDT";
 import HomeDoanTruong from "./HomeDoanTruong";
 import { useSelector } from "react-redux";
 
@@ -76,8 +76,8 @@ function UITapDoanTruong(props) {
 
         {/* form create active */}
         <Tab.Screen
-          name="createActive"
-          component={FormCreateActive}
+          name="formCreateActiveDT"
+          component={FormCreateActiveDT}
           options={{
             tabBarIcon: ({ focused }) => {
               return (

@@ -3,7 +3,7 @@ import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { Image, Text } from "react-native";
 import Color from "../../component/Color";
 import ProfileTruongCLB from "./profileTruongCLB/ProfileTruongCLB";
-import FormCreateActive from "../generalFunction/FormCreateActive";
+import FormCreateActiveTruongCLB from "./formCreateActive/FormCreateActiveTruongCLB";
 import HomeTruongCLB from "./HomeTruongCLB";
 import { useSelector } from "react-redux";
 
@@ -76,8 +76,8 @@ function UITapTruongCLB(props) {
 
         {/* form create active */}
         <Tab.Screen
-          name="createActive"
-          component={FormCreateActive}
+          name="formCreateActiveTruongCLB"
+          component={FormCreateActiveTruongCLB}
           options={{
             tabBarIcon: ({ focused }) => {
               return (

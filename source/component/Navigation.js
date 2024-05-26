@@ -12,6 +12,8 @@ import DetailActived from '../screen/user/detailActived/DetailActived'
 
 // Trưởng câu lạc bộ
 import { UITapTruongCLB } from '../screen/truongCLB/UITapTruongCLB';
+import Form2CreateActiveTruongCLB from'../screen/truongCLB/formCreateActive/Form2CreateActiveTruongCLB'
+
 import  ListActiveTruongCLB  from '../screen/truongCLB/listActiveTruongCLB/ListActiveTruongCLB';
 import  DetailActiveTruongCLB  from '../screen/truongCLB/detailActiveTruongCLB/DetailActiveTruongCLB';
 
@@ -28,8 +30,11 @@ import  From2EditActiveTruongCLB  from '../screen/truongCLB/editActiveTruongCLB/
 
 // Đoàn trường
 import { UITapDoanTruong } from '../screen/doanTruong/UITapDoanTruong';
+import Form2CreateActiveDT from '../screen/doanTruong/formCreateActive/Form2CreateActiveDT'
+
+
 import DetailActiveDTruong from '../screen/doanTruong/detailActive/DetailActiveDoanTruong'
-import FormCreateActive2 from '../screen/generalFunction/FormCreateActive2';
+
 import ScreenListDoanTruong from "../screen/doanTruong/listActive/ScreenListDoanTruong"
 import ListActiveCreatedDT from "../screen/doanTruong/listActiveCreated/ListActiveCreatedDT";
 import ListActiveApproveDT from "../screen/doanTruong/listActiveApprove/ListActiveApproveDT";
@@ -45,7 +50,28 @@ import From2EditActiveDoanTruong from "../screen/doanTruong/editActiveDoanTruong
 
 // Admin
 import { UITapAdmin } from '../screen/admin/UITapAdmin';
+import  Form2CreateActiveAdmin  from '../screen/admin/formCreateActive/Form2CreateActiveAdmin';
 
+import  ListActiveAdmin  from '../screen/admin/listActive/ListActiveAdmin'
+import  DetailActiveAdmin  from '../screen/admin/detailActive/DetailActiveAdmin'
+
+import  ListActiveCreatedAdmin  from '../screen/admin/listActiveCreated/ListActiveCreatedAdmin'
+
+import  ListActiveApproveAdmin  from '../screen/admin/listActiveApprove/ListActiveApproveAdmin'
+import  DetailActiveApproveAdmin  from '../screen/admin/detailActiveApprove/DetailActiveApproveAdmin'
+
+import  ListOrganizedActiveAdmin  from '../screen/admin/listOrganizedActive/ListOrganizedActiveAdmin'
+import  DetailOrganizedActiveAdmin  from '../screen/admin/detailOrganizedActive/DetailOrganizedActiveAdmin'
+
+import  ListApproveSvAdmin  from '../screen/admin/listApproveSvAdmin/ListApproveSvAdmin'
+import  DetailApproveSvAdmin  from '../screen/admin/detailApproveSvAdmin/DetailApproveSvAdmin'
+
+import  From1EditActiveAdmin  from '../screen/admin/editActiveAdmin/From1EditActiveAdmin'
+import  From2EditActiveAdmin  from '../screen/admin/editActiveAdmin/From2EditActiveAdmin'
+
+
+
+// resource 
 import { useDispatch, useSelector } from 'react-redux';
 import { useEffect } from 'react';
 
@@ -84,7 +110,7 @@ const TruongCLB = () => {
     // Trưởng câu lạc bộ, bí thứ
     <Stack.Navigator initialRouteName='uiTapTruongCLB' screenOptions={{ headerShown: false }}>
       <Stack.Screen name="uiTapTruongCLB" component={UITapTruongCLB} />
-      <Stack.Screen name="formCreateActive2" component={FormCreateActive2} />
+      <Stack.Screen name="form2CreateActiveTruongCLB" component={Form2CreateActiveTruongCLB} />
 
       <Stack.Screen name="listActiveTruongCLB" component={ListActiveTruongCLB} />
       <Stack.Screen name="detailActiveTruongCLB" component={DetailActiveTruongCLB} />
@@ -109,7 +135,7 @@ const DoanTruong = () => {
      // Đoàn trường
     <Stack.Navigator initialRouteName='uiTapDTruong' screenOptions={{ headerShown: false }}>
       <Stack.Screen name="uiTapDTruong" component={UITapDoanTruong} />
-      <Stack.Screen name="formCreateActive2" component={FormCreateActive2} />
+      <Stack.Screen name="form2CreateActiveDT" component={Form2CreateActiveDT} />
 
       <Stack.Screen name="screenListDoanTruong" component={ScreenListDoanTruong} />
       <Stack.Screen name="detailActiveDTruong" component={DetailActiveDTruong}/>
@@ -135,6 +161,24 @@ const Admin = () => {
   return(
     <Stack.Navigator initialRouteName='uiTapAdmin' screenOptions={{ headerShown: false }}>
       <Stack.Screen name="uiTapAdmin" component={UITapAdmin} />
+      <Stack.Screen name="form2CreateActiveAdmin" component={Form2CreateActiveAdmin} />
+
+      <Stack.Screen name="listActiveAdmin" component={ListActiveAdmin} />
+      <Stack.Screen name="detailActiveAdmin" component={DetailActiveAdmin} />
+
+      <Stack.Screen name="listActiveCreatedAdmin" component={ListActiveCreatedAdmin} />
+
+      <Stack.Screen name="listActiveApproveAdmin" component={ListActiveApproveAdmin} />
+      <Stack.Screen name="detailActiveApproveAdmin" component={DetailActiveApproveAdmin} />
+
+      <Stack.Screen name="listOrganizedActiveAdmin" component={ListOrganizedActiveAdmin} />
+      <Stack.Screen name="DetailOrganizedActiveAdmin" component={DetailOrganizedActiveAdmin} />
+
+      <Stack.Screen name="listApproveSvAdmin" component={ListApproveSvAdmin} />
+      <Stack.Screen name="detailApproveSvAdmin" component={DetailApproveSvAdmin} />
+
+      <Stack.Screen name="from1EditActiveAdmin" component={From1EditActiveAdmin} />
+      <Stack.Screen name="from2EditActiveAdmin" component={From2EditActiveAdmin} />
     </Stack.Navigator>
   )
  

@@ -3,7 +3,7 @@ import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { Image, Text } from "react-native";
 import Color from "../../component/Color";
 import ProfileAdmin from "./profileAdmin/ProfileAdmin";
-import FormCreateActive from "../generalFunction/FormCreateActive";
+import FormCreateActiveAdmin from "./formCreateActive/FormCreateActiveAdmin";
 import HomeAdmin from "./HomeAdmin";
 import { useSelector } from "react-redux";
 
@@ -76,8 +76,8 @@ function UITapAdmin(props) {
 
         {/* form create active */}
         <Tab.Screen
-          name="createActive"
-          component={FormCreateActive}
+          name="formCreateActiveAdmin"
+          component={FormCreateActiveAdmin}
           options={{
             tabBarIcon: ({ focused }) => {
               return (
@@ -109,8 +109,6 @@ function UITapAdmin(props) {
             },
           }}
         />
-
-     
 
         {/* Profile đoàn trường */}
         <Tab.Screen

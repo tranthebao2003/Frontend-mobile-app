@@ -13,17 +13,17 @@ import {
   Keyboard
 } from "react-native";
 import React, { useState, useEffect} from "react";
-import FontSize from "../../component/FontSize";
-import Color from "../../component/Color";
-import { screenWidth, screenHeight } from "../../component/DimensionsScreen";
+import FontSize from "../../../component/FontSize";
+import Color from "../../../component/Color";
+import { screenWidth, screenHeight } from "../../../component/DimensionsScreen";
 // import { DarkTheme } from "@react-navigation/native";
 import DatePicker from "react-native-modern-datepicker";
 import moment from "moment";
 import Dialog from 'react-native-dialog'
 import {useDispatch } from "react-redux";
-import {showKeyBoardAction, hideKeyBoardAction} from '../../redux/action/KeyBoardAction'
+import {showKeyBoardAction, hideKeyBoardAction} from '../../../redux/action/KeyBoardAction'
 
-export default function FormCreateActive(props) {
+export default function FormCreateActiveAdmin(props) {
   const {navigation} = props
 
   // Thời gian tổ chức
@@ -109,7 +109,7 @@ export default function FormCreateActive(props) {
         "Hạn chót đăng kí trước ngày tổ chức tối thiểu 3 ngày"
       );
     } else {
-      navigation.navigate('formCreateActive2');
+      navigation.navigate('form2CreateActiveAdmin');
     }
   };
 
@@ -142,7 +142,7 @@ export default function FormCreateActive(props) {
     <View style={styles.container}>
       <StatusBar style="auto" />
       <ImageBackground
-        source={require("../../resource/iconLogin/bg.png")}
+        source={require("../../../resource/iconLogin/bg.png")}
         resizeMode="cover"
         style={{ width: screenWidth, height: screenHeight }}
       >
@@ -157,7 +157,7 @@ export default function FormCreateActive(props) {
           }}
         >
           <Image
-            source={require("../../resource/iconLogin/lotLogo2.png")}
+            source={require("../../../resource/iconLogin/lotLogo2.png")}
             style={{
               height: 80,
               width: 80,
@@ -169,7 +169,7 @@ export default function FormCreateActive(props) {
             resizeMode="contain"
           ></Image>
           <Image
-            source={require("../../resource/iconLogin/logo.png")}
+            source={require("../../../resource/iconLogin/logo.png")}
             style={{
               height: 75,
               width: 75,
@@ -280,7 +280,7 @@ export default function FormCreateActive(props) {
                 {dateOrganize}
               </Text>
               <Image
-                source={require("../../resource/iconFormCreateActive/triangleDowm.png")}
+                source={require("../../../resource/iconFormCreateActive/triangleDowm.png")}
                 style={{
                   height: 18,
                   width: 18,
@@ -353,7 +353,7 @@ export default function FormCreateActive(props) {
                 {dateDeadLine}
               </Text>
               <Image
-                source={require("../../resource/iconFormCreateActive/triangleDowm.png")}
+                source={require("../../../resource/iconFormCreateActive/triangleDowm.png")}
                 style={{
                   height: 18,
                   width: 18,

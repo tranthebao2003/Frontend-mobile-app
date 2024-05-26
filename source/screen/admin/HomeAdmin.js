@@ -77,7 +77,7 @@ function HomeAdmin(props) {
             <View style={{ alignItems: "center" }}>
               <TouchableOpacity
                 style={styles.containerIcon}
-                onPress={() => navigation.navigate("screenListDoanTruong")}
+                onPress={() => navigation.navigate("listActiveAdmin")}
               >
                 <Image
                   style={styles.icon}
@@ -92,7 +92,7 @@ function HomeAdmin(props) {
             <View style={{ alignItems: "center" }}>
               <TouchableOpacity
                 style={styles.containerIcon}
-                onPress={() => navigation.navigate("listActiveCreatedDT")}
+                onPress={() => navigation.navigate("")}
               >
                 <Image
                   style={styles.icon}
@@ -108,7 +108,7 @@ function HomeAdmin(props) {
             <View style={{ alignItems: "center" }}>
               <TouchableOpacity
                 style={styles.containerIcon}
-                onPress={() => navigation.navigate("listActiveApproveDT")}
+                onPress={() => navigation.navigate("listActiveApproveAdmin")}
               >
                 <Image
                   style={styles.icon}
@@ -135,7 +135,7 @@ function HomeAdmin(props) {
             <View style={{ alignItems: "center" }}>
               <TouchableOpacity
                 style={styles.containerIcon}
-                onPress={() => navigation.navigate("screenListDoanTruong")}
+                onPress={() => navigation.navigate("listOrganizedActiveAdmin")}
               >
                 <Image
                   style={styles.icon}
@@ -159,15 +159,15 @@ function HomeAdmin(props) {
                   source={require("../../resource/iconHomeDoanTruong/accountStudent.png")}
                 />
               </TouchableOpacity>
-              <Text style={styles.bottomText}>Tài khoản</Text>
-              <Text style={[styles.bottomText, { marginTop: -2 }]}>sinh viên</Text>
+              <Text style={styles.bottomText}>Quản lý</Text>
+              <Text style={[styles.bottomText, { marginTop: -2 }]}>tài khoản</Text>
             </View>
 
             {/* list approve active  */}
             <View style={{ alignItems: "center" }}>
               <TouchableOpacity
                 style={styles.containerIcon}
-                onPress={() => navigation.navigate("listActiveApproveDT")}
+                onPress={() => navigation.navigate("listApproveSvAdmin")}
               >
                 <Image
                   style={styles.icon}
