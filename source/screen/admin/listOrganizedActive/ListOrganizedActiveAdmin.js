@@ -16,7 +16,6 @@ import { screenWidth, screenHeight } from "../../../component/DimensionsScreen";
 import OrganizedActiveItemAdmin from "./OrganizedActiveItemAdmin";
 import { useSelector, useDispatch } from "react-redux";
 import DatePicker from "react-native-modern-datepicker";
-import moment from "moment";
 
 export default function ListOrganizedActiveAdmin({ navigation }) {
   // ở đây chỉ bao gồm những hoạt động do đoàn trường tạo
@@ -27,13 +26,13 @@ export default function ListOrganizedActiveAdmin({ navigation }) {
       id: 1,
       stt: 1,
       nameActive: "Trăng cho em",
-      timeOrganize: "3/2/2005",
+      timeOrganize: "03/02/2005",
       // deadline này là thuộc tính tính toán được
-      deadline: "20/1/2005",
+      deadline: "20/01/2005",
       location: "Học viện cơ sở quận 9 hội trường A",
       quantityActived: 30,
       organizer: "Đoàn trường",
-      timeCreateActive: "10/1/2005",
+      timeCreateActive: "10/01/2005",
       cost: 20000,
       personApprove: "không có",
       timeApprove: "không có",
@@ -48,12 +47,12 @@ export default function ListOrganizedActiveAdmin({ navigation }) {
       id: 2,
       stt: 2,
       nameActive: "Mùa hè xanh",
-      timeOrganize: "10/2/2005",
+      timeOrganize: "10/02/2005",
       deadline: "10/10/2005",
       location: "Học viện cơ sở quận 9 hội trường B",
       quantityActived: 10,
       organizer: "Đoàn trường",
-      timeCreateActive: "10/1/2005",
+      timeCreateActive: "10/01/2005",
       cost: 60000,
       personApprove: "không có",
       timeApprove: "không có",
@@ -66,12 +65,12 @@ export default function ListOrganizedActiveAdmin({ navigation }) {
       id: 3,
       stt: 3,
       nameActive: "Lập trình cho bé từ 10 đến 12 tuổi",
-      timeOrganize: "3/8/2005",
-      deadline: "1/9/2005",
+      timeOrganize: "03/08/2005",
+      deadline: "01/09/2005",
       location: "Học viện cơ sở quận 1",
       quantityActived: 50,
       organizer: "Đoàn trường",
-      timeCreateActive: "10/1/2005",
+      timeCreateActive: "10/01/2005",
       cost: 200000,
       personApprove: "không có",
       timeApprove: "không có",
@@ -84,12 +83,12 @@ export default function ListOrganizedActiveAdmin({ navigation }) {
       id: 4,
       stt: 4,
       nameActive: "Lập trình cho bé từ 10 đến 12 tuổi",
-      timeOrganize: "4/10/2005",
+      timeOrganize: "04/10/2005",
       deadline: "12/12/2005",
       location: "Học viện cơ sở quận 9 phòng 2A11",
       quantityActived: 60,
       organizer: "Đoàn trường",
-      timeCreateActive: "10/1/2005",
+      timeCreateActive: "10/01/2005",
       cost: 0,
       personApprove: "không có",
       timeApprove: "không có",
@@ -102,12 +101,12 @@ export default function ListOrganizedActiveAdmin({ navigation }) {
       id: 5,
       stt: 5,
       nameActive: "Lập trình cho bé từ 10 đến 12 tuổi",
-      timeOrganize: "4/10/2005",
+      timeOrganize: "04/10/2005",
       deadline: "12/12/2005",
       location: "Học viện cơ sở quận 9 phòng 2A11",
       quantityActived: 60,
       organizer: "Đoàn trường",
-      timeCreateActive: "10/1/2005",
+      timeCreateActive: "10/01/2005",
       cost: 0,
       personApprove: "không có",
       timeApprove: "không có",
@@ -120,12 +119,12 @@ export default function ListOrganizedActiveAdmin({ navigation }) {
       id: 6,
       stt: 6,
       nameActive: "Lập trình cho bé từ 10 đến 12 tuổi",
-      timeOrganize: "4/10/2005",
+      timeOrganize: "04/10/2005",
       deadline: "12/12/2005",
       location: "Học viện cơ sở quận 9 phòng 2A11",
       quantityActived: 60,
       organizer: "Đoàn trường",
-      timeCreateActive: "10/1/2005",
+      timeCreateActive: "10/01/2005",
       cost: 0,
       personApprove: "không có",
       timeApprove: "không có",
@@ -135,15 +134,24 @@ export default function ListOrganizedActiveAdmin({ navigation }) {
     },
   ]);
 
-  const [dateOrganize, setdateOrganize] = useState("DD/MM/YYYY");
+  const [dateOrganize, setdateOrganize] = useState("MM/YYYY");
   const [openOrganize, setOpenOrganize] = useState(false); // open and close the modal
   const handleOnPressOrganize = () => {
     setOpenOrganize(!openOrganize);
   };
+
   const handleChangeOrganize = (propDate) => {
-    const reversedStrOrganize = propDate.split("/").reverse().join("/");
+    const reversedStrOrganize = propDate.split(" ").reverse().join("/");
     setdateOrganize(reversedStrOrganize);
   };
+
+  const filterForMonthYear = () => {
+    return active.filter((eachActive) =>
+        eachActive.timeOrganize.includes(dateOrganize)
+    );
+  };
+
+  console.log(filterForMonthYear())
 
   return (
     <View style={styles.container}>
@@ -181,14 +189,16 @@ export default function ListOrganizedActiveAdmin({ navigation }) {
               style={[
                 styles.formActive,
                 {
-                  width: dateOrganize == 'DD/MM/YYYY' ? 0.4 * screenWidth : 0.34 * screenWidth,
+                  width:
+                    dateOrganize == "MM/YYYY"
+                      ? 0.3 * screenWidth
+                      : 0.26 * screenWidth,
                   justifyContent: "center",
-                  
                 },
               ]}
               onPress={handleOnPressOrganize}
             >
-              <Text style={{ color: Color.colorTextMain, fontSize: 20}}>
+              <Text style={{ color: Color.colorTextMain, fontSize: 20 }}>
                 {dateOrganize}
               </Text>
               <Image
@@ -211,18 +221,18 @@ export default function ListOrganizedActiveAdmin({ navigation }) {
               animationType="fade"
               transparent={true}
               visible={openOrganize}
-              
             >
               <View style={styles.centeredView}>
                 <View style={styles.modalView}>
                   <DatePicker
-                    mode="calendar"
+                    mode="monthYear"
                     // minimumDate={convertDateOrganize}
                     // do ở trên mình convert string thành DD//MM/YYYY
                     // nên sau đó trx khi đưa vào hệ thống sử lí mình
                     // phải convert ngược lại
+
                     selected={dateOrganize.split("/").reverse().join("/")}
-                    onDateChange={handleChangeOrganize}
+                    onMonthYearChange={handleChangeOrganize}
                   />
 
                   <TouchableOpacity
@@ -235,25 +245,6 @@ export default function ListOrganizedActiveAdmin({ navigation }) {
               </View>
             </Modal>
           </View>
-
-          <Modal animationType="fade" transparent={true} visible={openOrganize}>
-            <View style={styles.centeredView}>
-              <View style={styles.modalView}>
-                <DatePicker
-                  mode="calendar"
-                  selected={dateOrganize.split("/").reverse().join("/")}
-                  onDateChange={handleChangeOrganize}
-                />
-
-                <TouchableOpacity
-                  onPress={handleOnPressOrganize}
-                  style={styles.btnDate}
-                >
-                  <Text>Ok</Text>
-                </TouchableOpacity>
-              </View>
-            </View>
-          </Modal>
         </View>
 
         <View
@@ -314,30 +305,62 @@ export default function ListOrganizedActiveAdmin({ navigation }) {
             </View>
           </View>
 
-          <FlatList
-            style={{ flex: 1 }}
-            data={active}
-            renderItem={({ item }) => (
-              <OrganizedActiveItemAdmin
-                activeOrganized={item}
-                onPressItem={() => {
-                  navigation.navigate("DetailOrganizedActiveAdmin", {
-                    detailOrganizedActiveAdmin: item,
-                  });
+          {filterForMonthYear().length > 0 ? (
+            <FlatList
+              style={{ flex: 1 }}
+              data={filterForMonthYear()}
+              renderItem={({ item }) => (
+                <OrganizedActiveItemAdmin
+                  activeOrganized={item}
+                  onPressItem={() => {
+                    navigation.navigate("detailOrganizedActiveAdmin", {
+                      detailOrganizedActiveAdmin: item,
+                    });
+                  }}
+                />
+              )}
+              keyExtractor={(item) => item.id}
+            />
+          ) : (
+            <View
+              style={{
+                flex: 1,
+                justifyContent: "center",
+                alignItems: "center",
+              }}
+            >
+              <Text
+                style={{
+                  fontSize: FontSize.sizeMain,
+                  color: Color.colorTextMain,
                 }}
-              />
-            )}
-            keyExtractor={(item) => item.id}
-          />
+              >
+                Not Found
+              </Text>
+            </View>)}
         </View>
 
         {/* btn approve all */}
         <TouchableOpacity
-          style={[styles.btnCancel, {borderWidth: dateOrganize == 'DD/MM/YYYY' ? 0 : 1, borderColor: Color.colorApproveAll}]}
+          style={[
+            styles.btnCancel,
+            {
+              borderWidth: dateOrganize == "MM/YYYY" ? 0 : 1,
+              borderColor: Color.colorApproveAll,
+            },
+          ]}
           onPress={() => alert("lọc hoạt động theo tháng, năm")}
-          disabled = {dateOrganize == 'DD/MM/YYYY' ? true : false}
+          disabled={dateOrganize == "MM/YYYY" ? true : false}
         >
-          <Text style={[styles.resigter, { color: dateOrganize == 'DD/MM/YYYY' ? 'gray' : Color.colorApproveAll }]}>
+          <Text
+            style={[
+              styles.resigter,
+              {
+                color:
+                  dateOrganize == "MM/YYYY" ? "gray" : Color.colorApproveAll,
+              },
+            ]}
+          >
             Lọc hoạt động
           </Text>
         </TouchableOpacity>

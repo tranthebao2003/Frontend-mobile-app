@@ -92,7 +92,7 @@ function HomeAdmin(props) {
             <View style={{ alignItems: "center" }}>
               <TouchableOpacity
                 style={styles.containerIcon}
-                onPress={() => navigation.navigate("")}
+                onPress={() => navigation.navigate("listActiveCreatedAdmin")}
               >
                 <Image
                   style={styles.icon}
@@ -151,12 +151,12 @@ function HomeAdmin(props) {
             <View style={{ alignItems: "center" }}>
               <TouchableOpacity
                 style={styles.containerIcon}
-                onPress={() => navigation.navigate("listActiveCreatedDT")}
+                onPress={() => navigation.navigate("uiTapManageAccount")}
               >
                 <Image
-                  style={{width: 52,height: 52}}
-                  resizeMode="cover"
-                  source={require("../../resource/iconHomeDoanTruong/accountStudent.png")}
+                  style={{width: 45,height: 45}}
+                  resizeMode='contain'
+                  source={require("../../resource/iconHomeDoanTruong/manageAccount.png")}
                 />
               </TouchableOpacity>
               <Text style={styles.bottomText}>Quản lý</Text>

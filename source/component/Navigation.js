@@ -63,11 +63,16 @@ import  DetailActiveApproveAdmin  from '../screen/admin/detailActiveApprove/Deta
 import  ListOrganizedActiveAdmin  from '../screen/admin/listOrganizedActive/ListOrganizedActiveAdmin'
 import  DetailOrganizedActiveAdmin  from '../screen/admin/detailOrganizedActive/DetailOrganizedActiveAdmin'
 
+import  {UITapManageAccount}  from '../screen/admin/manageAccount/UITapManageAccount'
+
+
 import  ListApproveSvAdmin  from '../screen/admin/listApproveSvAdmin/ListApproveSvAdmin'
 import  DetailApproveSvAdmin  from '../screen/admin/detailApproveSvAdmin/DetailApproveSvAdmin'
 
 import  From1EditActiveAdmin  from '../screen/admin/editActiveAdmin/From1EditActiveAdmin'
 import  From2EditActiveAdmin  from '../screen/admin/editActiveAdmin/From2EditActiveAdmin'
+
+import  Form1CreateStudent  from '../screen/admin/manageAccount/createAccount/createStudent/Form1CreateStudent'
 
 
 
@@ -172,13 +177,17 @@ const Admin = () => {
       <Stack.Screen name="detailActiveApproveAdmin" component={DetailActiveApproveAdmin} />
 
       <Stack.Screen name="listOrganizedActiveAdmin" component={ListOrganizedActiveAdmin} />
-      <Stack.Screen name="DetailOrganizedActiveAdmin" component={DetailOrganizedActiveAdmin} />
+      <Stack.Screen name="detailOrganizedActiveAdmin" component={DetailOrganizedActiveAdmin} />
+
+      <Stack.Screen name="uiTapManageAccount" component={UITapManageAccount} />
 
       <Stack.Screen name="listApproveSvAdmin" component={ListApproveSvAdmin} />
       <Stack.Screen name="detailApproveSvAdmin" component={DetailApproveSvAdmin} />
 
       <Stack.Screen name="from1EditActiveAdmin" component={From1EditActiveAdmin} />
       <Stack.Screen name="from2EditActiveAdmin" component={From2EditActiveAdmin} />
+
+      <Stack.Screen name="form1CreateStudent" component={Form1CreateStudent} />
     </Stack.Navigator>
   )
  
