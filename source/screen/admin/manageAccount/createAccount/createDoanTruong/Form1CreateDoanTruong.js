@@ -8,8 +8,6 @@ import {
     TextInput,
     TouchableOpacity,
     ScrollView,
-    Modal,
-    Alert,
     Keyboard
   } from "react-native";
   import React, { useState, useEffect} from "react";
@@ -17,12 +15,11 @@ import {
   import Color from "../../../../../component/Color";
   import { screenWidth, screenHeight } from "../../../../../component/DimensionsScreen";
   // import { DarkTheme } from "@react-navigation/native";
-  import DropDownPicker from 'react-native-dropdown-picker';
   import Dialog from 'react-native-dialog'
-  import {useDispatch} from "react-redux";
+  import {useDispatch, useSelector} from "react-redux";
   import {showKeyBoardAction, hideKeyBoardAction} from '../../../../../redux/action/KeyBoardAction'
   
-  export default function Form1CreateStudent(props) {
+  export default function Form1CreateDoanTruong(props) {
     const {navigation} = props
 
     const [visiblePassword, setVisiblePassword] = useState(true);
@@ -43,27 +40,19 @@ import {
       return false;
     };
 
-    const [openDropPicker, setOpenDropPicker] = useState(false);
-    const [value, setValue] = useState(null);
-    const [items, setItems] = useState([
-      { label: 'Sinh viên', value: '2' },
-      { label: 'Trưởng CLB', value: '5' },
-      { label: 'Bí thư', value: '6' }
-    ]);
-
-    // role id này để chuyển value từ 5, 6 thành 3 (vì trưởng clb, bí thư)
-    // cùng cấp và role_id của sv là 2
-    const [role_id, setRole_Id] = useState()
 
     const [dialogThongtin, setDialogThongtin] = useState(false);
 
     const [dialogPassword, setDialogPassword] = useState(false);
 
+    const [userName, setUserName] = useState('');
+    const [position, setPosition] = useState('');
+
     const navigateFormContinue = () => {
   
       // console.log(date1, date2)
       if (
-        userName == '' || password == '' || value == null
+        userName == '' || password == '' || position == ''
       ) {
         setDialogThongtin(true)
       }
@@ -72,17 +61,18 @@ import {
         setDialogPassword (true)
       }
       else {
-        navigation.navigate("form2CreateStudent", {
+        navigation.navigate("form2CreateDoanTruong", {
           username: userName,
           password: password,
-          role_id: role_id,
+          role_id: 4,
+          position: position
         });
       }
     };
 
     const dispatch = useDispatch()
   
-    const [userName, setUserName] = useState('');
+    const {showKeyBoard} = useSelector(state => state.keyboardShow)
     useEffect(() => {
       const showSubscription = Keyboard.addListener('keyboardDidShow', () => {
         dispatch(showKeyBoardAction())
@@ -91,10 +81,6 @@ import {
         dispatch(hideKeyBoardAction())
       });
   
-      // showSubscription.remove() và hideSubscription.remove() là các phương thức được 
-      // sử dụng để gỡ bỏ các hàm xử lý sự kiện đã được đăng ký trước đó thông qua addListener.
-      // Khi component bị unmount hoặc useEffect được gọi lại, các hàm xử lý sự kiện này 
-      // không còn cần thiết nữa, vì vậy chúng ta gọi remove() để loại bỏ chúng
       return () => {
         showSubscription.remove();
         hideSubscription.remove();
@@ -202,7 +188,7 @@ import {
             />
           </View>
           <View style={styles.containerHeader}>
-            <Text style={styles.header}>Tạo tài khoản sinh viên</Text>
+            <Text style={styles.header}>Tạo tài khoản đoàn trường</Text>
           </View>
 
           <ScrollView
@@ -210,6 +196,7 @@ import {
               flex: 1,
               marginTop: 20,
               paddingHorizontal: 20,
+              marginBottom: showKeyBoard ? 1/2*screenHeight - 40: 0
             }}
           >
             {/* Name active */}
@@ -236,6 +223,7 @@ import {
               ></TextInput>
             </View>
 
+            {/* password */}
             <View style={styles.containerFormActive}>
               <View style={{ flexDirection: "row" }}>
                 <Text style={styles.headerFormActive}>Mật khẩu</Text>
@@ -311,7 +299,8 @@ import {
               </View>
             </View>
 
-            <View style={[styles.containerFormActive, { marginBottom: 50 }]}>
+            {/* Position */}
+            <View style={styles.containerFormActive}>
               <View style={{ flexDirection: "row" }}>
                 <Text style={styles.headerFormActive}>Chức vụ</Text>
                 <Text
@@ -323,6 +312,14 @@ import {
                   (*)
                 </Text>
               </View>
+
+              <TextInput
+                style={styles.formActive}
+                onChangeText={(positionInput) => {
+                  setPosition(positionInput);
+                }}
+                value={position}
+              ></TextInput>
             </View>
 
             <View
@@ -330,6 +327,7 @@ import {
                 flexDirection: "row",
                 alignItems: "center",
                 justifyContent: "space-between",
+                marginBottom: showKeyBoard ? 30: 0
               }}
             >
               <Text
@@ -426,35 +424,6 @@ import {
               </TouchableOpacity>
             </View>
           </ScrollView>
-          <View style={styles.containerDropPicker}>
-            <DropDownPicker
-              open={openDropPicker}
-              value={value}
-              items={items}
-              setOpen={setOpenDropPicker}
-              setValue={setValue}
-              setItems={setItems}
-              onSelectItem={(item) => {
-                if (item.value == 5 || item.value == 6) {
-                  setRole_Id(3);
-                } else if (item.value == 2) {
-                  setRole_Id(2);
-                }
-              }}
-              placeholder="Chức vụ"
-              dropDownContainerStyle={{
-                borderWidth: 0,
-                elevation: 5,
-                shadowColor: Color.colorTextMain,
-              }}
-              style={styles.dropdown}
-              textStyle={{
-                fontSize: 17,
-                color: Color.colorTextMain,
-                fontWeight: "600",
-              }}
-            />
-          </View>
         </ImageBackground>
       </View>
     );
@@ -495,7 +464,7 @@ import {
   
     containerFormActive: {
       width: "100%",
-      height: 100,
+      height: 120,
       marginBottom: 20,
       // borderWidth: 1,
       justifyContent: "center",

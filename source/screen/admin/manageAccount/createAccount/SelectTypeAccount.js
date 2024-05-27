@@ -71,7 +71,7 @@ function SelectTypeAccount(props) {
               flexDirection: "row",
             }}
           >
-            {/* list active */}
+            {/* navigation to form create account student */}
             <View style={{ alignItems: "center" }}>
               <TouchableOpacity
                 style={styles.containerIcon}
@@ -86,11 +86,11 @@ function SelectTypeAccount(props) {
               <Text style={styles.bottomText}>Tài khoản đoàn trường</Text>
             </View>
 
-            {/* list approve active  */}
+              {/* navigation to form create account đoàn trường */}
             <View style={{ alignItems: "center" }}>
               <TouchableOpacity
                 style={styles.containerIcon}
-                onPress={() => navigation.navigate("")}
+                onPress={() => navigation.navigate("form1CreateDoanTruong")}
               >
                 <Image
                   style={styles.icon}

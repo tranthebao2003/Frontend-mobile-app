@@ -76,6 +76,13 @@ import  Form1CreateStudent  from '../screen/admin/manageAccount/createAccount/cr
 import  Form2CreateStudent  from '../screen/admin/manageAccount/createAccount/createStudent/Form2CreateStudent'
 import  Form3CreateStudent  from '../screen/admin/manageAccount/createAccount/createStudent/Form3CreateStudent'
 
+import  Form1CreateDoanTruong  from '../screen/admin/manageAccount/createAccount/createDoanTruong/Form1CreateDoanTruong'
+import  Form2CreateDoanTruong  from '../screen/admin/manageAccount/createAccount/createDoanTruong/Form2CreateDoanTruong'
+import  Form3CreateDoanTruong  from '../screen/admin/manageAccount/createAccount/createDoanTruong/Form3CreateDoanTruong'
+
+import  DetailAccountStudent  from '../screen/admin/manageAccount/detailAccountStudent/DetailAccountStudent'
+
+
 
 
 // resource 
@@ -189,9 +196,16 @@ const Admin = () => {
       <Stack.Screen name="from1EditActiveAdmin" component={From1EditActiveAdmin} />
       <Stack.Screen name="from2EditActiveAdmin" component={From2EditActiveAdmin} />
 
+     
       <Stack.Screen name="form1CreateStudent" component={Form1CreateStudent} />
       <Stack.Screen name="form2CreateStudent" component={Form2CreateStudent} />
       <Stack.Screen name="form3CreateStudent" component={Form3CreateStudent} />
+
+      <Stack.Screen name="form1CreateDoanTruong" component={Form1CreateDoanTruong} />
+      <Stack.Screen name="form2CreateDoanTruong" component={Form2CreateDoanTruong} />
+      <Stack.Screen name="form3CreateDoanTruong" component={Form3CreateDoanTruong} />
+
+      <Stack.Screen name="detailAccountStudent" component={DetailAccountStudent} />
     </Stack.Navigator>
   )
  

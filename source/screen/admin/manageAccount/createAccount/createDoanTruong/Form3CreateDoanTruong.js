@@ -25,102 +25,71 @@ import Dialog from "react-native-dialog";
 import { useDispatch, useSelector } from "react-redux";
 import { CommonActions } from "@react-navigation/native";
 
-
-export default function Form3CreateStudent(props) {
+export default function Form3CreateDoanTruong(props) {
   const { navigation } = props;
-  const { username, password, role_id, MSSV, first_name, last_name, phone } =
-    props.route.params;
-
-
-  const [dateOfBirth, setDateOfBirth] = useState("Chọn ngày");
-  const [openDateOfBirth, setOpenDateOfBirth] = useState(false); // open and close the modal
-  const handleOnPressDateOfBirth = () => {
-    setOpenDateOfBirth(!openDateOfBirth);
-  };
-
-  const handleChangeDateOfBirth = (propDate) => {
-    const reversedStrDateOfBirth = propDate.split("/").reverse().join("/");
-    setDateOfBirth(reversedStrDateOfBirth);
-  };
-
-  const [openDropPicker, setOpenDropPicker] = useState(false);
-  const [value, setValue] = useState(null);
-  const [items, setItems] = useState([
-    { label: "Nam", value: "1" },
-    { label: "Nữ", value: "0" },
-  ]);
+  const {
+    username,
+    password,
+    role_id,
+    position,
+    first_name,
+    last_name,
+    phone,
+  } = props.route.params;
 
   const [dialogThongtin, setDialogThongtin] = useState(false);
 
   const [address, setAddress] = useState("");
-  const [maSoLop, setMaSoLop] = useState("");
   const [email, setEmail] = useState("");
 
-
-  // parseInt(role_id,10): chuyển qua kiểu số cơ số 10
-  const roleIdConvertNumber = parseInt(role_id,10)
-
   const navigateFormContinue = () => {
-    if (
-      address == "" ||
-      maSoLop == "" ||
-      email == "" ||
-      dateOfBirth == "Chọn ngày",
-      value == null
-    ) {
+    if (address == "" || email == "") {
       setDialogThongtin(true);
-    }  else {
-
+    } else {
       // dùng dispatch để gửi lên sever
 
-      // console.log(
-      //   username,
-      //   password,
-      //   roleIdConvertNumber,
-      //   1,
-      //   MSSV,
-      //   first_name,
-      //   last_name,
-      //   phone,
-      //   address,
-      //   maSoLop,
-      //   email,
-      //   value,
-      //   dateOfBirth
-      // );
-    //   navigation.navigate("", {
-    //     username: username,
-    //     password: password,
-    //     role_id: role_id,
-    //     // tạo tk mặc đính nó là 1
-    //     status_id: 1,
+    //   console.log(
+    //     username,
+    //     password,
+    //     role_id,
+    //     1,
+    //     first_name,
+    //     last_name,
+    //     phone,
+    //     address,
+    //     email,
+    //     position
+    //   );
+      //   navigation.navigate("", {
+      //     username: username,
+      //     password: password,
+      //     role_id: role_id,
+      //     // tạo tk mặc đính nó là 1
+      //     status_id: 1,
 
-    //     MSSV: MSSV, 
-    //     first_name: first_name, 
-    //     last_name: last_name, 
-    //     phone: phone,
+      //     MSSV: MSSV,
+      //     first_name: first_name,
+      //     last_name: last_name,
+      //     phone: phone,
 
-    //     address: address,
-    //     class_id: maSoLop,
-    //     gender_id: value,
-    //     birth_date: dateOfBirth
-    //   });
+      //     address: address,
+      //     gender_id: value,
+      //     birth_date: dateOfBirth
+      //   });
 
-    alert('bạn đã tạo tk mới thành công')
-    navigation.dispatch(
-      CommonActions.reset(
-        {
+      alert("bạn đã tạo tk mới thành công");
+      navigation.dispatch(
+        CommonActions.reset({
           index: 0,
-          routes: [{name: 'uiTapAdmin'}]
-        }
-      )
-    )
+          routes: [{ name: "uiTapAdmin" }],
+        })
+      );
     }
   };
 
   const dispatch = useDispatch();
 
-  const {showKeyBoard} = useSelector(state => state.keyboardShow)
+  const { showKeyBoard } = useSelector((state) => state.keyboardShow);
 
   return (
     <View style={styles.container}>
@@ -253,26 +222,6 @@ export default function Form3CreateStudent(props) {
             ></TextInput>
           </View>
 
-          {/* Mã số lớp */}
-          <View style={styles.containerFormActive}>
-            <View style={{ flexDirection: "row" }}>
-              <Text style={styles.headerFormActive}>Mã số lớp</Text>
-              <Text
-                style={[styles.headerFormActive, { color: Color.colorRemove }]}
-              >
-                (*)
-              </Text>
-            </View>
-
-            <TextInput
-              style={styles.formActive}
-              onChangeText={(maSoLopInput) => {
-                setMaSoLop(maSoLopInput);
-              }}
-              value={maSoLop}
-            ></TextInput>
-          </View>
-
           {/* Email*/}
           <View style={styles.containerFormActive}>
             <View style={{ flexDirection: "row" }}>
@@ -292,122 +241,6 @@ export default function Form3CreateStudent(props) {
               value={email}
             ></TextInput>
           </View>
-
-          {/* giới tính */}
-          <View
-            style={{
-              height: 70,
-              position: "absolute",
-              top: -5,
-              right: 15,
-            }}
-          >
-            <View style={{ flexDirection: "row" }}>
-              <Text style={styles.headerFormActive}>Giới tính</Text>
-              <Text
-                style={[styles.headerFormActive, { color: Color.colorRemove }]}
-              >
-                (*)
-              </Text>
-            </View>
-          </View>
-
-          {/* Ngày sinh */}
-          <View
-            style={{
-              position: "absolute",
-              top: 0.22 * screenHeight + 4,
-              right: 15,
-            }}
-          >
-            <View style={{ flexDirection: "row" }}>
-              <Text style={styles.headerFormActive}>Ngày sinh</Text>
-              <Text
-                style={[styles.headerFormActive, { color: Color.colorRemove }]}
-              >
-                (*)
-              </Text>
-            </View>
-          </View>
-
-          {/* giới tính */}
-          <View style={styles.containerDropPicker}>
-            <DropDownPicker
-              open={openDropPicker}
-              value={value}
-              items={items}
-              setOpen={setOpenDropPicker}
-              setValue={setValue}
-              setItems={setItems}
-              placeholder="Giới tính"
-              dropDownContainerStyle={{
-                borderWidth: 0,
-                elevation: 5,
-                shadowColor: Color.colorTextMain,
-              }}
-              style={styles.dropdown}
-              textStyle={{
-                fontSize: 17,
-                color: Color.colorTextMain,
-                fontWeight: "600",
-              }}
-            />
-          </View>
-
-          {/* Ngày sinh */}
-          <TouchableOpacity
-            style={[
-              styles.formActive,
-              {
-                position: "absolute",
-                top: 0.27 * screenHeight - 3,
-                right: 0,
-                width: 0.3 * screenWidth + 12,
-                justifyContent: "center",
-              },
-            ]}
-            onPress={handleOnPressDateOfBirth}
-          >
-            <Text style={{ color: Color.colorTextMain, fontSize: 20 }}>
-              {dateOfBirth}
-            </Text>
-            <Image
-              source={require("../../../../../resource/iconFormCreateActive/triangleDowm.png")}
-              style={{
-                height: 18,
-                width: 18,
-                position: "absolute",
-                right: 0,
-                top: "25%",
-                borderRadius: 16,
-                zIndex: 2,
-                tintColor: Color.colorTextMain,
-              }}
-              resizeMode="contain"
-            ></Image>
-          </TouchableOpacity>
-
-          <Modal
-            animationType="fade"
-            transparent={true}
-            visible={openDateOfBirth}
-          >
-            <View style={styles.centeredView}>
-              <View style={styles.modalView}>
-                <DatePicker
-                  mode="calendar"
-                  selected={dateOfBirth.split("/").reverse().join("/")}
-                  onDateChange={handleChangeDateOfBirth}
-                />
-                <TouchableOpacity
-                  onPress={handleOnPressDateOfBirth}
-                  style={styles.btnDate}
-                >
-                  <Text>Ok</Text>
-                </TouchableOpacity>
-              </View>
-            </View>
-          </Modal>
 
           <View
             style={{
@@ -557,8 +390,8 @@ const styles = StyleSheet.create({
   },
 
   containerFormActive: {
-    width: "55%",
-    height: 70,
+    width: "100%",
+    height: 110,
     marginBottom: 26,
     // borderWidth: 1,
     justifyContent: "center",
@@ -637,7 +470,7 @@ const styles = StyleSheet.create({
 
   containerDropPicker: {
     position: "absolute",
-    top: '13%',
+    top: "13%",
     right: 0,
     marginBottom: 20,
   },

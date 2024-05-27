@@ -16,90 +16,41 @@ import {
   import FontSize from "../../../../../component/FontSize";
   import Color from "../../../../../component/Color";
   import { screenWidth, screenHeight } from "../../../../../component/DimensionsScreen";
-  // import { DarkTheme } from "@react-navigation/native";
-  import DropDownPicker from 'react-native-dropdown-picker';
   import Dialog from 'react-native-dialog'
-  import {useDispatch} from "react-redux";
-  import {showKeyBoardAction, hideKeyBoardAction} from '../../../../../redux/action/KeyBoardAction'
+  import {useSelector} from "react-redux";
   
-  export default function Form1CreateStudent(props) {
+  export default function Form2CreateDoanTruong(props) {
     const {navigation} = props
-
-    const [visiblePassword, setVisiblePassword] = useState(true);
-    const changeIconPassword = () => setVisiblePassword(!visiblePassword);
-  
-  
-    const [password, onChangePassword] = useState("");
-    const [isValidPassword, setIsValidPassword] = useState(false);
-    const verifyPassword = (password) => {
-      // regexPassword: Minimum eight characters, at least one uppercase letter,
-      // one lowercase letter and one number:
-      let regexPassword = new RegExp(
-        /((?=^.{8,}$)((?=.*\d)|(?=.*\W+))(?![.\n])(?=.*[A-Z])(?=.*[a-z]).*$)/
-      );
-      if (regexPassword.test(password)) {
-        return true;
-      }
-      return false;
-    };
-
-    const [openDropPicker, setOpenDropPicker] = useState(false);
-    const [value, setValue] = useState(null);
-    const [items, setItems] = useState([
-      { label: 'Sinh viên', value: '2' },
-      { label: 'Trưởng CLB', value: '5' },
-      { label: 'Bí thư', value: '6' }
-    ]);
-
-    // role id này để chuyển value từ 5, 6 thành 3 (vì trưởng clb, bí thư)
-    // cùng cấp và role_id của sv là 2
-    const [role_id, setRole_Id] = useState()
+    const { username, password, role_id, position } = props.route.params;
+    
 
     const [dialogThongtin, setDialogThongtin] = useState(false);
 
-    const [dialogPassword, setDialogPassword] = useState(false);
+    const [hoVaTenLot, setHoVaTenLot] = useState('');
+    const [ten, setTen] = useState('');
+    const [sdt, setSdt] = useState('');
 
     const navigateFormContinue = () => {
   
       // console.log(date1, date2)
-      if (
-        userName == '' || password == '' || value == null
-      ) {
-        setDialogThongtin(true)
-      }
-
-      else if (!isValidPassword) {
-        setDialogPassword (true)
+      if (hoVaTenLot == "" || ten == "" || sdt == "") {
+        setDialogThongtin(true);
       }
       else {
-        navigation.navigate("form2CreateStudent", {
-          username: userName,
+        navigation.navigate("form3CreateDoanTruong", {
+          username: username,
           password: password,
           role_id: role_id,
+ 
+          first_name: hoVaTenLot,
+          last_name: ten,
+          phone: sdt,
+          position: position
         });
       }
     };
 
-    const dispatch = useDispatch()
-  
-    const [userName, setUserName] = useState('');
-    useEffect(() => {
-      const showSubscription = Keyboard.addListener('keyboardDidShow', () => {
-        dispatch(showKeyBoardAction())
-      });
-      const hideSubscription = Keyboard.addListener('keyboardDidHide', () => {
-        dispatch(hideKeyBoardAction())
-      });
-  
-      // showSubscription.remove() và hideSubscription.remove() là các phương thức được 
-      // sử dụng để gỡ bỏ các hàm xử lý sự kiện đã được đăng ký trước đó thông qua addListener.
-      // Khi component bị unmount hoặc useEffect được gọi lại, các hàm xử lý sự kiện này 
-      // không còn cần thiết nữa, vì vậy chúng ta gọi remove() để loại bỏ chúng
-      return () => {
-        showSubscription.remove();
-        hideSubscription.remove();
-      };
-    }, []);
+    const {showKeyBoard} = useSelector(state => state.keyboardShow)
   
     return (
       <View style={styles.container}>
@@ -114,7 +65,7 @@ import {
               // borderWidth: 1,
               flexDirection: "row",
               height: (screenHeight * 1) / 8,
-              marginBottom: 20,
+              marginBottom: 10,
               justifyContent: "center",
               alignItems: "center",
             }}
@@ -172,15 +123,14 @@ import {
               style={{
                 width: 100,
                 height: 2,
-                backgroundColor: "#b1ceef",
-                // borderRadius: 50,
+                backgroundColor: Color.colorDecorateStep,
               }}
             />
             <View
               style={{
                 width: 15,
                 height: 15,
-                backgroundColor: "#b1ceef",
+                backgroundColor: Color.colorDecorateStep,
                 borderRadius: 50,
               }}
             />
@@ -202,20 +152,22 @@ import {
             />
           </View>
           <View style={styles.containerHeader}>
-            <Text style={styles.header}>Tạo tài khoản sinh viên</Text>
+            <Text style={styles.header}>Tạo tài khoản đoàn trường</Text>
           </View>
 
           <ScrollView
             style={{
               flex: 1,
-              marginTop: 20,
+              marginTop: 10,
               paddingHorizontal: 20,
+              marginBottom: showKeyBoard ? 1/2*screenHeight - 40: 0
             }}
           >
-            {/* Name active */}
+
+            {/* Họ và tên lót */}
             <View style={styles.containerFormActive}>
               <View style={{ flexDirection: "row" }}>
-                <Text style={styles.headerFormActive}>Tên tài khoản</Text>
+                <Text style={styles.headerFormActive}>Họ và tên lót</Text>
                 <Text
                   style={[
                     styles.headerFormActive,
@@ -228,17 +180,18 @@ import {
 
               <TextInput
                 style={styles.formActive}
-                autoFocus={true}
-                onChangeText={(userNameInput) => {
-                  setUserName(userNameInput);
+                autoFocus = {true}
+                onChangeText={(hoVaTenLotInput) => {
+                  setHoVaTenLot(hoVaTenLotInput);
                 }}
-                value={userName}
+                value={hoVaTenLot}
               ></TextInput>
             </View>
 
+            {/*Tên */}
             <View style={styles.containerFormActive}>
               <View style={{ flexDirection: "row" }}>
-                <Text style={styles.headerFormActive}>Mật khẩu</Text>
+                <Text style={styles.headerFormActive}>Tên</Text>
                 <Text
                   style={[
                     styles.headerFormActive,
@@ -248,72 +201,20 @@ import {
                   (*)
                 </Text>
               </View>
-              <View style={styles.containerPassword}>
-                <TextInput
-                  style={styles.password}
-                  placeholderTextColor={Color.colorTextMain}
-                  secureTextEntry={visiblePassword}
-                  onChangeText={(password) => {
-                    onChangePassword(password);
-                    const isValidPw = verifyPassword(password);
-                    isValidPw
-                      ? setIsValidPassword(true)
-                      : setIsValidPassword(false);
-                  }}
-                  // value này để hiển thị lên user
-                  value={password}
-                ></TextInput>
 
-                {isValidPassword === false ? (
-                  <View style={{
-                    top: 26,
-                    position: "absolute",
-                    marginTop: 8,
-                  }}>
-                    <Text
-                      style={{
-                        fontSize: 16,
-                        color: "#ff5252",
-                        fontWeight: "500",
-                      }}
-                    >
-                      Password phải đủ 8 kí tự trong đó ít nhất 1 chữ số, 
-                    </Text>
-                    <Text
-                      style={{
-                        fontSize: 16,
-                        color: "#ff5252",
-                        fontWeight: "500",
-                      }}
-                    >
-                     1 chữ hoa và 1 chữ thường
-                    </Text>
-                  </View>
-                ) : (
-                  ""
-                )}
-
-                <TouchableOpacity onPress={changeIconPassword}>
-                  {visiblePassword ? (
-                    <Image
-                      source={require("../../../../../resource/iconLogin/eyeHide.png")}
-                      style={styles.eye}
-                      resizeMode="contain"
-                    ></Image>
-                  ) : (
-                    <Image
-                      source={require("../../../../../resource/iconLogin/eyeShow.png")}
-                      style={styles.eye}
-                      resizeMode="contain"
-                    ></Image>
-                  )}
-                </TouchableOpacity>
-              </View>
+              <TextInput
+                style={styles.formActive}
+                onChangeText={(tenInput) => {
+                  setTen(tenInput);
+                }}
+                value={ten}
+              ></TextInput>
             </View>
 
-            <View style={[styles.containerFormActive, { marginBottom: 50 }]}>
+            {/* Số diện thoại */}
+            <View style={[styles.containerFormActive, {marginBottom: 32,}]}>
               <View style={{ flexDirection: "row" }}>
-                <Text style={styles.headerFormActive}>Chức vụ</Text>
+                <Text style={styles.headerFormActive}>Số điện thoại</Text>
                 <Text
                   style={[
                     styles.headerFormActive,
@@ -323,13 +224,24 @@ import {
                   (*)
                 </Text>
               </View>
+
+              <TextInput
+                keyboardType='number-pad'
+                style={styles.formActive}
+                onChangeText={(sdtInput) => {
+                  setSdt(sdtInput);
+                }}
+                value={sdt}
+              ></TextInput>
             </View>
 
             <View
               style={{
+                flex: 1,
                 flexDirection: "row",
                 alignItems: "center",
                 justifyContent: "space-between",
+                marginBottom: showKeyBoard ? 30: 0
               }}
             >
               <Text
@@ -384,77 +296,9 @@ import {
                   />
                 </Dialog.Container>
 
-                {/* dialogPassword */}
-                <Dialog.Container
-                  visible={dialogPassword}
-                  contentStyle={{
-                    backgroundColor: "#EEF7FF",
-                    borderRadius: 10,
-                    width: (1 / 2) * screenWidth + 150,
-                    height: (1 / 5) * screenHeight,
-                  }}
-                >
-                  <Dialog.Title
-                    style={{
-                      color: Color.colorTextMain,
-                      fontWeight: "700",
-                      fontSize: 20,
-                    }}
-                  >
-                    Thông báo
-                  </Dialog.Title>
-                  <Dialog.Description
-                    style={{ color: "black", fontSize: FontSize.sizeSmall + 2 }}
-                  >
-                    Mật khẩu chưa đúng định dạng
-                  </Dialog.Description>
-                  <Dialog.Button
-                    label="Ok"
-                    onPress={() => setDialogPassword(!dialogPassword)}
-                    style={[
-                      styles.btnCancel,
-                      {
-                        width: 60,
-                        height: 40,
-                        fontWeight: "700",
-                        fontSize: FontSize.sizeMain,
-                        color: Color.colorTextMain,
-                      },
-                    ]}
-                  />
-                </Dialog.Container>
               </TouchableOpacity>
             </View>
           </ScrollView>
-          <View style={styles.containerDropPicker}>
-            <DropDownPicker
-              open={openDropPicker}
-              value={value}
-              items={items}
-              setOpen={setOpenDropPicker}
-              setValue={setValue}
-              setItems={setItems}
-              onSelectItem={(item) => {
-                if (item.value == 5 || item.value == 6) {
-                  setRole_Id(3);
-                } else if (item.value == 2) {
-                  setRole_Id(2);
-                }
-              }}
-              placeholder="Chức vụ"
-              dropDownContainerStyle={{
-                borderWidth: 0,
-                elevation: 5,
-                shadowColor: Color.colorTextMain,
-              }}
-              style={styles.dropdown}
-              textStyle={{
-                fontSize: 17,
-                color: Color.colorTextMain,
-                fontWeight: "600",
-              }}
-            />
-          </View>
         </ImageBackground>
       </View>
     );
@@ -482,7 +326,6 @@ import {
     },
     containerHeader: {
       height: (1 / 12) * screenHeight,
-      // borderWidth: 1,
       alignItems: "center",
       justifyContent: "center",
       zIndex: 2,
@@ -495,9 +338,8 @@ import {
   
     containerFormActive: {
       width: "100%",
-      height: 100,
+      height: 110,
       marginBottom: 20,
-      // borderWidth: 1,
       justifyContent: "center",
     },
   
@@ -571,42 +413,5 @@ import {
       fontWeight: "600",
       color: "white",
     },
-
-    containerDropPicker: {
-      position: 'absolute',
-      top: 2/3*screenHeight - 70,
-      right: 20,
-      marginBottom: 20,
-    },
-    
-    dropdown: {
-      width: 72 * 2,
-      height: 28 * 1.6,
-      backgroundColor: Color.colorBgUiTap,
-      borderWidth: 0,
-      elevation: 2,
-      shadowColor: Color.colorTextMain
-    },
-
-    containerPassword: {
-      width: "100%",
-      height: 30,
-      borderBottomWidth: 1,
-      borderBottomColor: Color.colorBorder,
-      marginBottom: 15,
-      flexDirection: "row",
-      justifyContent: "space-between",
-    },
-  
-    password: {
-      fontSize: 20,
-      color: Color.colorTextMain,
-      width: "85%",
-    },
-  
-    
-  eye: {
-    height: 26,
-    width: 26,
-  },
+ 
   });

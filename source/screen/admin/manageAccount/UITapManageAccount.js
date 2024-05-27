@@ -3,8 +3,7 @@ import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { Image, Text } from "react-native";
 import Color from "../../../component/Color";
 import FormCreateActiveAdmin from "../formCreateActive/FormCreateActiveAdmin";
-import ListOrganizedActiveAdmin from "../listOrganizedActive/ListOrganizedActiveAdmin";
-import HomeAdmin from "../HomeAdmin";
+import  ListAccountStudent  from './accountStudent/ListAccountStudent'
 import SelectTypeAccount from "./createAccount/SelectTypeAccount";
 import { useSelector } from "react-redux";
 
@@ -26,7 +25,7 @@ function UITapManageAccount(props) {
   return (
     <UserLoginAdmin.Provider value={user}>
       <Tab.Navigator
-        initialRouteName="selectTypeAccount"
+        initialRouteName="listAccountStudent"
         screenOptions={{
           headerShown: false,
           // tabBarActiveTintColor: Color.colorTextMain,
@@ -41,8 +40,8 @@ function UITapManageAccount(props) {
       >
         {/* account student*/}
         <Tab.Screen
-          name="homeAdmin"
-          component={HomeAdmin}
+          name="listAccountStudent"
+          component={ListAccountStudent}
           options={{
             tabBarIcon: ({ focused }) => {
               return (
