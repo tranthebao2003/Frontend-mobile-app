@@ -26,7 +26,7 @@ function UITapManageAccount(props) {
   return (
     <UserLoginAdmin.Provider value={user}>
       <Tab.Navigator
-        initialRouteName="homeAdmin"
+        initialRouteName="selectTypeAccount"
         screenOptions={{
           headerShown: false,
           // tabBarActiveTintColor: Color.colorTextMain,

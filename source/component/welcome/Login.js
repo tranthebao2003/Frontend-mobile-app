@@ -156,18 +156,30 @@ const MainComponent = ({ navigation }) => {
           ></TextInput>
 
           {isValidPassword === false ? (
+           <View style={{
+            top: 26,
+            position: "absolute",
+            marginTop: 8,
+          }}>
             <Text
               style={{
-                top: 26,
-                position: "absolute",
                 fontSize: 16,
                 color: "#ff5252",
                 fontWeight: "500",
-                marginTop: 8,
               }}
             >
-              Password chưa hợp lệ
+              Password phải đủ 8 kí tự trong đó ít nhất 1 chữ số, 
             </Text>
+            <Text
+              style={{
+                fontSize: 16,
+                color: "#ff5252",
+                fontWeight: "500",
+              }}
+            >
+             1 chữ hoa và 1 chữ thường
+            </Text>
+          </View>
           ) : (
             ""
           )}

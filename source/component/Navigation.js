@@ -73,6 +73,8 @@ import  From1EditActiveAdmin  from '../screen/admin/editActiveAdmin/From1EditAct
 import  From2EditActiveAdmin  from '../screen/admin/editActiveAdmin/From2EditActiveAdmin'
 
 import  Form1CreateStudent  from '../screen/admin/manageAccount/createAccount/createStudent/Form1CreateStudent'
+import  Form2CreateStudent  from '../screen/admin/manageAccount/createAccount/createStudent/Form2CreateStudent'
+import  Form3CreateStudent  from '../screen/admin/manageAccount/createAccount/createStudent/Form3CreateStudent'
 
 
 
@@ -188,6 +190,8 @@ const Admin = () => {
       <Stack.Screen name="from2EditActiveAdmin" component={From2EditActiveAdmin} />
 
       <Stack.Screen name="form1CreateStudent" component={Form1CreateStudent} />
+      <Stack.Screen name="form2CreateStudent" component={Form2CreateStudent} />
+      <Stack.Screen name="form3CreateStudent" component={Form3CreateStudent} />
     </Stack.Navigator>
   )
  
