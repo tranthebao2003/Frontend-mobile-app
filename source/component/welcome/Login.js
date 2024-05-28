@@ -18,12 +18,20 @@ import {
   LoginAction
 } from "../../redux/action/LoginAction";
 
+import Spinner from 'react-native-loading-spinner-overlay';
+
 const Login = (props) => {
   const { navigation } = props;
+  const {loading} = useSelector(state => state.authReducer)
 
   return (
     <View style={styles.container}>
       <StatusBar barStyle="default" />
+      <Spinner
+        visible={loading}
+        textContent={"Loading..."}
+        textStyle={{color: 'white', fontSize: FontSize.sizeHeader}}
+      />
       <ImageBackground
         source={require("../../resource/iconLogin/bg.png")}
         resizeMode="cover"
@@ -305,7 +313,7 @@ const styles = StyleSheet.create({
   },
 
   containerBtnLoginFooter: {
-    margin: 50,
+    margin: 80,
     alignItems: "center",
   },
   btnLogin: {

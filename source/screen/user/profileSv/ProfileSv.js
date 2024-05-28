@@ -15,8 +15,12 @@ import { screenWidth, screenHeight } from "../../../component/DimensionsScreen";
 import { UserLogin } from "../UITapSinhVien";
 import { useContext, useState } from "react";
 import Dialog from "react-native-dialog";
+import { useDispatch, useSelector } from "react-redux";
+import {LogoutAction} from '../../../redux/action/LoginAction'
 
 function Profile() {
+  const dispatch = useDispatch()
+
   const [dialogCancel, setDialogCancel] = useState(false);
   const showHideDialogCancel = () => {
     setDialogCancel(!dialogCancel);
@@ -290,7 +294,7 @@ function Profile() {
               />
               <Dialog.Button
                 label="Yes"
-                onPress={yesBtnCancel}
+                onPress={() => dispatch(LogoutAction())}
                 style={{
                   width: 60,
                   height: 40,

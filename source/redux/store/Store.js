@@ -10,4 +10,4 @@ const rootReducer = combineReducers({
     infoUser: InfoUserReducer
 })
 
-export const Store = createStore(rootReducer, applyMiddleware(thunk))
+export default Store = createStore(rootReducer, applyMiddleware(thunk))

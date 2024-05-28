@@ -15,18 +15,17 @@ import { screenWidth, screenHeight } from "../../../component/DimensionsScreen";
 import { UserLoginAdmin } from "../UITapAdmin";
 import { useContext, useState } from "react";
 import Dialog from "react-native-dialog";
+import { useDispatch, useSelector } from "react-redux";
+import {LogoutAction} from '../../../redux/action/LoginAction'
 
 function ProfileAdmin() {
+  const dispatch = useDispatch()
+
   const [dialogCancel, setDialogCancel] = useState(false);
   const showHideDialogCancel = () => {
     setDialogCancel(!dialogCancel);
   };
 
-  const [yesNotificationCancel, setYesNotificationCancel] = useState(false);
-    const yesBtnCancel = () => {
-      setDialogCancel(!dialogCancel);
-      setYesNotificationCancel(!yesNotificationCancel);
-    };
   const user = useContext(UserLoginAdmin);
   const {
     nameUser,
@@ -296,7 +295,7 @@ function ProfileAdmin() {
               />
               <Dialog.Button
                 label="Yes"
-                onPress={yesBtnCancel}
+                onPress={() => dispatch(LogoutAction())}
                 style={{
                   width: 60,
                   height: 40,

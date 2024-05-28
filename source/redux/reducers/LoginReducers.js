@@ -1,19 +1,28 @@
-import { LOGIN, LOGOUT, LOGIN_ERROR} from "../types/TypesLogin"
+import { LOGIN_REQUEST, LOGIN_SUCCESS, LOGIN_FAILURE, LOGOUT} from "../types/TypesLogin"
 
 const initialState = {
-    authToken: null,
-    message: ''
+    loading: false,
+    token: null,
+    role: null,
+    error: null
 }
 
 
 export default (state = initialState, { type, payload }) => {
   switch (type) {
-    case LOGIN:
-      return { ...state, authToken: payload };
+    case LOGIN_REQUEST:
+      return { ...state, loading: true, error: null };
+    case LOGIN_SUCCESS:
+      return {
+        ...state,
+        loading: false,
+        token: payload.token,
+        role: payload.role,
+      };
+    case LOGIN_FAILURE:
+      return { ...state, loading: false, error: payload };
     case LOGOUT:
-      return { ...state, authToken: payload };
-    case LOGIN_ERROR:
-      return { ...state, message: payload};
+      return { ...state, token: null, role: null };
     default:
       return state;
   }

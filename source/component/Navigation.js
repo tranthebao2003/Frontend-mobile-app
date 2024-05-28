@@ -1,5 +1,13 @@
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import {LOGIN_SUCCESS} from '../redux/types/TypesLogin'
+
+// resource 
+import { useDispatch, useSelector } from 'react-redux';
+import { useEffect } from 'react';
+
+import SetAuthToken from "./SetAuthToken";
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 // Xác minh
 import Login from '../component/welcome/Login';
@@ -84,17 +92,6 @@ import  DetailAccountStudent  from '../screen/admin/manageAccount/detailAccountS
 import  DetailAccountDT  from '../screen/admin/manageAccount/detailAccountDT/DetailAccountDT'
 
 
-
-
-// resource 
-import { useDispatch, useSelector } from 'react-redux';
-import { useEffect } from 'react';
-
-import SetAuthToken from "./SetAuthToken";
-import HandelJwtDecode from './JwtDecode';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-
-
 const Stack = createNativeStackNavigator();
 
 
@@ -173,6 +170,7 @@ const DoanTruong = () => {
 }
 
 const Admin = () => {
+  
   return(
     <Stack.Navigator initialRouteName='uiTapAdmin' screenOptions={{ headerShown: false }}>
       <Stack.Screen name="uiTapAdmin" component={UITapAdmin} />
@@ -233,32 +231,55 @@ const getUserFromToken = async () => {
   }
 };
 
-export default RootElement = () =>{
-    const { authToken } = useSelector((state) => state.authReducer);
 
+export default RootElement = () => {
+
+  // nếu user chưa đăng xuất thì khi thoát app và vào lại 
+  // thì token và role sẽ được load lên từ local storage
+  // chính vì vậy không cần phải đăng nhập lại
+  const dispatch = useDispatch()
+  useEffect(() => {
+    const loadStorageData = async () => {
+        try {
+            const token = await AsyncStorage.getItem('token');
+            const role = await AsyncStorage.getItem('role');
+  
+            // nếu mà token và role khác null thì mik sẽ dùng dispatch
+            // bắn object này đi 
+            if (token && role) {
+                dispatch({ type: LOGIN_SUCCESS, payload: { token, role } });
+            }
+        } catch (error) {
+            console.log('Không thể lấy token và role từ local storage');
+        }
+    };
+  
+    loadStorageData();
+  }, [dispatch]);
+
+    // lấy token và role trong stole
+    const { token, role } = useSelector((state) => state.authReducer);
+    
     useEffect(() => {
       SetAuthToken();
-    }, [authToken]);
+    }, [token]);
 
-    console.log (authToken, ' màn navigation')
+    console.log(role, 'màn navigation')
 
-    // // objectA = JwtDecode(authToken)
-    // // console.log('object A: ', objectA)
-    // objectDecode = getUserFromToken()
-    // console.log('objectDecode ', objectDecode)
-
-  //   getUserFromToken().then(decodedToken => {
-  //     if (decodedToken && decodedToken.success) {
-  //         console.log('Decoded token data:', decodedToken.data);
-  //     } else {
-  //         console.log('Error:', decodedToken ? decodedToken.message : 'Token not found');
-  //     }
-  //  });
-
+    const phanQuyen = () => {
+      if(role == null){
+        return <AuthStack/>
+      } else{
+        if(role == 1) return <Admin/>
+        else if(role == 2) return <SinhVien/>
+        else if(role == 3) return <TruongCLB/>
+        else if(role == 4) return <DoanTruong/>
+      }
+    }
     return (
       <NavigationContainer>
         {
-          authToken === true ? <AuthStack/> : <Admin/>
+           phanQuyen()
         }
       </NavigationContainer>
     );
