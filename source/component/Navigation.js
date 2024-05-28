@@ -81,6 +81,7 @@ import  Form2CreateDoanTruong  from '../screen/admin/manageAccount/createAccount
 import  Form3CreateDoanTruong  from '../screen/admin/manageAccount/createAccount/createDoanTruong/Form3CreateDoanTruong'
 
 import  DetailAccountStudent  from '../screen/admin/manageAccount/detailAccountStudent/DetailAccountStudent'
+import  DetailAccountDT  from '../screen/admin/manageAccount/detailAccountDT/DetailAccountDT'
 
 
 
@@ -206,6 +207,7 @@ const Admin = () => {
       <Stack.Screen name="form3CreateDoanTruong" component={Form3CreateDoanTruong} />
 
       <Stack.Screen name="detailAccountStudent" component={DetailAccountStudent} />
+      <Stack.Screen name="detailAccountDT" component={DetailAccountDT} />
     </Stack.Navigator>
   )
  

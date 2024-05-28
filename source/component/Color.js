@@ -9,5 +9,7 @@ export default{
     colorDecorateStep: '#55a6ff',
     colorBtnCreateActive: '#1fafb0',
     colorBgIconHome: '#eaeaea',
-    colorApproveAll: '#41B06E'
+    colorApproveAll: '#41B06E',
+    colorBtnLock: '#fff0db',
+    colorTextLock: '#FFA62F'
 }

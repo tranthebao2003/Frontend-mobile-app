@@ -74,7 +74,8 @@ export default function Form3CreateDoanTruong(props) {
 
       //     address: address,
       //     gender_id: value,
-      //     birth_date: dateOfBirth
+      //     birth_date: dateOfBirth,
+      //     email: email
       //   });
 
       alert("bạn đã tạo tk mới thành công");

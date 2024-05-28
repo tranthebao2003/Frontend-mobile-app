@@ -26,7 +26,7 @@ import {
 export default function ListAccountStudent({ navigation }) {
   const [account, setAccount] = useState([
     {
-      MSSV: "N21DCPT008",
+      MSSV: "N22DCPT008",
       first_name: "Trần Thế",
       last_name: "Bảo",
       phone: "0377253857",
@@ -37,10 +37,11 @@ export default function ListAccountStudent({ navigation }) {
       class_id: "D21CQPT01-N",
       gender_id: 1,
       birth_date: "22/3/2003",
+      email: 'n221dcpt00@gmail.com'
     },
 
     {
-      MSSV: "N21DCPT009",
+      MSSV: "N22DCPT009",
       first_name: "Nguyễn Văn",
       last_name: "An",
       phone: "0356789123",
@@ -50,6 +51,7 @@ export default function ListAccountStudent({ navigation }) {
       class_id: "D21CQPT01-N",
       gender_id: 1,
       birth_date: "2003-04-15",
+      email : 'nbkb@gmail.com'
     },
     {
       MSSV: "N21DCPT010",
@@ -62,6 +64,7 @@ export default function ListAccountStudent({ navigation }) {
       class_id: "D21CQPT02-N",
       gender_id: 2,
       birth_date: "2003-05-10",
+      email : 'nbk2222b@gmail.com'
     },
     {
       MSSV: "N21DCPT011",
@@ -74,6 +77,7 @@ export default function ListAccountStudent({ navigation }) {
       class_id: "D21CQPT01-N",
       gender_id: 1,
       birth_date: "2003-06-20",
+      email : 'n32dcpt0@gmail.com'
     },
     {
       MSSV: "N21DCPT012",
@@ -86,6 +90,7 @@ export default function ListAccountStudent({ navigation }) {
       class_id: "D21CQPT03-N",
       gender_id: 2,
       birth_date: "2003-07-30",
+      email : 'tranthe342@gmail.com'
     },
     {
       MSSV: "N21DCPT013",
@@ -98,6 +103,7 @@ export default function ListAccountStudent({ navigation }) {
       class_id: "D21CQPT01-N",
       gender_id: 1,
       birth_date: "2003-08-25",
+      email : 'rtranthe333@gmail.com'
     },
   ]);
 
@@ -161,8 +167,8 @@ export default function ListAccountStudent({ navigation }) {
           }}
         >
           <TextInput
-            placeholder="Search"
-            placeholderTextColor={Color.colorTextMain}
+            placeholder="Mã sinh viên"
+            placeholderTextColor='#afdffe'
             onChangeText={(text) => setSearchText(text)}
             style={{
               fontSize: FontSize.sizeMain,

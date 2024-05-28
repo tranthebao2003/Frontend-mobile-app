@@ -103,7 +103,8 @@ export default function Form3CreateStudent(props) {
     //     address: address,
     //     class_id: maSoLop,
     //     gender_id: value,
-    //     birth_date: dateOfBirth
+    //     birth_date: dateOfBirth,
+    //     email: email
     //   });
 
     alert('bạn đã tạo tk mới thành công')

@@ -2,8 +2,8 @@ import { createContext, useState } from "react";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { Image, Text } from "react-native";
 import Color from "../../../component/Color";
-import FormCreateActiveAdmin from "../formCreateActive/FormCreateActiveAdmin";
 import  ListAccountStudent  from './accountStudent/ListAccountStudent'
+import  ListAccountDT  from './accountDT/ListAccountDT'
 import SelectTypeAccount from "./createAccount/SelectTypeAccount";
 import { useSelector } from "react-redux";
 
@@ -75,8 +75,8 @@ function UITapManageAccount(props) {
 
         {/* account đoàn trường */}
         <Tab.Screen
-          name="formCreateActiveAdmin"
-          component={FormCreateActiveAdmin}
+          name="listAccountDT"
+          component={ListAccountDT}
           options={{
             tabBarIcon: ({ focused }) => {
               return (

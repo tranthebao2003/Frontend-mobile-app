@@ -20,20 +20,20 @@ import {
 // 2 cách:
 // - ListView from a map of objects
 // - FlatList
-export default function DetailAccountStudent(props) {
+export default function DetailAccountDT(props) {
   const {
-    MSSV,
     first_name,
     last_name,
     phone,
-    email,
     role_id,
     status_id,
+
     address,
-    class_id,
     gender_id,
     birth_date,
-  } = props.route.params.detailAccountStudent;
+    email,
+    position
+  } = props.route.params.detailAccountDT;
 
   const { navigation } = props;
 
@@ -57,14 +57,10 @@ export default function DetailAccountStudent(props) {
 
   const [chucVu, setChucVu] = useState();
   useEffect(() => {
-    if (role_id == 3) {
-      setChucVu("Bí thư (trưởng CLB)");
-    } else if (role_id == 2) {
-      setChucVu("Sinh viên");
+    if (role_id == 4) {
+      setChucVu("Đoàn trường");
     }
   }, []);
-
-
 
   // btn remove
   const [dialogRemove, setDialogRemove] = useState(false);
@@ -183,7 +179,7 @@ export default function DetailAccountStudent(props) {
                 fontWeight: "600",
               }}
             >
-              Mã số sinh viên
+              Tên người dùng
             </Text>
 
             <Text
@@ -193,7 +189,7 @@ export default function DetailAccountStudent(props) {
                 fontWeight: "600",
               }}
             >
-              Tên sinh viên
+              Vị trí
             </Text>
           </View>
 
@@ -216,7 +212,7 @@ export default function DetailAccountStudent(props) {
                 marginRight: 10,
               }}
             >
-              <Text style={styles.contentText}>{MSSV}</Text>
+              <Text style={styles.contentText}>{first_name + ' ' + last_name}</Text>
             </View>
 
             <View
@@ -225,7 +221,7 @@ export default function DetailAccountStudent(props) {
               }}
             >
               <Text style={styles.contentText}>
-                {first_name + " " + last_name}
+                {position}
               </Text>
             </View>
           </View>
@@ -342,29 +338,6 @@ export default function DetailAccountStudent(props) {
             </Text>
           </View>
 
-          {/* mã lớp */}
-          <View style={{ width: "100%", marginBottom: 20 }}>
-            <Text
-              style={{
-                color: Color.colorTextMain,
-                fontSize: FontSize.sizeMain,
-                fontWeight: 500,
-                marginBottom: 2,
-              }}
-            >
-              Mã lớp
-            </Text>
-
-            <Text
-              style={{
-                color: Color.colorTextMain,
-                fontSize: FontSize.sizeMain,
-                fontWeight: 400,
-              }}
-            >
-              {class_id}
-            </Text>
-          </View>
 
           {/* ngày sinh */}
           <View style={{ width: "100%", marginBottom: 20 }}>
