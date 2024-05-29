@@ -1,21 +1,25 @@
-import axios from 'axios';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import axios from "axios";
 import {
-    INFO_USER_REQUEST,
-    INFO_USER_SUCCESS,
-    INFO_USER_FAILURE,
+  INFO_USER_REQUEST,
+  INFO_USER_SUCCESS,
+  INFO_USER_FAILURE,
 } from "../types/TypesInfoUser";
-import SetAuthToken from '../../component/SetAuthToken';
+import UrlApi from '../UrlApi'
+import SetAuthToken from "../../component/SetAuthToken";
 
-export const fetchUser = () => {
+export const getProfileUser = () => {
+  const urlInfoUser = 'users/details'
   return async (dispatch) => {
-    dispatch({ type: INFO_USER_REQUEST });
-
+    
     try {
-      await SetAuthToken();
-      const response = await axios.get('/api/user'); // Replace with your API endpoint
-      const userData = response.data;
+      dispatch({ type: INFO_USER_REQUEST });
+      console.log("chưa call api màn inforUserAction");
+      const res = await axios.get(
+        `${UrlApi}${urlInfoUser}`
+      ); // Replace with your API endpoint
+      const userData = res.data;
 
+      console.log('đã call api màn inforUserAction', userData);
       dispatch({
         type: INFO_USER_SUCCESS,
         payload: userData,

@@ -6,18 +6,8 @@ import {
 
 const initialState = {
   loading: false,
-  user: {},
+  infoUser: {},
   error: "",
-
-  // MSSV : "N21DCAT005111a",
-  // first_name : "Nguyễn Trần Hùng",
-  // last_name : "Biện",
-  // phone : "0384616327",
-  // address: "Bình ĐỊnh",
-  // class_id: "N20DCAT1",
-  // mail : "bluephoenix7193@gmail.com",
-  // gender_id : "1",
-  // birth_date : "1990-01-01"
 };
 
 export default (state = initialState, { type, payload }) => {
@@ -30,15 +20,16 @@ export default (state = initialState, { type, payload }) => {
     case INFO_USER_SUCCESS:
       return {
         loading: false,
-        user: payload,
+        infoUser: payload,
         error: "",
       };
     case INFO_USER_FAILURE:
       return {
         loading: false,
-        user: {},
+        infoUser: {},
         error: payload,
       };
+    default:
+        return state;
   }
-  return state;
 };

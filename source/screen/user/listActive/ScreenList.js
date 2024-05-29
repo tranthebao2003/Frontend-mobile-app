@@ -16,155 +16,58 @@ import {screenWidth, screenHeight} from '../../../component/DimensionsScreen'
 import ActiveItem from './ActiveItem'
 import { useDispatch, useSelector } from 'react-redux';
 import {showKeyBoardAction, hideKeyBoardAction} from '../../../redux/action/KeyBoardAction'
+import {ListActiveAcceptAction} from '../../../redux/action/ListActiveAcceptAction'
+
+import Spinner from 'react-native-loading-spinner-overlay';
 
 export function ScreenList(props) {
-  const{navigation} = props
-  const [active, setActive] = useState([
-    {
-      id: 1,
-      stt: 1,
-      nameActive: "Trăng cho em",
-      timeOrganize: "3/2/2005",
-      deadline: '1/10/2005',
-      location: "Học viện cơ sở quận 9 hội trường A",
-      quantityActived: 30,
-      organizer: "Học viện bưu chính viễn thông",
-      cost: 20000,
-      description:
-        "Là hoạt động thiện nguyên cho trẻ em vùng cao có hoàn cảnh khó khăn",
-      status: 'register'
-    },
 
-    {
-      id: 2,
-      stt: 2,
-      nameActive: "Mùa hè xanh",
-      timeOrganize: "10/2/2005",
-      deadline: '10/10/2005',
-      location: "Học viện cơ sở quận 9 hội trường B",
-      quantityActived: 10,
-      organizer: "Câu lạc bộ cầu lông",
-      cost: 10000,
-      description:
-        "Là hoạt động để sinh viên có 1 mùa hè ý nghĩa",
-      status: 'registered'
-    },
-
-    {
-      id: 3,
-      stt: 3,
-      nameActive: "Lập trình cho bé từ 10 đến 12 tuổi",
-      timeOrganize: "3/8/2005",
-      deadline: '1/9/2005',
-      location: "Học viện cơ sở quận 1",
-      quantityActived: 50,
-      organizer: "Câu lạc bộ bóng rỗ",
-      cost: 25000,
-      description:
-        "Là hoạt động giới thiệu lập trình đến các em nh3o",
-      status: 'no register'
-    },
-
-    {
-      id: 4,
-      stt: 4,
-      nameActive: "Lập trình cho bé từ 10 đến 12 tuổi",
-      timeOrganize: "4/10/2005",
-      deadline: '12/12/2005',
-      location: "Học viện cơ sở quận 9 phòng 2A11",
-      quantityActived: 60,
-      organizer: "Học viện bưu chính viễn thông",
-      cost: 50000,
-      description:
-        "giới thiệu lập trình đến các em nhỏ",
-      status: 'registered'
-    },
-
-    {
-      id: 5,
-      stt: 5,
-      nameActive: "Vẽ tay",
-      timeOrganize: "13/8/2005",
-      deadline: '22/12/2005',
-      location: "Học viện cơ sở quận 9 sân trường",
-      quantityActived: 36,
-      organizer: "Trung tâm hỗ trợ trẻ em",
-      cost: 100000,
-      cost: 0,
-      description: "Hỗ trợ giáo dục và phát triển cho trẻ em mồ côi",
-      status: 'no register'
-    },
-
-    {
-      id: 6,
-      stt: 6,
-      nameActive: "Sức khỏe cộng đồng",
-      timeOrganize: "3/2/2005",
-      deadline: '12/11/2005',
-      location: "Học viện cơ sở quận 9 2b32",
-      quantityActived: 60,
-      organizer: "Nhóm tình nguyện viên y tế",
-      cost: 0,
-      description: "Tổ chức các buổi khám sức khỏe và chia sẻ kiến thức về sức khỏe cho cộng đồng",
-      status: 'register'
-    },
-
-    {
-      id: 7,
-      stt: 7,
-      nameActive: "Học bổng cho em",
-      timeOrganize: "30/3/2005",
-      deadline: '1/8/2005',
-      location: "Học viện cơ sở quận 1",
-      quantityActived: 25,
-      organizer: "Quỹ học bổng cho trẻ em nghèo",
-      cost: 80000,
-      description: "Cung cấp học bổng và đồng hành cho trẻ em vùng nông thôn",
-      status: 'register'
-    },
-
-    {
-      id: 8,
-      stt: 8,
-      nameActive: "Tiếp sức mùa thi",
-      timeOrganize: "3/12/2005",
-      deadline: '13/2/2005',
-      location: "Học viện cơ sở quận 10",
-      quantityActived: 100,
-      organizer: "Trung tâm hỗ trợ giáo dục",
-      cost: 0,
-      description: "Hỗ trợ giáo dục và phát triển cho trẻ em có hoàn cảnh khó khăn",
-      status: 'registered'
-    },
-
-    {
-      id: 9,
-      stt: 9,
-      nameActive: "Tiếp sức mùa thi",
-      timeOrganize: "3/12/2005",
-      deadline: '13/2/2005',
-      location: "Học viện cơ sở quận 10",
-      quantityActived: 100,
-      organizer: "Trung tâm hỗ trợ giáo dục",
-      cost: 0,
-      description: "Hỗ trợ giáo dục và phát triển cho trẻ em có hoàn cảnh khó khăn",
-      status: 'registered'
-    },
-  ]);
-
-  
-  const [searchText, setSearchText] = useState('')
-  const filteredActives = () => {
-    return active.filter((eachActive) =>
-        eachActive.nameActive.toLowerCase().includes(searchText.toLowerCase())
-    );
-  };
-  
-  const {showKeyBoard} = useSelector(state => state.keyboardShow)
   const dispatch = useDispatch()
-  
-  // event keyboard: event là cho toàn màn hình nằm trong UITapSinhVien.js là chỉ cần mình ấn vào 
-  // ô input ở screen HĐ đã tham gia hay HĐ thì nó đều bắt đc keyboard
+
+  const { loading, listActiveAccept, error} = useSelector(state => state.listActiveAcceptReducer)
+  // console.log(infoUser, 'infoUser màn profileSv')
+
+
+  useEffect(() => {
+    dispatch(ListActiveAcceptAction())
+  }
+  , [dispatch])
+
+ 
+  // console.log(listActiveAccept, 'màn screenlist')
+
+  const{navigation} = props
+  const [active, setActive] = useState([]);
+
+  useEffect(() => {
+    if(listActiveAccept){
+      setActive(listActiveAccept)
+    } else{
+      setActive([])
+    }
+  }
+  , [listActiveAccept])
+
+  const [filterActive, setFilterActive] = useState([]);
+  const [searchText, setSearchText] = useState('')
+
+  useEffect(() => {
+    const filteredActives = () => {
+      if(active){
+        return active.filter((eachActive) =>
+          eachActive.act_name.toLowerCase().includes(searchText.toLowerCase())
+        );
+      }
+    };
+    
+    setFilterActive(filteredActives());
+  }, [searchText, active]);
+
+  // console.log (active.length, 'active màn screenList')
+
+
+
+  const {showKeyBoard} = useSelector(state => state.keyboardShow)
 
   useEffect(() => {
     const showSubscription = Keyboard.addListener('keyboardDidShow', () => {
@@ -185,9 +88,7 @@ export function ScreenList(props) {
   }, []);
 
   return (
-    
     <View style={styles.container}>
-
       <StatusBar style="auto" />
       <Image
         source={require("../../../resource/iconListActive/decorTop.png")}
@@ -201,12 +102,17 @@ export function ScreenList(props) {
         }}
         resizeMode="contain"
       ></Image>
-      
+
       <ImageBackground
         source={require("../../../resource/iconLogin/bg.png")}
         resizeMode="cover"
         style={{ width: "100%", height: "120%" }}
       >
+        <Spinner
+          visible={loading}
+          textContent={"Loading..."}
+          textStyle={{ color: "white", fontSize: FontSize.sizeHeader }}
+        />
         <View
           style={{
             height: (1 / 10) * screenHeight,
@@ -232,8 +138,7 @@ export function ScreenList(props) {
               borderRadius: 8,
               borderWidth: 0.5,
             }}
-          >
-          </TextInput>
+          ></TextInput>
 
           <Image
             source={require("../../../resource/iconListActive/search.png")}
@@ -265,25 +170,16 @@ export function ScreenList(props) {
             elevation: 0.8,
             zIndex: 2,
             borderWidth: 0.8,
-            borderColor: Color.colorBorder
+            borderColor: Color.colorBorder,
           }}
         >
           <View
             style={{
               width: "100%",
               flexDirection: "row",
+              justifyContent: 'space-between'
             }}
           >
-            <Text
-              style={{
-                color: Color.colorTextMain,
-                fontSize: FontSize.sizeMain,
-                fontWeight: 500,
-                marginRight: 28,
-              }}
-            >
-              STT
-            </Text>
 
             <Text
               style={{
@@ -307,14 +203,16 @@ export function ScreenList(props) {
             </Text>
           </View>
 
-          {filteredActives().length > 0 ? (
+          {filterActive.length > 0 ? (
             <FlatList
-              style={{flex: 1 , marginBottom: showKeyBoard ? 95 : 200}}
-              data={filteredActives()}
+              style={{ flex: 1, marginBottom: showKeyBoard ? 95 : 200 }}
+              data={filterActive}
               renderItem={({ item }) => (
                 <ActiveItem
                   active={item}
-                  onPressItem={() => navigation.navigate('detailActive', {detailActive:item})}
+                  onPressItem={() =>
+                    navigation.navigate("detailActive", { detailActive: item })
+                  }
                 />
               )}
               keyExtractor={(item) => item.id}
@@ -339,7 +237,6 @@ export function ScreenList(props) {
           )}
         </View>
       </ImageBackground>
-      
     </View>
   );
 }

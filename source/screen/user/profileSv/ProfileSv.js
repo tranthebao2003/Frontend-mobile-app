@@ -13,35 +13,48 @@ import FontSize from "../../../component/FontSize";
 import Color from "../../../component/Color";
 import { screenWidth, screenHeight } from "../../../component/DimensionsScreen";
 import { UserLogin } from "../UITapSinhVien";
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import Dialog from "react-native-dialog";
 import { useDispatch, useSelector } from "react-redux";
 import {LogoutAction} from '../../../redux/action/LoginAction'
+import {getProfileUser} from '../../../redux/action/InfoUserAction'
+import Spinner from 'react-native-loading-spinner-overlay';
+
+import moment from 'moment';
+
+
 
 function Profile() {
   const dispatch = useDispatch()
+
+  const { loading, infoUser, error} = useSelector(state => state.infoUser)
+  // console.log(infoUser, 'infoUser màn profileSv')
+
+  const {
+    last_name,
+    first_name,
+    phone,
+    MSSV,
+    email,
+    birthday,
+    gender_id,
+    class_id
+  } = infoUser;
+
+  const isoDate = birthday;
+  const formattedDate = moment(isoDate).format('DD/MM/YYYY');
+
+  useEffect(() => {
+    dispatch(getProfileUser())
+  }
+  , [dispatch])
 
   const [dialogCancel, setDialogCancel] = useState(false);
   const showHideDialogCancel = () => {
     setDialogCancel(!dialogCancel);
   };
 
-  const [yesNotificationCancel, setYesNotificationCancel] = useState(false);
-    const yesBtnCancel = () => {
-      setDialogCancel(!dialogCancel);
-      setYesNotificationCancel(!yesNotificationCancel);
-    };
-  const user = useContext(UserLogin);
-  const {
-    nameUser,
-    phone,
-    mssv,
-    position,
-    email,
-    dateOfBirth,
-    // backend trả về cũng đc mà select count thui
-    numberOfActived,
-  } = user;
+  
   return (
     <SafeAreaView style={{ flex: 1, zIndex: 0 }}>
       <StatusBar barStyle="auto"></StatusBar>
@@ -50,6 +63,11 @@ function Profile() {
         resizeMode="cover"
         style={{ width: "100%", height: "120%" }}
       >
+        <Spinner
+          visible={loading}
+          textContent={"Loading..."}
+          textStyle={{ color: "white", fontSize: FontSize.sizeHeader }}
+        />
         <ScrollView
           style={{
             flex: 1,
@@ -82,7 +100,7 @@ function Profile() {
 
           <View style={styles.containerNamePhone}>
             <Text style={[styles.textLarge, { marginTop: 95 }]}>
-              {nameUser}
+              {last_name + ' ' +  first_name}
             </Text>
             <Text style={styles.textMain}>{phone}</Text>
 
@@ -116,7 +134,7 @@ function Profile() {
                   source={require("../../../resource/iconProfile/mssv.png")}
                 />
                 <Text style={[styles.textMain, { fontWeight: "500" }]}>
-                  {mssv}
+                  {MSSV}
                 </Text>
               </View>
 
@@ -134,14 +152,14 @@ function Profile() {
                   style={{
                     width: 35,
                     height: 35,
-                    marginRight: 10,
+                    marginRight: 20,
                     tintColor: Color.colorTextMain,
                   }}
                   resizeMode="contain"
-                  source={require("../../../resource/iconProfile/position.png")}
+                  source={require("../../../resource/iconProfile/gender.png")}
                 />
                 <Text style={[styles.textMain, { fontWeight: "500" }]}>
-                  {position}
+                  {gender_id == 1 ? 'Nam' : 'Nữ'}
                 </Text>
               </View>
             </View>
@@ -220,7 +238,7 @@ function Profile() {
                 <Text
                   style={[styles.textMain, { fontWeight: 400, color: "black" }]}
                 >
-                  {dateOfBirth}
+                  {formattedDate}
                 </Text>
               </View>
             </View>
@@ -238,22 +256,22 @@ function Profile() {
             >
               <Image
                 style={{
-                  width: 25,
-                  height: 25,
-                  marginRight: 20,
+                  width: 30,
+                  height: 30,
+                  marginRight: 15,
                   tintColor: Color.colorTextMain,
                 }}
                 resizeMode="cover"
-                source={require("../../../resource/iconProfile/numberOfActive.png")}
+                source={require("../../../resource/iconProfile/class.png")}
               />
               <View style={{ flex: 1, flexWrap: "wrap" }}>
                 <Text style={[styles.textLarge, { fontSize: 18 }]}>
-                  Số hoạt động đã tham gia
+                  Lớp
                 </Text>
                 <Text
                   style={[styles.textMain, { fontWeight: 400, color: "black" }]}
                 >
-                  {numberOfActived}
+                  {class_id}
                 </Text>
               </View>
             </View>
@@ -267,7 +285,13 @@ function Profile() {
             <Text style={[styles.resigter, { color: Color.colorRemove }]}>
               Đăng xuất
             </Text>
-            <Dialog.Container visible={dialogCancel} contentStyle= {{width: 3/4*screenWidth, height: 1/5*screenHeight}}>
+            <Dialog.Container
+              visible={dialogCancel}
+              contentStyle={{
+                width: (3 / 4) * screenWidth,
+                height: (1 / 5) * screenHeight,
+              }}
+            >
               <Dialog.Title
                 style={{ color: Color.colorTextMain, fontWeight: "700" }}
               >

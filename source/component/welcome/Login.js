@@ -19,6 +19,7 @@ import {
 } from "../../redux/action/LoginAction";
 
 import Spinner from 'react-native-loading-spinner-overlay';
+import Dialog from "react-native-dialog";
 
 const Login = (props) => {
   const { navigation } = props;
@@ -104,6 +105,24 @@ const BannerComponent = ({}) => {
 
 const MainComponent = ({ navigation }) => {
 
+  const {error} = useSelector(state => state.authReducer)
+
+  // bắt lỗi nếu user nhập sai tài khoản, mật khẩu
+  useEffect(() => {
+    if(error != null){
+      setDialogError(true)
+      setContenError(error)
+    }
+  }, [error])
+
+  const [dialogError, setDialogError] = useState(false);
+  const [contentError, setContenError] = useState('')
+
+  const functionBtnLogin = () => {
+     dispatch(LoginAction(userName, password))
+    //  showHideDialogError()
+  }
+
   const [userName, setUserName] = useState("");
 
   const [visiblePassword, setVisiblePassword] = useState(true);
@@ -136,10 +155,10 @@ const MainComponent = ({ navigation }) => {
           {/* nếu autoFocus = {true} thì khi component được gắn thì nó sẽ tự động focus */}
           <TextInput
             style={styles.username}
-            placeholder="username"
+            placeholder="Username"
             placeholderTextColor={Color.colorTextMain}
             autoFocus={true}
-            autoCapitalize='none'
+            autoCapitalize="none"
             onChangeText={(username) => {
               setUserName(username);
             }}
@@ -164,30 +183,32 @@ const MainComponent = ({ navigation }) => {
           ></TextInput>
 
           {isValidPassword === false ? (
-           <View style={{
-            top: 26,
-            position: "absolute",
-            marginTop: 8,
-          }}>
-            <Text
+            <View
               style={{
-                fontSize: 16,
-                color: "#ff5252",
-                fontWeight: "500",
+                top: 26,
+                position: "absolute",
+                marginTop: 8,
               }}
             >
-              Password phải đủ 8 kí tự trong đó ít nhất 1 chữ số, 
-            </Text>
-            <Text
-              style={{
-                fontSize: 16,
-                color: "#ff5252",
-                fontWeight: "500",
-              }}
-            >
-             1 chữ hoa và 1 chữ thường
-            </Text>
-          </View>
+              <Text
+                style={{
+                  fontSize: 16,
+                  color: "#ff5252",
+                  fontWeight: "500",
+                }}
+              >
+                Password phải đủ 8 kí tự trong đó ít nhất 1 chữ số,
+              </Text>
+              <Text
+                style={{
+                  fontSize: 16,
+                  color: "#ff5252",
+                  fontWeight: "500",
+                }}
+              >
+                1 chữ hoa và 1 chữ thường
+              </Text>
+            </View>
           ) : (
             ""
           )}
@@ -213,8 +234,10 @@ const MainComponent = ({ navigation }) => {
       {/* btn login and forgot password */}
 
       <View style={styles.containerBtnLoginFooter}>
-        {/* onPress={navigateUITaps} */}
-        <TouchableOpacity style={styles.btnLogin} onPress={()=>dispatch(LoginAction(userName, password))}>
+        <TouchableOpacity
+          style={styles.btnLogin}
+          onPress={functionBtnLogin}
+        >
           <Text style={styles.login}>LOGIN</Text>
         </TouchableOpacity>
 
@@ -223,6 +246,31 @@ const MainComponent = ({ navigation }) => {
             <Text style={styles.footerSignUp}>Forgot Password?</Text>
           </TouchableOpacity>
         </View>
+
+        <Dialog.Container visible={dialogError}>
+          <Dialog.Title
+            style={{ color: Color.colorTextMain, fontWeight: "700" }}
+          >
+            THÔNG BÁO
+          </Dialog.Title>
+          <Dialog.Description style={{ color: "black" }}>
+            {contentError}
+          </Dialog.Description>
+          <Dialog.Button
+            label="Ok"
+            onPress={() => setDialogError(!dialogError)}
+            style={[
+              styles.btnCancel,
+              {
+                width: 60,
+                height: 40,
+                marginRight: 30,
+                fontWeight: 500,
+                fontSize: 18,
+              },
+            ]}
+          />
+        </Dialog.Container>
       </View>
 
       <View style={{ flex: 1 }}>

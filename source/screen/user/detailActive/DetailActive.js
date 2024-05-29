@@ -15,6 +15,7 @@ import { useState } from "react";
 import FontSize from "../../../component/FontSize";
 import Color from "../../../component/Color";
 import { screenWidth, screenHeight } from "../../../component/DimensionsScreen";
+import moment from 'moment'
 
 // 2 cách:
 // - ListView from a map of objects
@@ -45,17 +46,23 @@ export default function DetailActive(props) {
   };
 
 
+  
   const {
-    nameActive,
-    timeOrganize,
-    deadline,
-    location,
-    quantityActived,
-    organizer,
-    cost,
-    description,
-    status,
+    act_name,
+    act_description,
+    act_address,
+    act_price,
+    act_status,
+    act_time,
+    amount,
+    creater_id,
+    audit_id,
+    createdAt,
+    updatedAt
   } = props.route.params.detailActive;
+
+  const isoDate = act_time;
+  const formatAct_time = moment(isoDate).format('DD/MM/YYYY');
 
   return (
     <ScrollView style={styles.container}>
@@ -100,6 +107,7 @@ export default function DetailActive(props) {
             style={{
               width: "100%",
               flexDirection: "row",
+              justifyContent: 'space-between'
             }}
           >
             <Text
@@ -123,16 +131,6 @@ export default function DetailActive(props) {
             >
               Thời gian
             </Text>
-
-            <Text
-              style={{
-                color: Color.colorTextMain,
-                fontSize: FontSize.sizeMain,
-                fontWeight: 500,
-              }}
-            >
-              Trạng thái
-            </Text>
           </View>
 
           {/* content row */}
@@ -140,40 +138,30 @@ export default function DetailActive(props) {
             style={{
               width: "100%",
               alignItems: "center",
-              marginTop: 20,
               flexDirection: "row",
               borderTopWidth: 0.5,
               borderColor: Color.colorTextMain,
               paddingTop: 26,
               paddingBottom: 13,
+              justifyContent: 'space-between'
             }}
           >
             <View
               style={{
-                flex: 2.4,
-                marginRight: 10,
+                width: '50%'
               }}
             >
-              <Text style={styles.contentText}>{nameActive}</Text>
+              <Text style={styles.contentText}>{act_name}</Text>
             </View>
 
             <View
               style={{
-                flex: 2,
+                width: '35%',        
+                alignSelf: 'flex-end',
                 backgroundColor: Color.colorBtn,
               }}
             >
-              <Text style={styles.contentText}>{timeOrganize}</Text>
-            </View>
-
-            <View
-              style={{
-                flex: 2,
-                backgroundColor: Color.colorBtn,
-                alignItems: "flex-end",
-              }}
-            >
-              <Text style={styles.contentText}>{status}</Text>
+              <Text style={styles.contentText}>{formatAct_time}</Text>
             </View>
           </View>
         </View>
@@ -193,28 +181,6 @@ export default function DetailActive(props) {
           }}
         >
           {/* header column */}
-          <View style={{ width: "100%", marginBottom: 20 }}>
-            <Text
-              style={{
-                color: Color.colorTextMain,
-                fontSize: FontSize.sizeMain,
-                fontWeight: 500,
-                marginRight: 20,
-              }}
-            >
-              Hạn chót
-            </Text>
-
-            <Text
-              style={{
-                color: Color.colorTextMain,
-                fontSize: FontSize.sizeMain,
-                fontWeight: 400,
-              }}
-            >
-              {deadline}
-            </Text>
-          </View>
 
           <View style={{ width: "100%", marginBottom: 20 }}>
             <Text
@@ -235,7 +201,7 @@ export default function DetailActive(props) {
                 fontWeight: 400,
               }}
             >
-              {location}
+              {act_address}
             </Text>
           </View>
 
@@ -258,7 +224,7 @@ export default function DetailActive(props) {
                 fontWeight: 400,
               }}
             >
-              {quantityActived}
+              {amount}
             </Text>
           </View>
 
@@ -281,30 +247,7 @@ export default function DetailActive(props) {
                 fontWeight: 400,
               }}
             >
-              {cost}
-            </Text>
-          </View>
-
-          <View style={{ width: "100%", marginBottom: 20 }}>
-            <Text
-              style={{
-                color: Color.colorTextMain,
-                fontSize: FontSize.sizeMain,
-                fontWeight: 500,
-                marginRight: 20,
-              }}
-            >
-              Đơn vị tổ chức
-            </Text>
-
-            <Text
-              style={{
-                color: Color.colorTextMain,
-                fontSize: FontSize.sizeMain,
-                fontWeight: 400,
-              }}
-            >
-              {organizer}
+              {act_price == null ? 0 : act_price}
             </Text>
           </View>
 
@@ -327,7 +270,7 @@ export default function DetailActive(props) {
                 fontWeight: 400,
               }}
             >
-              {description}
+              {act_description}
             </Text>
           </View>
         </View>

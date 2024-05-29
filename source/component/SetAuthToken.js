@@ -10,11 +10,13 @@ const SetAuthToken = async () => {
   try {
     const tokenReceive = await AsyncStorage.getItem("token");
     if (tokenReceive) {
-      axios.defaults.headers.common["Authorization"] = `Bearer ${tokenReceive}`;
+      axios.defaults.headers.common['Authorization'] = `${tokenReceive}`;
     } else {
       console.log('xóa header token màn hình SetAuthToken')
       delete axios.defaults.headers.common["Authorization"];
     }
+
+    console.log('Headers trước khi gọi API:', axios.defaults.headers.common)
   } catch (error) {
     console.error("Không thể load token lên từ local storage", error);
   }

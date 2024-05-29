@@ -234,9 +234,9 @@ const getUserFromToken = async () => {
 
 export default RootElement = () => {
 
-  // nếu user chưa đăng xuất thì khi thoát app và vào lại 
-  // thì token và role sẽ được load lên từ local storage
-  // chính vì vậy không cần phải đăng nhập lại
+  // // nếu user chưa đăng xuất thì khi thoát app và vào lại 
+  // // thì token và role sẽ được load lên từ local storage
+  // // chính vì vậy không cần phải đăng nhập lại
   const dispatch = useDispatch()
   useEffect(() => {
     const loadStorageData = async () => {
@@ -261,7 +261,7 @@ export default RootElement = () => {
     const { token, role } = useSelector((state) => state.authReducer);
     
     useEffect(() => {
-      SetAuthToken();
+       SetAuthToken();
     }, [token]);
 
     console.log(role, 'màn navigation')
