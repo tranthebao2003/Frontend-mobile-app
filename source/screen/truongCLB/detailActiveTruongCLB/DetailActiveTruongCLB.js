@@ -5,6 +5,8 @@ import {
   StatusBar,
   Image,
   ImageBackground,
+  TextInput,
+  FlatList,
   TouchableOpacity,
   ScrollView,
 } from "react-native";
@@ -13,13 +15,12 @@ import { useState } from "react";
 import FontSize from "../../../component/FontSize";
 import Color from "../../../component/Color";
 import { screenWidth, screenHeight } from "../../../component/DimensionsScreen";
+import moment from 'moment'
 
 // 2 cách:
 // - ListView from a map of objects
 // - FlatList
 export default function DetailActiveTruongCLB(props) {
-  const {navigation} = props
-
   // btn cancel
   const [dialogCancel, setDialogCancel] = useState(false);
   const showHideDialogCancel = () => {
@@ -32,32 +33,36 @@ export default function DetailActiveTruongCLB(props) {
     setYesNotificationCancel(!yesNotificationCancel);
   };
 
-  const navigateFormEdit = () => {
-    navigation.navigate("from1EditActiveTruongCLB", {
-      nameActiveFromDetail: nameActive,
-      timeOrganizeFromDetail: timeOrganize,
-      deadlineFromDetail: deadline,
-      locationFromDetail: location,
-      organizerFromDetail: organizer,
-      costFromDetail: cost,
-      descriptionFromDetail: description
-    });
+  // btn resigter
+  const [dialogResigter, setDialogRegister] = useState(false);
+  const showHideDialogRegister = () => {
+    setDialogRegister(!dialogResigter);
   };
 
+  const [yesNotificationResigter, setYesNotificationResigter] = useState(false);
+  const yesBtnResigter = () => {
+    setDialogRegister(!dialogResigter);
+    setYesNotificationResigter(!yesNotificationResigter);
+  };
+
+
+  
   const {
-    nameActive,
-    timeOrganize,
-    deadline,
-    location,
-    quantityActived,
-    organizer,
-    timeCreateActive,
-    cost,
-    personApprove,
-    timeApprove,
-    description,
-    status,
+    act_name,
+    act_description,
+    act_address,
+    act_price,
+    act_status,
+    act_time,
+    amount,
+    creater_id,
+    audit_id,
+    createdAt,
+    updatedAt
   } = props.route.params.detailActiveTruongCLB;
+
+  const isoDate = act_time;
+  const formatAct_time = moment(isoDate).format('DD/MM/YYYY');
 
   return (
     <ScrollView style={styles.container}>
@@ -102,6 +107,7 @@ export default function DetailActiveTruongCLB(props) {
             style={{
               width: "100%",
               flexDirection: "row",
+              justifyContent: 'space-between'
             }}
           >
             <Text
@@ -125,16 +131,6 @@ export default function DetailActiveTruongCLB(props) {
             >
               Thời gian
             </Text>
-
-            <Text
-              style={{
-                color: Color.colorTextMain,
-                fontSize: FontSize.sizeMain,
-                fontWeight: 500,
-              }}
-            >
-              Trạng thái
-            </Text>
           </View>
 
           {/* content row */}
@@ -142,40 +138,30 @@ export default function DetailActiveTruongCLB(props) {
             style={{
               width: "100%",
               alignItems: "center",
-              marginTop: 20,
               flexDirection: "row",
               borderTopWidth: 0.5,
               borderColor: Color.colorTextMain,
               paddingTop: 26,
               paddingBottom: 13,
+              justifyContent: 'space-between'
             }}
           >
             <View
               style={{
-                flex: 2.4,
-                marginRight: 10,
+                width: '50%'
               }}
             >
-              <Text style={styles.contentText}>{nameActive}</Text>
+              <Text style={styles.contentText}>{act_name}</Text>
             </View>
 
             <View
               style={{
-                flex: 2,
+                width: '35%',        
+                alignSelf: 'flex-end',
                 backgroundColor: Color.colorBtn,
               }}
             >
-              <Text style={styles.contentText}>{timeOrganize}</Text>
-            </View>
-
-            <View
-              style={{
-                flex: 2,
-                backgroundColor: Color.colorBtn,
-                alignItems: "flex-end",
-              }}
-            >
-              <Text style={styles.contentText}>{status}</Text>
+              <Text style={styles.contentText}>{formatAct_time}</Text>
             </View>
           </View>
         </View>
@@ -195,31 +181,7 @@ export default function DetailActiveTruongCLB(props) {
           }}
         >
           {/* header column */}
-          {/* deadline*/}
-          <View style={{ width: "100%", marginBottom: 20 }}>
-            <Text
-              style={{
-                color: Color.colorTextMain,
-                fontSize: FontSize.sizeMain,
-                fontWeight: 500,
-                marginRight: 20,
-              }}
-            >
-              Hạn chót
-            </Text>
 
-            <Text
-              style={{
-                color: Color.colorTextMain,
-                fontSize: FontSize.sizeMain,
-                fontWeight: 400,
-              }}
-            >
-              {deadline}
-            </Text>
-          </View>
-
-          {/* location*/}
           <View style={{ width: "100%", marginBottom: 20 }}>
             <Text
               style={{
@@ -239,11 +201,10 @@ export default function DetailActiveTruongCLB(props) {
                 fontWeight: 400,
               }}
             >
-              {location}
+              {act_address}
             </Text>
           </View>
 
-          {/* quantityActived*/}
           <View style={{ width: "100%", marginBottom: 20 }}>
             <Text
               style={{
@@ -253,7 +214,7 @@ export default function DetailActiveTruongCLB(props) {
                 marginRight: 20,
               }}
             >
-              Số lượng đã đăng kí
+              Số lượng
             </Text>
 
             <Text
@@ -263,11 +224,10 @@ export default function DetailActiveTruongCLB(props) {
                 fontWeight: 400,
               }}
             >
-              {quantityActived}
+              {amount}
             </Text>
           </View>
 
-          {/* cost */}
           <View style={{ width: "100%", marginBottom: 20 }}>
             <Text
               style={{
@@ -287,131 +247,10 @@ export default function DetailActiveTruongCLB(props) {
                 fontWeight: 400,
               }}
             >
-              {cost}
+              {act_price == null ? 0 : act_price}
             </Text>
           </View>
 
-          {/* organizer */}
-          <View style={{ width: "100%", marginBottom: 20 }}>
-            <Text
-              style={{
-                color: Color.colorTextMain,
-                fontSize: FontSize.sizeMain,
-                fontWeight: 500,
-                marginRight: 20,
-              }}
-            >
-              Đơn vị tổ chức
-            </Text>
-
-            <Text
-              style={{
-                color: Color.colorTextMain,
-                fontSize: FontSize.sizeMain,
-                fontWeight: 400,
-              }}
-            >
-              {organizer}
-            </Text>
-          </View>
-
-          {/* timeCreateActive */}
-          <View style={{ width: "100%", marginBottom: 20 }}>
-            <Text
-              style={{
-                color: Color.colorTextMain,
-                fontSize: FontSize.sizeMain,
-                fontWeight: 500,
-                marginRight: 20,
-              }}
-            >
-              Thời gian tạo hoạt động
-            </Text>
-
-            <Text
-              style={{
-                color: Color.colorTextMain,
-                fontSize: FontSize.sizeMain,
-                fontWeight: 400,
-              }}
-            >
-              {timeCreateActive}
-            </Text>
-          </View>
-
-          {/* personApprove */}
-          <View style={{ width: "100%", marginBottom: 20 }}>
-            <Text
-              style={{
-                color: Color.colorTextMain,
-                fontSize: FontSize.sizeMain,
-                fontWeight: 500,
-                marginRight: 20,
-              }}
-            >
-              Người duyệt hoạt động
-            </Text>
-
-            <Text
-              style={{
-                color: Color.colorTextMain,
-                fontSize: FontSize.sizeMain,
-                fontWeight: 400,
-              }}
-            >
-              {personApprove}
-            </Text>
-          </View>
-
-          {/* timeCreateActive */}
-          <View style={{ width: "100%", marginBottom: 20 }}>
-            <Text
-              style={{
-                color: Color.colorTextMain,
-                fontSize: FontSize.sizeMain,
-                fontWeight: 500,
-                marginRight: 20,
-              }}
-            >
-              Thời gian tạo hoạt động
-            </Text>
-
-            <Text
-              style={{
-                color: Color.colorTextMain,
-                fontSize: FontSize.sizeMain,
-                fontWeight: 400,
-              }}
-            >
-              {timeCreateActive}
-            </Text>
-          </View>
-
-          {/* timeApprove */}
-          <View style={{ width: "100%", marginBottom: 20 }}>
-            <Text
-              style={{
-                color: Color.colorTextMain,
-                fontSize: FontSize.sizeMain,
-                fontWeight: 500,
-                marginRight: 20,
-              }}
-            >
-              Thời gian duyệt hoạt động
-            </Text>
-
-            <Text
-              style={{
-                color: Color.colorTextMain,
-                fontSize: FontSize.sizeMain,
-                fontWeight: 400,
-              }}
-            >
-              {timeApprove}
-            </Text>
-          </View>
-
-          {/* description*/}
           <View style={{ width: "100%", marginBottom: 20 }}>
             <Text
               style={{
@@ -431,83 +270,142 @@ export default function DetailActiveTruongCLB(props) {
                 fontWeight: 400,
               }}
             >
-              {description}
+              {act_description}
             </Text>
           </View>
         </View>
 
-        {/* buttons */}
-        {organizer === "Trưởng câu lạc bộ" ? (
-          <View
-            style={{
-              width: "100%",
-              flexDirection: "row",
-              justifyContent: "center",
-            }}
+        <View
+          style={{
+            width: "100%",
+            flexDirection: "row",
+            justifyContent: "center",
+          }}
+        >
+          {/* btn cancel */}
+          <TouchableOpacity
+            style={styles.btnCancel}
+            onPress={showHideDialogCancel}
           >
-            {/* btn cancel */}
-
-            <TouchableOpacity
-              style={styles.btnCancel}
-              onPress={showHideDialogCancel}
-            >
-              <Text style={[styles.resigter, { color: Color.colorRemove }]}>
-                Xóa
-              </Text>
-              <Dialog.Container visible={dialogCancel}>
-                <Dialog.Title
-                  style={{ color: Color.colorTextMain, fontWeight: "700" }}
-                >
-                  XÁC NHẬN
-                </Dialog.Title>
-                <Dialog.Description
-                  style={{ color: "black", fontSize: FontSize.sizeMain - 2 }}
-                >
-                  Bạn có chắc muốn xóa hoạt động này?
-                </Dialog.Description>
-                <Dialog.Button
-                  label="No"
-                  onPress={showHideDialogCancel}
-                  style={[
-                    styles.btnCancel,
-                    {
-                      width: 60,
-                      height: 40,
-                      marginRight: 30,
-                      fontWeight: 500,
-                      fontSize: 18,
-                      color: Color.colorRemove,
-                    },
-                  ]}
-                />
-                <Dialog.Button
-                  label="Yes"
-                  onPress={yesBtnCancel}
-                  style={{
+            <Text style={styles.resigter}>Hủy</Text>
+            <Dialog.Container visible={dialogCancel}>
+              <Dialog.Title
+                style={{ color: Color.colorTextMain, fontWeight: "700" }}
+              >
+                XÁC NHẬN
+              </Dialog.Title>
+              <Dialog.Description style={{ color: "black" }}>
+                Bạn có chắc muốn hủy tham gia?
+              </Dialog.Description>
+              <Dialog.Button
+                label="No"
+                onPress={showHideDialogCancel}
+                style={[
+                  styles.btnCancel,
+                  {
                     width: 60,
                     height: 40,
-                    marginRight: 50,
-                    borderRadius: 5,
-                    backgroundColor: "#d9ebfe",
+                    marginRight: 30,
                     fontWeight: 500,
                     fontSize: 18,
-                  }}
-                />
-              </Dialog.Container>
-              <Dialog.Container visible={yesNotificationCancel}>
+                  },
+                ]}
+              />
+              <Dialog.Button
+                label="Yes"
+                onPress={yesBtnCancel}
+                style={{
+                  width: 60,
+                  height: 40,
+                  marginRight: 50,
+                  borderRadius: 5,
+                  backgroundColor: "#d9ebfe",
+                  fontWeight: 500,
+                  fontSize: 18,
+                }}
+              />
+            </Dialog.Container>
+            <Dialog.Container visible={yesNotificationCancel}>
+              <Dialog.Title
+                style={{ color: Color.colorTextMain, fontWeight: "700" }}
+              >
+                THÔNG BÁO
+              </Dialog.Title>
+              <Dialog.Description style={{ color: "black" }}>
+                Bạn đã hủy tham gia thành công!
+              </Dialog.Description>
+              <Dialog.Button
+                label="Ok"
+                onPress={() => setYesNotificationCancel(!yesNotificationCancel)}
+                style={[
+                  styles.btnCancel,
+                  {
+                    width: 60,
+                    height: 40,
+                    marginRight: 30,
+                    fontWeight: 500,
+                    fontSize: 18,
+                  },
+                ]}
+              />
+            </Dialog.Container>
+          </TouchableOpacity>
+
+          {/* btn resigter */}
+          <TouchableOpacity
+            style={styles.btnResigter}
+            onPress={showHideDialogRegister}
+          >
+            <Text style={styles.resigter}>Đăng kí</Text>
+            <Dialog.Container visible={dialogResigter}>
+              <Dialog.Title
+                style={{ color: Color.colorTextMain, fontWeight: "700" }}
+              >
+                XÁC NHẬN
+              </Dialog.Title>
+              <Dialog.Description style={{ color: "black" }}>
+                Bạn có chắc muốn tham gia?
+              </Dialog.Description>
+              <Dialog.Button
+                label="No"
+                onPress={showHideDialogRegister}
+                style={[
+                  styles.btnCancel,
+                  {
+                    width: 60,
+                    height: 40,
+                    marginRight: 30,
+                    fontWeight: 500,
+                    fontSize: 18,
+                  },
+                ]}
+              />
+              <Dialog.Button
+                label="Yes"
+                onPress={yesBtnResigter}
+                style={{
+                  width: 60,
+                  height: 40,
+                  marginRight: 50,
+                  borderRadius: 5,
+                  backgroundColor: "#d9ebfe",
+                  fontWeight: 500,
+                  fontSize: 18,
+                }}
+              />
+            </Dialog.Container>
+            <Dialog.Container visible={yesNotificationResigter}>
                 <Dialog.Title
                   style={{ color: Color.colorTextMain, fontWeight: "700" }}
                 >
                   THÔNG BÁO
                 </Dialog.Title>
                 <Dialog.Description style={{ color: "black" }}>
-                  Bạn đã xóa hoạt động thành công!
+                  Bạn đã tham gia thành công!
                 </Dialog.Description>
                 <Dialog.Button
                   label="Ok"
-                  onPress={() =>
-                    setYesNotificationCancel(!yesNotificationCancel)
-                  }
+                  onPress={() => setYesNotificationResigter(!yesNotificationResigter)}
                   style={[
                     styles.btnCancel,
                     {
@@ -520,21 +418,8 @@ export default function DetailActiveTruongCLB(props) {
                   ]}
                 />
               </Dialog.Container>
-            </TouchableOpacity>
-
-            {/* btn remove hoạt động do trưởng clb tạo */}
-            {/* ở đây chỉnh là trưởng clb vì của chính mình tạo mới có quyền sửa, xóa */}
-
-            <TouchableOpacity
-              style={styles.btnResigter}
-              onPress={navigateFormEdit}
-            >
-              <Text style={styles.resigter}>Sửa</Text>
-            </TouchableOpacity>
-          </View>
-        ) : (
-          ""
-        )}
+          </TouchableOpacity>
+        </View>
       </ImageBackground>
     </ScrollView>
   );
@@ -571,7 +456,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     borderWidth: 1,
     borderRadius: 10,
-    borderColor: Color.colorRemove,
+    borderColor: "#437173",
   },
 
   btnResigter: {

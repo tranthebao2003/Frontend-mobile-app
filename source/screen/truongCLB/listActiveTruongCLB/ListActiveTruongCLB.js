@@ -17,172 +17,59 @@ import ActiveItemTruongCLB from './ActiveItemTruongCLB'
 import { useDispatch, useSelector } from 'react-redux';
 import {showKeyBoardAction, hideKeyBoardAction} from '../../../redux/action/KeyBoardAction'
 
+import {ListActiveAction} from '../../../redux/action/ListActiveAction'
 
-export default function ListActiveTruongCLB({navigation}) {
-  const [active, setActive] = useState([
-    {
-      id: 1,
-      stt: 1,
-      nameActive: "Trăng cho em (trưởng clb)",
-      timeOrganize: "3/2/2005",
-      // deadline này là thuộc tính tính toán được
-      deadline: '20/1/2005',
-      location: "Học viện cơ sở quận 9 hội trường A",
-      quantityActived: 30,
-      organizer: "Đoàn trường",
-      timeCreateActive: '10/1/2005',
-      cost: 20000,
-      personApprove: 'không có',
-      timeApprove: 'không có',
-      minNumber: 50,
+import Spinner from 'react-native-loading-spinner-overlay';
 
-      description:
-        "Là hoạt động thiện nguyên cho trẻ em vùng cao có hoàn cảnh khó khăn",
-      status: 'register'
-    },
+export default function ListActiveTruongCLB(props) {
 
-    {
-      id: 2,
-      stt: 2,
-      nameActive: "Mùa hè xanh",
-      timeOrganize: "10/2/2005",
-      deadline: '10/10/2005',
-      location: "Học viện cơ sở quận 9 hội trường B",
-      quantityActived: 10,
-      organizer: "Câu lạc bộ cầu lông",
-      timeCreateActive: '10/2/2005',
-      cost: 10000,
-      personApprove: 'Hùng Biện',
-      timeApprove: '1/2/2005',
-      minNumber: 20,
-      description:
-        "Là hoạt động để sinh viên có 1 mùa hè ý nghĩa",
-      status: 'registered'
-    },
-
-    {
-      id: 3,
-      stt: 3,
-      nameActive: "Lập trình cho bé từ 10 đến 12 tuổi",
-      timeOrganize: "3/8/2005",
-      deadline: '1/9/2005',
-      location: "Học viện cơ sở quận 1",
-      quantityActived: 50,
-      organizer: "Câu lạc bộ bóng rỗ",
-      timeCreateActive: '10/2/2005',
-      cost: 100000,
-      personApprove: 'Hùng Bảo',
-      timeApprove: '10/5/2005',
-      minNumber: 80,
-      description:
-        "Là hoạt động giới thiệu lập trình đến các em nh3o",
-      status: 'no register'
-    },
-
-    {
-      id: 4,
-      stt: 4,
-      nameActive: "Lập trình cho bé từ 10 đến 12 tuổi",
-      timeOrganize: "4/10/2005",
-      deadline: '12/12/2005',
-      location: "Học viện cơ sở quận 9 phòng 2A11",
-      quantityActived: 60,
-      organizer: "Học viện bưu chính viễn thông",
-      timeCreateActive: '10/2/2005',
-      cost: 0,
-      personApprove: 'Không có',
-      timeApprove: 'Không có',
-      minNumber: 20,
-      description:
-        "giới thiệu lập trình đến các em nhỏ",
-      status: 'registered'
-    },
-
-    {
-      id: 5,
-      stt: 5,
-      nameActive: "Vẽ tay",
-      timeOrganize: "13/8/2005",
-      deadline: '22/12/2005',
-      location: "Học viện cơ sở quận 9 sân trường",
-      quantityActived: 36,
-      organizer: "Trung tâm hỗ trợ trẻ em",
-      timeCreateActive: '10/2/2005',
-      cost: 0,
-      personApprove: 'Trung châu',
-      timeApprove: '2/2/2008',
-      minNumber: 120,
-      description: "Hỗ trợ giáo dục và phát triển cho trẻ em mồ côi",
-      status: 'no register'
-    },
-
-    {
-      id: 6,
-      stt: 6,
-      nameActive: "Sức khỏe cộng đồng",
-      timeOrganize: "3/2/2005",
-      deadline: '12/11/2005',
-      location: "Học viện cơ sở quận 9 2b32",
-      quantityActived: 60,
-      organizer: "Nhóm tình nguyện viên y tế",
-      timeCreateActive: '10/10/2005',
-      cost: 0,
-      personApprove: 'Hùng Biện',
-      timeApprove: '10/2/2012',
-      minNumber: 120,
-      description: "Tổ chức các buổi khám sức khỏe và chia sẻ kiến thức về sức khỏe cho cộng đồng",
-      status: 'register'
-    },
-
-    {
-      id: 7,
-      stt: 7,
-      nameActive: "Học bổng cho em",
-      timeOrganize: "30/3/2005",
-      deadline: '1/8/2005',
-      location: "Học viện cơ sở quận 1",
-      quantityActived: 25,
-      organizer: "Trưởng câu lạc bộ",
-      timeCreateActive: '10/2/2010',
-      cost: 200000,
-      personApprove: 'Ms Cường',
-      timeApprove: '10/2/2012',
-      minNumber: 10,
-      description: "Cung cấp học bổng và đồng hành cho trẻ em vùng nông thôn",
-      status: 'register'
-    },
-
-    {
-      id: 8,
-      stt: 8,
-      nameActive: "Tiếp sức mùa thi",
-      timeOrganize: "3/12/2005",
-      deadline: '13/2/2005',
-      location: "Học viện cơ sở quận 10",
-      quantityActived: 100,
-      organizer: "Trưởng câu lạc bộ",
-      timeCreateActive: '10/2/2001',
-      cost: 0,
-      personApprove: 'Thế Hải',
-      timeApprove: '10/2/2010',
-      minNumber: 50,
-      description: "Hỗ trợ giáo dục và phát triển cho trẻ em có hoàn cảnh khó khăn",
-      status: 'registered'
-    },
-  ]);
-
-
-  const [searchText, setSearchText] = useState('')
-  const filteredActives = () => {
-    return active.filter((eachActive) =>
-        eachActive.nameActive.toLowerCase().includes(searchText.toLowerCase())
-    );
-  };
-
-  const {showKeyBoard} = useSelector(state => state.keyboardShow)
   const dispatch = useDispatch()
 
-  
+  const { loading, listActive, error} = useSelector(state => state.listActiveReducer)
+  // console.log(infoUser, 'infoUser màn profileSv')
+
+  const urlListActiveAccept = 'activities/activities_accept'
+
+  useEffect(() => {
+    dispatch(ListActiveAction(urlListActiveAccept))
+  }
+  , [dispatch])
+
+ 
+  // console.log(listActive, 'màn screenlist')
+
+  const{navigation} = props
+  const [active, setActive] = useState([]);
+
+  useEffect(() => {
+    if(listActive){
+      setActive(listActive)
+    } else{
+      setActive([])
+    }
+  }
+  , [listActive])
+
+  const [filterActive, setFilterActive] = useState([]);
+  const [searchText, setSearchText] = useState('')
+
+  useEffect(() => {
+    const filteredActives = () => {
+      if(active){
+        console.log(active, 'active trong if')
+        return active.filter((eachActive) =>
+          eachActive.act_name.toLowerCase().includes(searchText.toLowerCase())
+        );
+      } 
+      return setActive([])
+      
+    };
+    
+    setFilterActive(filteredActives());
+  }, [searchText, active]);
+
+  const {showKeyBoard} = useSelector(state => state.keyboardShow)
+
   // event keyboard: event là cho toàn màn hình nằm trong UITapDoanTruong.js là chỉ cần mình ấn vào 
   // ô input ở scrren HĐ đã tham gia hay HĐ thì nó đều bắt đc keyboard
 
@@ -223,6 +110,11 @@ export default function ListActiveTruongCLB({navigation}) {
         resizeMode="cover"
         style={{ width: "100%", height: "120%" }}
       >
+        <Spinner
+          visible={loading}
+          textContent={"Loading..."}
+          textStyle={{ color: "white", fontSize: FontSize.sizeHeader }}
+        />
         <View
           style={{
             height: (1 / 10) * screenHeight,
@@ -286,18 +178,9 @@ export default function ListActiveTruongCLB({navigation}) {
             style={{
               width: "100%",
               flexDirection: "row",
+              justifyContent: 'space-between'
             }}
           >
-            <Text
-              style={{
-                color: Color.colorTextMain,
-                fontSize: FontSize.sizeMain,
-                fontWeight: 500,
-                marginRight: 28,
-              }}
-            >
-              STT
-            </Text>
 
             <Text
               style={{
@@ -321,10 +204,10 @@ export default function ListActiveTruongCLB({navigation}) {
             </Text>
           </View>
 
-          {filteredActives().length > 0 ? (
+          {filterActive.length > 0 ? (
             <FlatList
               style={{flex: 1,  marginBottom: showKeyBoard ? 95 : 150}}
-              data={filteredActives()}
+              data={filterActive}
               renderItem={({ item }) => (
                 <ActiveItemTruongCLB
                   active={item}

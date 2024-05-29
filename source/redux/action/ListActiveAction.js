@@ -6,22 +6,24 @@ import {
 } from "../types/TypesListActive";
 import UrlApi from "../UrlApi";
 
-export const ListActiveAcceptAction = () => {
-  const urlListActive = 'activities/activities_accept'
+// action này để xử lí những api trả về list active
+
+export const ListActiveAction = (urlActive) => {
+  
   return async (dispatch) => {
     
     try {
       dispatch({ type: LIST_ACTIVE_REQUEST });
       console.log("chưa call api màn listActiveAction");
       const res = await axios.get(
-        `${UrlApi}${urlListActive}`
+        `${UrlApi}${urlActive}`
       ); // Replace with your API endpoint
-      const listActiveAccept = res.data;
+      const listActive = res.data;
 
-      console.log('đã call api màn listActiveAction', listActiveAccept);
+      console.log('đã call api màn listActiveAction', listActive);
       dispatch({
         type: LIST_ACTIVE_SUCCESS,
-        payload: listActiveAccept,
+        payload: listActive,
       });
     } catch (error) {
       dispatch({

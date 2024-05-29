@@ -2,11 +2,11 @@ import {
     LIST_ACTIVE_REQUEST,
     LIST_ACTIVE_SUCCESS,
     LIST_ACTIVE_FAILURE
-  } from "../types//TypesListActive";
+  } from "../types/TypesListActive";
   
   const initialState = {
     loading: false,
-    listActiveAccept: {},
+    listActive: {},
     error: "",
   };
   
@@ -20,13 +20,13 @@ import {
       case LIST_ACTIVE_SUCCESS:
         return {
           loading: false,
-          listActiveAccept: payload,
+          listActive: payload,
           error: "",
         };
       case LIST_ACTIVE_FAILURE:
         return {
           loading: false,
-          listActiveAccept: {},
+          listActive: {},
           error: payload,
         };
       default:

@@ -26,6 +26,7 @@ import  ListActiveTruongCLB  from '../screen/truongCLB/listActiveTruongCLB/ListA
 import  DetailActiveTruongCLB  from '../screen/truongCLB/detailActiveTruongCLB/DetailActiveTruongCLB';
 
 import  ListActiveCreatedTruongCLB  from '../screen/truongCLB/listActiveCreatedTruongCLB/ListActiveCreatedTruongCLB';
+import  DetailActiveCreated  from '../screen/truongCLB/detailActiveCreated/DetailActiveCreated';
 
 import  ListApproveSvTruongCLB  from '../screen/truongCLB/listApproveSvTruongCLB/ListApproveSvTruongCLB';
 import  DetailApproveSvTruongCLB  from '../screen/truongCLB/detailApproveSvTruongCLB/DetailApproveSvTruongCLB';
@@ -128,6 +129,7 @@ const TruongCLB = () => {
       <Stack.Screen name="detailActiveTruongCLB" component={DetailActiveTruongCLB} />
 
       <Stack.Screen name="listActiveCreatedTruongCLB" component={ListActiveCreatedTruongCLB} />
+      <Stack.Screen name="detailActiveCreated" component={DetailActiveCreated} />
 
       <Stack.Screen name="listApproveSvTruongCLB" component={ListApproveSvTruongCLB} />
       <Stack.Screen name="detailApproveSvTruongCLB" component={DetailApproveSvTruongCLB} />

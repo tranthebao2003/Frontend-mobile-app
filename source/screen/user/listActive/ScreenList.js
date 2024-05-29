@@ -16,7 +16,7 @@ import {screenWidth, screenHeight} from '../../../component/DimensionsScreen'
 import ActiveItem from './ActiveItem'
 import { useDispatch, useSelector } from 'react-redux';
 import {showKeyBoardAction, hideKeyBoardAction} from '../../../redux/action/KeyBoardAction'
-import {ListActiveAcceptAction} from '../../../redux/action/ListActiveAcceptAction'
+import {ListActiveAction} from '../../../redux/action/ListActiveAction'
 
 import Spinner from 'react-native-loading-spinner-overlay';
 
@@ -24,40 +24,49 @@ export function ScreenList(props) {
 
   const dispatch = useDispatch()
 
-  const { loading, listActiveAccept, error} = useSelector(state => state.listActiveAcceptReducer)
+  const { loading, listActive, error} = useSelector(state => state.listActiveReducer)
   // console.log(infoUser, 'infoUser màn profileSv')
 
+  const urlListActiveAccept = 'activities/activities_accept'
 
   useEffect(() => {
-    dispatch(ListActiveAcceptAction())
+    dispatch(ListActiveAction(urlListActiveAccept))
   }
   , [dispatch])
 
  
-  // console.log(listActiveAccept, 'màn screenlist')
+  // console.log(listActive, 'màn screenlist')
 
   const{navigation} = props
   const [active, setActive] = useState([]);
 
   useEffect(() => {
-    if(listActiveAccept){
-      setActive(listActiveAccept)
+    if(listActive){
+      setActive(listActive)
     } else{
       setActive([])
     }
   }
-  , [listActiveAccept])
+  , [listActive])
 
   const [filterActive, setFilterActive] = useState([]);
   const [searchText, setSearchText] = useState('')
 
   useEffect(() => {
     const filteredActives = () => {
-      if(active){
-        return active.filter((eachActive) =>
-          eachActive.act_name.toLowerCase().includes(searchText.toLowerCase())
-        );
+      try{
+        if(active != undefined){
+          return active.filter((eachActive) =>
+            eachActive.act_name.toLowerCase().includes(searchText.toLowerCase())
+          );
+        }
+
+        return setFilterActive([])
       }
+     catch(error){
+      console.error(error.message)
+     }
+      
     };
     
     setFilterActive(filteredActives());

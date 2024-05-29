@@ -5,7 +5,7 @@ import {
   INFO_USER_FAILURE,
 } from "../types/TypesInfoUser";
 import UrlApi from '../UrlApi'
-import SetAuthToken from "../../component/SetAuthToken";
+
 
 export const getProfileUser = () => {
   const urlInfoUser = 'users/details'
