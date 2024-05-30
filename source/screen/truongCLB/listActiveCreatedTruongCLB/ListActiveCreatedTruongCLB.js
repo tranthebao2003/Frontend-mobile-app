@@ -17,56 +17,57 @@ import ActiveCreatedItemTruongCLB from './ActiveCreatedItemTruongCLB'
 import { useDispatch, useSelector } from 'react-redux';
 import {showKeyBoardAction, hideKeyBoardAction} from '../../../redux/action/KeyBoardAction'
 
-import {ListActiveAction} from '../../../redux/action/ListActiveAction'
+import {ListActiveCreatedAction} from '../../../redux/action/ListActiveCreatedAction'
 
 import Spinner from 'react-native-loading-spinner-overlay';
 
 export default function ListActiveCreatedTruongCLB(props) {
 
+const {navigation} = props
 const dispatch = useDispatch()
 
-const { loading, listActive, error} = useSelector(state => state.listActiveReducer)
+const { loading, listActiveCreated, error} = useSelector(state => state.listActiveCreatedReducer)
 // console.log(infoUser, 'infoUser màn profileSv')
 
 const urlListActiveCreated = 'activities/activities_user_created'
 
-useEffect(() => {
-  dispatch(ListActiveAction(urlListActiveCreated))
-}
-, [dispatch])
-
-
-// console.log(listActive, 'màn screenlist')
-
-const{navigation} = props
 const [active, setActive] = useState([]);
-
-useEffect(() => {
-  if(listActive){
-    setActive(listActive)
-  } else{
-    setActive([])
-  }
-}
-, [listActive])
-
 const [filterActive, setFilterActive] = useState([]);
-const [searchText, setSearchText] = useState('')
+const [searchText, setSearchText] = useState('');
 
+// Gọi action để lấy dữ liệu khi component được mount
+useEffect(() => {
+  dispatch(ListActiveCreatedAction(urlListActiveCreated));
+}, [dispatch]);
+
+// Cập nhật state active khi dữ liệu từ Redux store thay đổi
+useEffect(() => {
+  if (listActiveCreated) {
+    console.log(listActiveCreated, 'listACtive trong if')
+    setActive(listActiveCreated);
+  } else {
+    console.log(listActiveCreated, 'listACtive trong else')
+    if(error !== ''){
+      alert('Bạn vui lòng thoát app để vào lại')
+    }
+  }
+}, [listActiveCreated]);
+
+// Lọc danh sách dựa trên searchText
 useEffect(() => {
   const filteredActives = () => {
-    if(active){
-      console.log(active, 'active trong if')
+    if (Array.isArray(active)) {
       return active.filter((eachActive) =>
         eachActive.act_name.toLowerCase().includes(searchText.toLowerCase())
       );
-    } 
-    return setActive([])
-    
+    }
   };
-  
+
   setFilterActive(filteredActives());
 }, [searchText, active]);
+
+console.log(active, 'active màn screenList');
+console.log(filterActive, 'filtered active màn screenList');
 
 const {showKeyBoard} = useSelector(state => state.keyboardShow)
 
@@ -204,7 +205,7 @@ return (
           </Text>
         </View>
 
-        {filterActive.length > 0 ? (
+        
           <FlatList
             style={{flex: 1,  marginBottom: showKeyBoard ? 95 : 150}}
             data={filterActive}
@@ -218,24 +219,6 @@ return (
             )}
             keyExtractor={(item) => item.id}
           />
-        ) : (
-          <View
-            style={{
-              flex: 1,
-              justifyContent: "center",
-              alignItems: "center",
-            }}
-          >
-            <Text
-              style={{
-                fontSize: FontSize.sizeMain,
-                color: Color.colorTextMain,
-              }}
-            >
-              Not Found
-            </Text>
-          </View>
-        )}
       </View>
     </ImageBackground>
   </View>

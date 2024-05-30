@@ -21,60 +21,55 @@ import {ListActiveAction} from '../../../redux/action/ListActiveAction'
 import Spinner from 'react-native-loading-spinner-overlay';
 
 export function ScreenList(props) {
+  const {navigation} = props
 
   const dispatch = useDispatch()
 
   const { loading, listActive, error} = useSelector(state => state.listActiveReducer)
   // console.log(infoUser, 'infoUser màn profileSv')
-
+  
+  
   const urlListActiveAccept = 'activities/activities_accept'
-
-  useEffect(() => {
-    dispatch(ListActiveAction(urlListActiveAccept))
-  }
-  , [dispatch])
-
- 
-  // console.log(listActive, 'màn screenlist')
-
-  const{navigation} = props
+  // Khởi tạo useState để lưu trữ dữ liệu
   const [active, setActive] = useState([]);
-
-  useEffect(() => {
-    if(listActive){
-      setActive(listActive)
-    } else{
-      setActive([])
-    }
-  }
-  , [listActive])
-
   const [filterActive, setFilterActive] = useState([]);
-  const [searchText, setSearchText] = useState('')
+  const [searchText, setSearchText] = useState('');
 
+  // Gọi action để lấy dữ liệu khi component được mount
+  useEffect(() => {
+    dispatch(ListActiveAction(urlListActiveAccept));
+  }, [dispatch]);
+
+  // Cập nhật state active khi dữ liệu từ Redux store thay đổi
+  useEffect(() => {
+    if (listActive) {
+      console.log(listActive, 'listACtive trong if')
+      setActive(listActive);
+    } else {
+      console.log(listActive, 'listACtive trong else')
+      if(error !== ''){
+        alert('Bạn vui lòng thoát app để vào lại')
+      }
+    }
+  }, [listActive]);
+
+  // Lọc danh sách dựa trên searchText
   useEffect(() => {
     const filteredActives = () => {
-      try{
-        if(active != undefined){
-          return active.filter((eachActive) =>
-            eachActive.act_name.toLowerCase().includes(searchText.toLowerCase())
-          );
-        }
-
-        return setFilterActive([])
+      if (Array.isArray(active)) {
+        return active.filter((eachActive) =>
+          eachActive.act_name.toLowerCase().includes(searchText.toLowerCase())
+        );
       }
-     catch(error){
-      console.error(error.message)
-     }
-      
     };
-    
+
     setFilterActive(filteredActives());
   }, [searchText, active]);
 
+  console.log(active, 'active màn screenList');
+  console.log(filterActive, 'filtered active màn screenList');
+ 
   // console.log (active.length, 'active màn screenList')
-
-
 
   const {showKeyBoard} = useSelector(state => state.keyboardShow)
 
@@ -212,7 +207,7 @@ export function ScreenList(props) {
             </Text>
           </View>
 
-          {filterActive.length > 0 ? (
+           
             <FlatList
               style={{ flex: 1, marginBottom: showKeyBoard ? 95 : 200 }}
               data={filterActive}
@@ -226,24 +221,7 @@ export function ScreenList(props) {
               )}
               keyExtractor={(item) => item.id}
             />
-          ) : (
-            <View
-              style={{
-                flex: 1,
-                justifyContent: "center",
-                alignItems: "center",
-              }}
-            >
-              <Text
-                style={{
-                  fontSize: FontSize.sizeMain,
-                  color: Color.colorTextMain,
-                }}
-              >
-                Not Found
-              </Text>
-            </View>
-          )}
+          
         </View>
       </ImageBackground>
     </View>
