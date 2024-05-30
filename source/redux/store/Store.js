@@ -5,6 +5,8 @@ import InfoUserReducer from "../reducers/InfoUserReducer";
 import ListActiveReducer from"../reducers/ListActiveReducer";
 import ListActiveCreatedReducer from"../reducers/ListActiveCreatedReducer";
 import CreateStudentReducer from"../reducers/reducerCreateUser/CreateStudentReducer";
+import CreateDoanTruongReducer from"../reducers/reducerCreateUser/CreateDoanTruongReducer";
+import CreateActiveReducer from"../reducers/CreateActiveReducer";
 import { thunk } from "redux-thunk";
 
 const rootReducer = combineReducers({
@@ -13,7 +15,9 @@ const rootReducer = combineReducers({
     infoUser: InfoUserReducer,
     listActiveReducer: ListActiveReducer,
     listActiveCreatedReducer: ListActiveCreatedReducer,
-    createStudentReducer: CreateStudentReducer
+    createStudentReducer: CreateStudentReducer,
+    createDoanTruongReducer: CreateDoanTruongReducer,
+    createActiveReducer: CreateActiveReducer
 })
 
 export default Store = createStore(rootReducer, applyMiddleware(thunk))

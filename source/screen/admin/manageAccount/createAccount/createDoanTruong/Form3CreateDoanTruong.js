@@ -18,24 +18,27 @@ import {
   screenWidth,
   screenHeight,
 } from "../../../../../component/DimensionsScreen";
-// import { DarkTheme } from "@react-navigation/native";
-import DropDownPicker from "react-native-dropdown-picker";
-import DatePicker from "react-native-modern-datepicker";
+
 import Dialog from "react-native-dialog";
 import { useDispatch, useSelector } from "react-redux";
 import { CommonActions } from "@react-navigation/native";
+import CreateDoanTruongAction from "../../../../../redux/action/actionCreateUser/CreateDoanTruongAction";
+import Spinner from 'react-native-loading-spinner-overlay'
 
 export default function Form3CreateDoanTruong(props) {
   const { navigation } = props;
-  const {
-    username,
+  const {  username,
     password,
     role_id,
-    position,
+
     first_name,
     last_name,
     phone,
-  } = props.route.params;
+    position } = props.route.params;
+  const dispatch = useDispatch();
+  const { loading, reponseSuccess, error } = useSelector(
+    (state) => state.createDoanTruongReducer
+  );
 
   const [dialogThongtin, setDialogThongtin] = useState(false);
 
@@ -46,55 +49,47 @@ export default function Form3CreateDoanTruong(props) {
     if (address == "" || email == "") {
       setDialogThongtin(true);
     } else {
-      // dùng dispatch để gửi lên sever
+      const accountDt = {
+        username: username,
+        password: password,
+        role_id: role_id,
+        status_id: 1,
 
-    //   console.log(
-    //     username,
-    //     password,
-    //     role_id,
-    //     1,
-    //     first_name,
-    //     last_name,
-    //     phone,
-    //     address,
-    //     email,
-    //     position
-    //   );
-      //   navigation.navigate("", {
-      //     username: username,
-      //     password: password,
-      //     role_id: role_id,
-      //     // tạo tk mặc đính nó là 1
-      //     status_id: 1,
+        first_name: first_name,
+        last_name: last_name,
+        phone: phone,
 
-      //     MSSV: MSSV,
-      //     first_name: first_name,
-      //     last_name: last_name,
-      //     phone: phone,
+        address: address,
+        mail: email,
+        position: position
+      };
 
-      //     address: address,
-      //     gender_id: value,
-      //     birth_date: dateOfBirth,
-      //     email: email
-      //   });
-
-      alert("bạn đã tạo tk mới thành công");
-      navigation.dispatch(
-        CommonActions.reset({
-          index: 0,
-          routes: [{ name: "uiTapAdmin" }],
-        })
-      );
+      dispatch(CreateDoanTruongAction(accountDt));
+    
     }
   };
-
-  const dispatch = useDispatch();
+  useEffect(() => {
+    if(reponseSuccess === true){
+        navigation.dispatch(
+          CommonActions.reset({
+            index: 0,
+            routes: [{ name: "uiTapAdmin" }],
+          })
+        );
+       }
+  },[reponseSuccess])
+  
 
   const { showKeyBoard } = useSelector((state) => state.keyboardShow);
 
   return (
     <View style={styles.container}>
       <StatusBar style="auto" />
+      <Spinner
+        visible={loading}
+        textContent={"Loading..."}
+        textStyle={{color: 'white', fontSize: FontSize.sizeHeader}}
+      />
       <ImageBackground
         source={require("../../../../../resource/iconLogin/bg.png")}
         resizeMode="cover"

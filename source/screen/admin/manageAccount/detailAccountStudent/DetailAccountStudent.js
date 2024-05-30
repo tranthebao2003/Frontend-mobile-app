@@ -65,7 +65,6 @@ export default function DetailAccountStudent(props) {
   }, []);
 
 
-
   // btn remove
   const [dialogRemove, setDialogRemove] = useState(false);
   const showHideDialogRemove = () => {

@@ -29,10 +29,6 @@ export default function FormCreateActiveDT(props) {
   // Thời gian tổ chức
   const today = new Date();
 
-  // ràng buộc deadline minimum tối thiểu là ngày hiện tại + 1
-  const todayFormat = moment(today.setDate(today.getDate() + 1)).format(
-    "YYYY/MM/DD"
-  );
 
   // ngày tổ chức cách ngày hiện tại ít nhất 7 ngày
   const convertDateOrganize = moment(today.setDate(today.getDate() + 7)).format(
@@ -48,68 +44,19 @@ export default function FormCreateActiveDT(props) {
     setOpenOrganize(!openOrganize);
   };
 
-  const [maxDateDeadLine, setMaxDateDeadLine] = useState();
   const handleChangeOrganize = (propDate) => {
     const reversedStrOrganize = propDate.split("/").reverse().join("/");
     setdateOrganize(reversedStrOrganize);
 
-    // khi user chọn thời gian tổ chức thì ta sẽ lấy thời gian user chọn
-    // là propDate, sau đó ta dùng propDate để tạo object moment rồi lấy nó
-    // subtract đi 3 ngày và format 'YYYY/MM/DD' sau đó dùng setMaxDateDeadLine
-    // để cho maxDateDeadLine thay đổi và gán nó vào props maximumDate = {maxDateDeadLine}
-    // của hạn chót đăng kí để giới hạn thời gian hạn chót đăng kí phải thấp
-    // hơn thời gian tổ chức ít nhất 3 ngày
-    setMaxDateDeadLine(
-      moment(propDate, "YYYY/MM/DD").subtract(3, "day").format("YYYY/MM/DD")
-    );
   };
 
-  // Hạn chót tham gia
-  const [openDeadLine, setOpenDeadLine] = useState(false); // open and close the modal
-  const [dateDeadLine, setdateDeadLine] = useState("DD/MM/YYYY");
-
-  const [dialogHandleOnPressDeadLine, setDialogHandleOnPressDeadLine] = useState(false);
-  const handleOnPressDeadLine = () => {
-    // bắt lỗi logic nếu chưa chọn tg tổ chức thì ko thêm hạn chót
-    // đăng kí đươc
-    if (dateOrganize === "DD/MM/YYYY") {
-      setDialogHandleOnPressDeadLine(true)
-      
-    } else {
-      setOpenDeadLine(!openDeadLine);
-    }
-  };
-
-  const handleChangeDeadLine = (propDate) => {
-    const reversedStrDeadLine = propDate.split("/").reverse().join("/");
-    setdateDeadLine(reversedStrDeadLine);
-    // console.log(reversedStr)
-  };
 
   const [dialogNavigateFormContinue1, setDialogNavigateFormContinue1] = useState(false);
   const navigateFormContinue = () => {
-    // thiếu 1 trong 3 thông tin thì ko thể next
-    const date1 = moment(dateOrganize, "DD/MM/YYYY");
-    const date2 = moment(dateDeadLine, "DD/MM/YYYY").add(3, "day");
-
-    // console.log(date1, date2)
-    if (
-      nameActive === "" ||
-      dateOrganize === "DD/MM/YYYY" ||
-      dateDeadLine === "DD/MM/YYYY"
-    ) {
-      setDialogNavigateFormContinue1(true)
-    }
-    // đk thứ 2 này là để ràng buộc nếu user đổi ngày tổ chức mà
-    // quên đổi lại deadline cho hợp lệ thì khi ấn tiếp theo thì
-    // sẽ đc hệ thống nhắc nhở
-    else if (date2.isAfter(date1, "day")) {
-      Alert.alert(
-        "Thông báo",
-        "Hạn chót đăng kí trước ngày tổ chức tối thiểu 3 ngày"
-      );
+    if (nameActive === "" || dateOrganize === "DD/MM/YYYY") {
+      setDialogNavigateFormContinue1(true);
     } else {
-      navigation.navigate('form2CreateActiveDT');
+      navigation.navigate("form2CreateActiveDT");
     }
   };
 
@@ -324,117 +271,6 @@ export default function FormCreateActiveDT(props) {
             </Modal>
           </View>
 
-          {/* Deadline */}
-          <View style={styles.containerFormActive}>
-            <View style={{ flexDirection: "row" }}>
-              <Text style={styles.headerFormActive}>Hạn chót đăng kí</Text>
-              <Text
-                style={[styles.headerFormActive, { color: Color.colorRemove }]}
-              >
-                (*)
-              </Text>
-            </View>
-            <TouchableOpacity
-              style={[
-                styles.formActive,
-                {
-                  width: dateDeadLine == 'DD/MM/YYYY' ? 0.4 * screenWidth : 0.34 * screenWidth,
-                  justifyContent: "center",
-                },
-              ]}
-              onPress={handleOnPressDeadLine}
-            >
-              <Text
-                style={{
-                  color: Color.colorTextMain,
-                  fontSize: FontSize.sizeMain,
-                }}
-              >
-                {dateDeadLine}
-              </Text>
-              <Image
-                source={require("../../../resource/iconFormCreateActive/triangleDowm.png")}
-                style={{
-                  height: 18,
-                  width: 18,
-                  position: "absolute",
-                  right: 0,
-                  top: "25%",
-                  borderRadius: 16,
-                  zIndex: 2,
-                  tintColor: Color.colorTextMain,
-                }}
-                resizeMode="contain"
-              ></Image>
-
-              <Dialog.Container
-                visible={dialogHandleOnPressDeadLine}
-                contentStyle={{
-                  backgroundColor: "#EEF7FF",
-                  borderRadius: 10,
-                  width: (1 / 2) * screenWidth + 150,
-                  height: (1 / 5) * screenHeight,
-                }}
-              >
-                <Dialog.Title
-                  style={{
-                    color: Color.colorTextMain,
-                    fontWeight: "700",
-                    fontSize: 20,
-                  }}
-                >
-                  Thông báo
-                </Dialog.Title>
-                <Dialog.Description
-                  style={{ color: "black", fontSize: FontSize.sizeSmall + 2 }}
-                >
-                  Bạn chưa chọn thời gian tổ chức!
-                </Dialog.Description>
-                <Dialog.Button
-                  label="Ok"
-                  onPress={() => setDialogHandleOnPressDeadLine(!dialogHandleOnPressDeadLine)}
-                  style={[
-                    styles.btnCancel,
-                    {
-                      width: 60,
-                      height: 40,
-                      fontWeight: '700',
-                      fontSize: FontSize.sizeMain,
-                      color: Color.colorTextMain,
-                    },
-                  ]}
-                />
-              </Dialog.Container>
-            </TouchableOpacity>
-
-            <Modal
-              animationType="fade"
-              transparent={true}
-              visible={openDeadLine}
-            >
-              <View style={styles.centeredView}>
-                <View style={styles.modalView}>
-                  <DatePicker
-                    mode="calendar"
-                    minimumDate={todayFormat}
-                    maximumDate={maxDateDeadLine}
-                    // do ở trên mình convert string thành DD//MM/YYYY
-                    // nên sau đó trx khi đưa vào hệ thống sử lí mình
-                    // phải convert ngược lại
-                    selected={dateDeadLine.split("/").reverse().join("/")}
-                    onDateChange={handleChangeDeadLine}
-                  />
-
-                  <TouchableOpacity
-                    onPress={handleOnPressDeadLine}
-                    style={styles.btnDate}
-                  >
-                    <Text>Ok</Text>
-                  </TouchableOpacity>
-                </View>
-              </View>
-            </Modal>
-          </View>
 
           <View
             style={{

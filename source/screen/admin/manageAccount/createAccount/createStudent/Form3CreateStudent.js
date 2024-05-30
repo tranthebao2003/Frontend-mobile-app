@@ -63,6 +63,7 @@ export default function Form3CreateStudent(props) {
 
   // parseInt(role_id,10): chuyển qua kiểu số cơ số 10
   const roleIdConvertNumber = parseInt(role_id, 10);
+ 
 
   const navigateFormContinue = () => {
     if (
@@ -74,6 +75,9 @@ export default function Form3CreateStudent(props) {
     ) {
       setDialogThongtin(true);
     } else {
+      const [day, month, year] = dateOfBirth.split('/');
+      const formattedDate = `${year}/${month}/${day}`;
+
       const accountStudent = {
         username: username,
         password: password,
@@ -85,37 +89,18 @@ export default function Form3CreateStudent(props) {
         phone: phone,
         address: address,
         class_id: maSoLop,
-        mail: email,
+        email: email,
         gender_id: value,
-        birth_date: dateOfBirth,
+        birth_date: formattedDate,
       };
 
       dispatch(CreateStudentAction(accountStudent));
-
-    //   console.log(loading, 'loading màn form3 createStudent')
-    //  if(loading === true){
-    //   if (report != "") alert("Thông báo", report);
-    //   else {
-    //     alert("Thông báo", error);
-    //   }
-    //   navigation.dispatch(
-    //     CommonActions.reset({
-    //       index: 0,
-    //       routes: [{ name: "uiTapAdmin" }],
-    //     })
-    //   );
-    //  }
-    
     }
   };
 
   console.log(loading, 'loading màn form3 createStudent')
   useEffect(() => {
     if(reponseSuccess === true){
-        // if (report != "") alert(report);
-        // else if (error != '') {
-        //   alert();
-        // }
         navigation.dispatch(
           CommonActions.reset({
             index: 0,

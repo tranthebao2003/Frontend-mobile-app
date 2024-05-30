@@ -17,11 +17,20 @@ import Color from "../../../component/Color";
 import { screenWidth, screenHeight } from "../../../component/DimensionsScreen";
 import { useSelector, useDispatch} from "react-redux";
 import {showKeyBoardAction, hideKeyBoardAction} from '../../../redux/action/KeyBoardAction'
-import { CommonActions } from "@react-navigation/native";
+import CreateActiveAction from "../../../redux/action/CreateActiveAction";
+import Spinner from 'react-native-loading-spinner-overlay'
 
-export default function FormCreateActiveAdmin(props) {
+export default function Form2CreateActiveAdmin(props) {
   const {navigation} = props
+  const dispatch = useDispatch()
 
+  const { loading, reponseSuccess, error } = useSelector(
+    (state) => state.createDoanTruongReducer
+  );
+
+  const {act_name, act_time, amount} = props.route.params;
+
+  
   const [location, setLocation] = useState('');
 
   const [organizer, setOrganizer] = useState('');
@@ -32,10 +41,44 @@ export default function FormCreateActiveAdmin(props) {
 
   const [description, setDescription] = useState('');
 
+  const navigateCreateActive = () => {
+    if (location === "" || organizer === "") {
+      Alert.alert("Thông báo", "Bạn vui lòng nhập đủ thông tin");
+    } else {
+      const active = {
+        act_name: act_name,
+        act_time: act_time,
+        amount: amount,
+
+        act_address: location,
+        act_price: cost,
+
+        act_description: description,
+        act_status: 1,
+      };
+
+      dispatch(CreateActiveAction(active));
+    }
+  };
+
+  
+
+  useEffect(() => {
+    if(reponseSuccess === true){
+        navigation.dispatch(
+          CommonActions.reset({
+            index: 0,
+            routes: [{ name: "uiTapAdmin" }],
+          })
+        );
+      }
+  },[reponseSuccess])
+
+
   const {showKeyBoard} = useSelector(state => state.keyboardShow)
 
   // xử lí keyboard
-  const dispatch = useDispatch()
+
   useEffect(() => {
     const showSubscription = Keyboard.addListener('keyboardDidShow', () => {
       dispatch(showKeyBoardAction())
@@ -54,38 +97,15 @@ export default function FormCreateActiveAdmin(props) {
     };
   }, []);
 
-  const navigateCreateActive = () => {
-    if (location === "" || organizer === "") {
-      Alert.alert("Thông báo", "Bạn vui lòng nhập đủ thông tin");
-    } else {
-
-      // dispatch này nó nằm trong navigation để gửi action navigation
-      //  lên navigator chứ ko liên quan j đến redux
-      Alert.alert("chuyển trang");
-
-      //navigation.dispatch: Used to send a navigation action to the navigator.
-      //CommonActions.reset: Resets the navigation state, replacing the current stack with a new one.
-
-      // index: 0 nghĩa là chỉ định cái screen trong array routes phía dưới
-      // routes: là 1 mảng chứa các đối tượng screen và index = 0 chính là trang chủ
-
-      // tóm lại code phía dưới sẽ reset stack cũ thay bằng stack mới hoàn toàn
-      // mục đích để tăng hiệu năng, xóa những state trong stack cũ ko sử dụng
-      // đến
-      navigation.dispatch(
-        CommonActions.reset(
-          {
-            index: 0,
-            routes: [{name: 'uiTapAdmin'}]
-          }
-        )
-      )
-    }
-  };
-
+  console.log(loading, 'loading màn form2 create active admin')
   return (
     <View style={styles.container}>
       <StatusBar style="auto" />
+      <Spinner
+        visible={loading}
+        textContent={"Loading..."}
+        textStyle={{ color: "white", fontSize: FontSize.sizeHeader }}
+      />
       <ImageBackground
         source={require("../../../resource/iconLogin/bg.png")}
         resizeMode="cover"
@@ -173,12 +193,11 @@ export default function FormCreateActiveAdmin(props) {
 
         <ScrollView
           style={{
-            height: 2/3*screenHeight,
+            height: (2 / 3) * screenHeight,
             // borderWidth: 1,
             marginTop: 20,
-            marginBottom: showKeyBoard ? 1/5*screenHeight : 0,
+            marginBottom: showKeyBoard ? (1 / 5) * screenHeight : 0,
             paddingHorizontal: 20,
-            
           }}
         >
           {/* Location active */}
@@ -291,13 +310,18 @@ export default function FormCreateActiveAdmin(props) {
           style={{
             flexDirection: "row",
             justifyContent: "space-between",
-            paddingBottom: 1/5*screenHeight,
-            alignItems: 'center',
-            height: 1/4*screenHeight,
+            paddingBottom: (1 / 5) * screenHeight,
+            alignItems: "center",
+            height: (1 / 4) * screenHeight,
             paddingHorizontal: 20,
           }}
         >
-          <Text style={[styles.headerFormActive, { color: Color.colorRemove, marginBottom: 0}]}>
+          <Text
+            style={[
+              styles.headerFormActive,
+              { color: Color.colorRemove, marginBottom: 0 },
+            ]}
+          >
             (*): Bắt buộc
           </Text>
 

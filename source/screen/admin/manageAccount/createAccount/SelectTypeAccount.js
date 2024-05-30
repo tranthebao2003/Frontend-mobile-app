@@ -80,10 +80,10 @@ function SelectTypeAccount(props) {
                 <Image
                   style={styles.icon}
                   resizeMode="cover"
-                  source={require("../../../../resource/iconUITapManageAccount/addAccountDT.png")}
+                  source={require("../../../../resource/iconUITapManageAccount/addAccountStudent.png")}
                 />
               </TouchableOpacity>
-              <Text style={styles.bottomText}>Tài khoản đoàn trường</Text>
+              <Text style={styles.bottomText}>Tài khoản sinh viên</Text>
             </View>
 
               {/* navigation to form create account đoàn trường */}
@@ -95,10 +95,10 @@ function SelectTypeAccount(props) {
                 <Image
                   style={styles.icon}
                   resizeMode="cover"
-                  source={require("../../../../resource/iconUITapManageAccount/addaccountStudent.png")}
+                  source={require("../../../../resource/iconUITapManageAccount/addAccountDT.png")}
                 />
               </TouchableOpacity>
-              <Text style={styles.bottomText}>Tài khoản sinh viên</Text>
+              <Text style={styles.bottomText}>Tài khoản đoàn trường</Text>
             </View>
           </View>
           <View style={styles.containerHeader}>
