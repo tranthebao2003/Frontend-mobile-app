@@ -24,13 +24,18 @@ import DatePicker from "react-native-modern-datepicker";
 import Dialog from "react-native-dialog";
 import { useDispatch, useSelector } from "react-redux";
 import { CommonActions } from "@react-navigation/native";
-
+import CreateStudentAction from "../../../../../redux/action/actionCreateUser/CreateStudentAction";
+import Spinner from 'react-native-loading-spinner-overlay'
 
 export default function Form3CreateStudent(props) {
   const { navigation } = props;
+  const dispatch = useDispatch();
+  const { loading, reponseSuccess, error } = useSelector(
+    (state) => state.createStudentReducer
+  );
+
   const { username, password, role_id, MSSV, first_name, last_name, phone } =
     props.route.params;
-
 
   const [dateOfBirth, setDateOfBirth] = useState("Chọn ngày");
   const [openDateOfBirth, setOpenDateOfBirth] = useState(false); // open and close the modal
@@ -56,76 +61,80 @@ export default function Form3CreateStudent(props) {
   const [maSoLop, setMaSoLop] = useState("");
   const [email, setEmail] = useState("");
 
-
   // parseInt(role_id,10): chuyển qua kiểu số cơ số 10
-  const roleIdConvertNumber = parseInt(role_id,10)
+  const roleIdConvertNumber = parseInt(role_id, 10);
 
   const navigateFormContinue = () => {
     if (
-      address == "" ||
-      maSoLop == "" ||
-      email == "" ||
-      dateOfBirth == "Chọn ngày",
-      value == null
+      (address == "" ||
+        maSoLop == "" ||
+        email == "" ||
+        dateOfBirth == "Chọn ngày",
+      value == null)
     ) {
       setDialogThongtin(true);
-    }  else {
+    } else {
+      const accountStudent = {
+        username: username,
+        password: password,
+        role_id: roleIdConvertNumber,
+        status_id: 1,
+        MSSV: MSSV,
+        first_name: first_name,
+        last_name: last_name,
+        phone: phone,
+        address: address,
+        class_id: maSoLop,
+        mail: email,
+        gender_id: value,
+        birth_date: dateOfBirth,
+      };
 
-      // dùng dispatch để gửi lên sever
+      dispatch(CreateStudentAction(accountStudent));
 
-      // console.log(
-      //   username,
-      //   password,
-      //   roleIdConvertNumber,
-      //   1,
-      //   MSSV,
-      //   first_name,
-      //   last_name,
-      //   phone,
-      //   address,
-      //   maSoLop,
-      //   email,
-      //   value,
-      //   dateOfBirth
-      // );
-    //   navigation.navigate("", {
-    //     username: username,
-    //     password: password,
-    //     role_id: role_id,
-    //     // tạo tk mặc đính nó là 1
-    //     status_id: 1,
-
-    //     MSSV: MSSV, 
-    //     first_name: first_name, 
-    //     last_name: last_name, 
-    //     phone: phone,
-
-    //     address: address,
-    //     class_id: maSoLop,
-    //     gender_id: value,
-    //     birth_date: dateOfBirth,
-    //     email: email
-    //   });
-
-    alert('bạn đã tạo tk mới thành công')
-    navigation.dispatch(
-      CommonActions.reset(
-        {
-          index: 0,
-          routes: [{name: 'uiTapAdmin'}]
-        }
-      )
-    )
+    //   console.log(loading, 'loading màn form3 createStudent')
+    //  if(loading === true){
+    //   if (report != "") alert("Thông báo", report);
+    //   else {
+    //     alert("Thông báo", error);
+    //   }
+    //   navigation.dispatch(
+    //     CommonActions.reset({
+    //       index: 0,
+    //       routes: [{ name: "uiTapAdmin" }],
+    //     })
+    //   );
+    //  }
+    
     }
   };
 
-  const dispatch = useDispatch();
+  console.log(loading, 'loading màn form3 createStudent')
+  useEffect(() => {
+    if(reponseSuccess === true){
+        // if (report != "") alert(report);
+        // else if (error != '') {
+        //   alert();
+        // }
+        navigation.dispatch(
+          CommonActions.reset({
+            index: 0,
+            routes: [{ name: "uiTapAdmin" }],
+          })
+        );
+       }
+  },[reponseSuccess])
 
-  const {showKeyBoard} = useSelector(state => state.keyboardShow)
+  const { showKeyBoard } = useSelector((state) => state.keyboardShow);
 
   return (
     <View style={styles.container}>
       <StatusBar style="auto" />
+      <Spinner
+        visible={loading}
+        textContent={"Loading..."}
+        textStyle={{color: 'white', fontSize: FontSize.sizeHeader}}
+      />
       <ImageBackground
         source={require("../../../../../resource/iconLogin/bg.png")}
         resizeMode="cover"
@@ -638,7 +647,7 @@ const styles = StyleSheet.create({
 
   containerDropPicker: {
     position: "absolute",
-    top: '13%',
+    top: "13%",
     right: 0,
     marginBottom: 20,
   },

@@ -213,27 +213,6 @@ const Admin = () => {
  
 }
 
-const getUserFromToken = async () => {
-  try {
-    // bắt buộc phải để let để mik có thể xóa 4 kí tự đầu của token
-    // để decode đc
-      let token = await AsyncStorage.getItem('token');
-      console.log('token getUserFromtoken: ', token)
-      if (token) {
-          console.log('token trong if: ', token)
-          const decodedToken = HandelJwtDecode(token);
-          return decodedToken;
-      }
-      return null;
-  } catch (err) {
-      return {
-          success: false,
-          message: err.message || 'Error retrieving token'
-      };
-  }
-};
-
-
 export default RootElement = () => {
 
   // // nếu user chưa đăng xuất thì khi thoát app và vào lại 

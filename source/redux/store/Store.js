@@ -4,6 +4,7 @@ import KeyBoardReducer from "../reducers/KeyBoardReducer";
 import InfoUserReducer from "../reducers/InfoUserReducer";
 import ListActiveReducer from"../reducers/ListActiveReducer";
 import ListActiveCreatedReducer from"../reducers/ListActiveCreatedReducer";
+import CreateStudentReducer from"../reducers/reducerCreateUser/CreateStudentReducer";
 import { thunk } from "redux-thunk";
 
 const rootReducer = combineReducers({
@@ -11,7 +12,8 @@ const rootReducer = combineReducers({
     authReducer: LoginReducers,
     infoUser: InfoUserReducer,
     listActiveReducer: ListActiveReducer,
-    listActiveCreatedReducer: ListActiveCreatedReducer
+    listActiveCreatedReducer: ListActiveCreatedReducer,
+    createStudentReducer: CreateStudentReducer
 })
 
 export default Store = createStore(rootReducer, applyMiddleware(thunk))
