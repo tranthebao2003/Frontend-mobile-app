@@ -18,7 +18,7 @@ export default CreateDoanTruongAction = (accountDT) => {
      await SetAuthToken()
       console.log(accountDT, "màn createDtAction");
       const res = await axios.post(`${UrlApi}${uerCreateDt}`, accountDT);
-
+      
       dispatch({
         type: CREATE_DT_SUCCESS,
       });
@@ -26,31 +26,13 @@ export default CreateDoanTruongAction = (accountDT) => {
       // Sử dụng console.error thay vì console.log trong
       // phần catch: Điều này giúp
       // phân biệt lỗi trong log dễ dàng hơn
-      console.error("Tạo tài khoản thất bại", error);
-
-      if (error.response) {
-        // Request made and server responded
-        dispatch({
-          type: CREATE_DT_FAILURE,
-          payload: error.message
-        }
-         
-
-          );
-      } else if (error.request) {
-        // The request was made but no response was received
-        dispatch({
-          type: CREATE_DT_FAILURE,
-          payload: "No response received from the server."}
-        )
-      }
-       else {
-        // Something happened in setting up the request that triggered an Error
-        dispatch({
-          type: CREATE_DT_FAILURE,
-          payload: error.message
-        });
-      }
+      console.error('Tạo tài khoản thất bại', error);
+      
+      let errorForUser = 'Tạo tài khoản thất bại vui lòng thử lại'
+      dispatch({
+        type: CREATE_DT_FAILURE,
+        payload: errorForUser,
+      });
     }
   };
 };

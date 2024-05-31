@@ -10,6 +10,7 @@ import {
     error: "",
   };
   
+  // reducer này để nhận những action trả về list active
   export default (state = initialState, { type, payload }) => {
     switch (type) {
       case LIST_ACTIVE_REQUEST:

@@ -9,7 +9,7 @@ import {
   TouchableOpacity,
   ScrollView,
   Alert,
-  Keyboard
+  Keyboard,
 } from "react-native";
 import React, { useState, useEffect} from "react";
 import FontSize from "../../../component/FontSize";
@@ -19,13 +19,14 @@ import { useSelector, useDispatch} from "react-redux";
 import {showKeyBoardAction, hideKeyBoardAction} from '../../../redux/action/KeyBoardAction'
 import CreateActiveAction from "../../../redux/action/CreateActiveAction";
 import Spinner from 'react-native-loading-spinner-overlay'
+import { CommonActions } from "@react-navigation/native";
 
 export default function Form2CreateActiveAdmin(props) {
   const {navigation} = props
   const dispatch = useDispatch()
 
   const { loading, reponseSuccess, error } = useSelector(
-    (state) => state.createDoanTruongReducer
+    (state) => state.createActiveReducer
   );
 
   const {act_name, act_time, amount} = props.route.params;
@@ -45,9 +46,12 @@ export default function Form2CreateActiveAdmin(props) {
     if (location === "" || organizer === "") {
       Alert.alert("Thông báo", "Bạn vui lòng nhập đủ thông tin");
     } else {
+      const [day, month, year] = act_time.split('/');
+      const formattedDate = `${year}/${month}/${day}`;
+
       const active = {
         act_name: act_name,
-        act_time: act_time,
+        act_time: formattedDate,
         amount: amount,
 
         act_address: location,
@@ -61,19 +65,11 @@ export default function Form2CreateActiveAdmin(props) {
     }
   };
 
-  
-
   useEffect(() => {
-    if(reponseSuccess === true){
-        navigation.dispatch(
-          CommonActions.reset({
-            index: 0,
-            routes: [{ name: "uiTapAdmin" }],
-          })
-        );
-      }
-  },[reponseSuccess])
-
+    if(error != '' && error != null && error != 'Tạo hoạt động thất bại vui lòng thử lại'){
+      alert(error)
+    }
+  }, [error])
 
   const {showKeyBoard} = useSelector(state => state.keyboardShow)
 
@@ -97,7 +93,7 @@ export default function Form2CreateActiveAdmin(props) {
     };
   }, []);
 
-  console.log(loading, 'loading màn form2 create active admin')
+  
   return (
     <View style={styles.container}>
       <StatusBar style="auto" />

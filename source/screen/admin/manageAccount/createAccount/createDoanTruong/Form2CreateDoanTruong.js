@@ -22,7 +22,6 @@ import {
   export default function Form2CreateDoanTruong(props) {
     const {navigation} = props
     const { username, password, role_id, position } = props.route.params;
-    
 
     const [dialogThongtin, setDialogThongtin] = useState(false);
 

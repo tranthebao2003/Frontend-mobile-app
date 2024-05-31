@@ -8,8 +8,7 @@ import {
   TextInput,
   TouchableOpacity,
   ScrollView,
-  Keyboard,
-  Modal,
+  Alert
 } from "react-native";
 import React, { useState, useEffect } from "react";
 import FontSize from "../../../../../component/FontSize";
@@ -25,16 +24,19 @@ import { CommonActions } from "@react-navigation/native";
 import CreateDoanTruongAction from "../../../../../redux/action/actionCreateUser/CreateDoanTruongAction";
 import Spinner from 'react-native-loading-spinner-overlay'
 
+
 export default function Form3CreateDoanTruong(props) {
   const { navigation } = props;
-  const {  username,
+  const {
+    username,
     password,
     role_id,
 
     first_name,
     last_name,
     phone,
-    position } = props.route.params;
+    position,
+  } = props.route.params;
   const dispatch = useDispatch();
   const { loading, reponseSuccess, error } = useSelector(
     (state) => state.createDoanTruongReducer
@@ -67,17 +69,16 @@ export default function Form3CreateDoanTruong(props) {
       dispatch(CreateDoanTruongAction(accountDt));
     
     }
+   
   };
+
+
   useEffect(() => {
-    if(reponseSuccess === true){
-        navigation.dispatch(
-          CommonActions.reset({
-            index: 0,
-            routes: [{ name: "uiTapAdmin" }],
-          })
-        );
-       }
-  },[reponseSuccess])
+    if(error != '' && error != null && error != 'Tạo tài khoản thất bại vui lòng thử lại'){
+      alert(error)
+    }
+  }, [error])
+
   
 
   const { showKeyBoard } = useSelector((state) => state.keyboardShow);
@@ -186,7 +187,7 @@ export default function Form3CreateDoanTruong(props) {
           />
         </View>
         <View style={styles.containerHeader}>
-          <Text style={styles.header}>Tạo tài khoản sinh viên</Text>
+          <Text style={styles.header}>Tạo tài khoản đoàn trường</Text>
         </View>
 
         <ScrollView

@@ -105,15 +105,8 @@ const BannerComponent = ({}) => {
 
 const MainComponent = ({ navigation }) => {
 
-  const {error} = useSelector(state => state.authReducer)
+  const {error, loading, token} = useSelector(state => state.authReducer)
 
-  // bắt lỗi nếu user nhập sai tài khoản, mật khẩu
-  useEffect(() => {
-    if(error != null){
-      setDialogError(true)
-      setContenError(error)
-    }
-  }, [error])
 
   const [dialogError, setDialogError] = useState(false);
   const [contentError, setContenError] = useState('')
@@ -122,6 +115,13 @@ const MainComponent = ({ navigation }) => {
      dispatch(LoginAction(userName, password))
     //  showHideDialogError()
   }
+  
+    useEffect(() => {
+      if(error != null){
+        setDialogError(true)
+        setContenError(error)
+      }
+    }, [error, loading])
 
   const [userName, setUserName] = useState("");
 

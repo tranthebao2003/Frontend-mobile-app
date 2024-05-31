@@ -98,17 +98,12 @@ export default function Form3CreateStudent(props) {
     }
   };
 
-  console.log(loading, 'loading màn form3 createStudent')
+
   useEffect(() => {
-    if(reponseSuccess === true){
-        navigation.dispatch(
-          CommonActions.reset({
-            index: 0,
-            routes: [{ name: "uiTapAdmin" }],
-          })
-        );
-       }
-  },[reponseSuccess])
+    if(error != '' && error != null && error != 'Tạo tài khoản thất bại vui lòng thử lại'){
+      alert(error)
+    }
+  }, [error])
 
   const { showKeyBoard } = useSelector((state) => state.keyboardShow);
 

@@ -5,6 +5,7 @@ import {
   INFO_USER_FAILURE,
 } from "../types/TypesInfoUser";
 import UrlApi from '../UrlApi'
+import SetAuthToken from '../../component/SetAuthToken'
 
 
 export const getProfileUser = () => {
@@ -13,6 +14,7 @@ export const getProfileUser = () => {
     
     try {
       dispatch({ type: INFO_USER_REQUEST });
+      await SetAuthToken()
       console.log("chưa call api màn inforUserAction");
       const res = await axios.get(
         `${UrlApi}${urlInfoUser}`

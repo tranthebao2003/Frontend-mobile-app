@@ -8,8 +8,9 @@ import UrlApi from "../UrlApi";
 export const LoginAction = (userName, password) => {
   const urlAuthLogin = 'auth/login'
   return async (dispatch) => {
-   
+    
     try {
+     
       dispatch({type: LOGIN_REQUEST})
       const res = await axios.post(
         `${UrlApi}${urlAuthLogin}`,
@@ -25,9 +26,10 @@ export const LoginAction = (userName, password) => {
       await AsyncStorage.setItem('token', token); // Lưu trữ token trong local storage
       await AsyncStorage.setItem('role', role.toString()); // Lưu trữ token trong local storage
 
+      let loading = false
       dispatch({
         type: LOGIN_SUCCESS,
-        payload: {token, role},
+        payload: {token, role, loading},
       });
 
       

@@ -16,7 +16,7 @@ export default (state = initialState, { type, payload }) => {
     case LOGIN_SUCCESS:
       return {
         ...state,
-        loading: false,
+        loading: payload.loading,
         token: payload.token,
         role: payload.role,
       };

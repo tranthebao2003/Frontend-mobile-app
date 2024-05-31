@@ -13,17 +13,18 @@ const initialState = {
 export default (state = initialState, { type, payload }) => {
   switch (type) {
     case CREATE_DT_REQUEST:
-      return { ...state, loading: true,};
+      return { ...state, loading: true,reponseSuccess: false};
 
     case CREATE_DT_SUCCESS:
       return {
         ...state,
         loading: false,
-        reponseSuccess: true
+        reponseSuccess: true,
+        error: null
       };
 
     case CREATE_DT_FAILURE:
-      return { ...state, loading: false, error: payload};
+      return { ...state, loading: false, error: payload,};
 
     default:
       return state;

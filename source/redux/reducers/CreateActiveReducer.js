@@ -13,13 +13,14 @@ const initialState = {
 export default (state = initialState, { type, payload }) => {
   switch (type) {
     case CREATE_ACTIVE_REQUEST:
-      return { ...state, loading: true,};
+      return { ...state, loading: true};
 
     case CREATE_ACTIVE_SUCCESS:
       return {
         ...state,
         loading: false,
-        reponseSuccess: true
+        reponseSuccess: true,
+        error: null
       };
 
     case CREATE_ACTIVE_FAILURE:
