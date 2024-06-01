@@ -17,10 +17,15 @@ import Color from "../../../component/Color";
 import { screenWidth, screenHeight } from "../../../component/DimensionsScreen";
 import { useSelector, useDispatch} from "react-redux";
 import {showKeyBoardAction, hideKeyBoardAction} from '../../../redux/action/KeyBoardAction'
-import { CommonActions } from "@react-navigation/native";
+import CreateActiveAction from "../../../redux/action/CreateActiveAction";
 
 export default function Form2CreateActiveTruongCLB(props) {
-  const {navigation} = props
+  const {act_name, act_time, amount} = props.route.params;
+  const dispatch = useDispatch()
+
+  const { loading, reponseSuccess, error } = useSelector(
+    (state) => state.createActiveReducer
+  );
 
   const [location, setLocation] = useState('');
 
@@ -31,11 +36,41 @@ export default function Form2CreateActiveTruongCLB(props) {
   const [cost, setCost] = useState('0');
 
   const [description, setDescription] = useState('');
+  
+  // xử lí keyboard
+  
+  const navigateCreateActive = () => {
+    if (location === "" || organizer === "") {
+      Alert.alert("Thông báo", "Bạn vui lòng nhập đủ thông tin");
+    } else {
+      const [day, month, year] = act_time.split('/');
+      const formattedDate = `${year}/${month}/${day}`;
+
+      const active = {
+        act_name: act_name,
+        act_time: formattedDate,
+        amount: amount,
+
+        act_address: location,
+        act_price: cost,
+
+        act_description: description,
+        act_status: 1,
+      };
+
+      dispatch(CreateActiveAction(active));
+    }
+  };
+
+  useEffect(() => {
+    if(error != '' && error != null && error != 'Tạo hoạt động thất bại vui lòng thử lại'){
+      alert(error)
+    }
+  }, [error])
 
   const {showKeyBoard} = useSelector(state => state.keyboardShow)
 
   // xử lí keyboard
-  const dispatch = useDispatch()
   useEffect(() => {
     const showSubscription = Keyboard.addListener('keyboardDidShow', () => {
       dispatch(showKeyBoardAction())
@@ -53,39 +88,14 @@ export default function Form2CreateActiveTruongCLB(props) {
       hideSubscription.remove();
     };
   }, []);
-
-  const navigateCreateActive = () => {
-    if (location === "" || organizer === "") {
-      Alert.alert("Thông báo", "Bạn vui lòng nhập đủ thông tin");
-    } else {
-
-      // dispatch này nó nằm trong navigation để gửi action navigation
-      //  lên navigator chứ ko liên quan j đến redux
-      Alert.alert("chuyển trang");
-
-      //navigation.dispatch: Used to send a navigation action to the navigator.
-      //CommonActions.reset: Resets the navigation state, replacing the current stack with a new one.
-
-      // index: 0 nghĩa là chỉ định cái screen trong array routes phía dưới
-      // routes: là 1 mảng chứa các đối tượng screen và index = 0 chính là trang chủ
-
-      // tóm lại code phía dưới sẽ reset stack cũ thay bằng stack mới hoàn toàn
-      // mục đích để tăng hiệu năng, xóa những state trong stack cũ ko sử dụng
-      // đến
-      navigation.dispatch(
-        CommonActions.reset(
-          {
-            index: 0,
-            routes: [{name: 'uiTapTruongCLB'}]
-          }
-        )
-      )
-    }
-  };
-
   return (
     <View style={styles.container}>
       <StatusBar style="auto" />
+      <Spinner
+        visible={loading}
+        textContent={"Loading..."}
+        textStyle={{ color: "white", fontSize: FontSize.sizeHeader }}
+      />
       <ImageBackground
         source={require("../../../resource/iconLogin/bg.png")}
         resizeMode="cover"

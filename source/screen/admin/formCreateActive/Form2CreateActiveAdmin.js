@@ -22,7 +22,6 @@ import Spinner from 'react-native-loading-spinner-overlay'
 import { CommonActions } from "@react-navigation/native";
 
 export default function Form2CreateActiveAdmin(props) {
-  const {navigation} = props
   const dispatch = useDispatch()
 
   const { loading, reponseSuccess, error } = useSelector(
