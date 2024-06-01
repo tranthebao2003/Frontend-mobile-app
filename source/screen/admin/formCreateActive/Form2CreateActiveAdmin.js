@@ -33,7 +33,7 @@ export default function Form2CreateActiveAdmin(props) {
   
   const [location, setLocation] = useState('');
 
-  const [organizer, setOrganizer] = useState('');
+  const [organizer, setOrganizer] = useState('Học viện');
 
   // cost này mình cho nó string luôn là vì textInput nó cho phép string thui
   //  nếu cần xử lí gì thì mình convert sang number cũng được
@@ -57,7 +57,7 @@ export default function Form2CreateActiveAdmin(props) {
         act_price: cost,
 
         act_description: description,
-        act_status: 1,
+        act_status: 2,
       };
 
       dispatch(CreateActiveAction(active));
@@ -239,9 +239,6 @@ export default function Form2CreateActiveAdmin(props) {
 
               <TextInput
                 style={styles.formActive}
-                onChangeText={(organizerInput) => {
-                  setOrganizer(organizerInput);
-                }}
                 value={organizer}
               ></TextInput>
             </View>

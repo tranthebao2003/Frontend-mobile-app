@@ -35,7 +35,8 @@ export default function FormCreateActiveDT(props) {
     "YYYY/MM/DD"
   );
 
-  const [nameActive, setNameActive] = useState();
+  const [nameActive, setNameActive] = useState('');
+  const [soLuongSVMin, setSoLuongSVMin] = useState('');
 
   const [openOrganize, setOpenOrganize] = useState(false); // open and close the modal
   const [dateOrganize, setdateOrganize] = useState("DD/MM/YYYY");
@@ -53,10 +54,14 @@ export default function FormCreateActiveDT(props) {
 
   const [dialogNavigateFormContinue1, setDialogNavigateFormContinue1] = useState(false);
   const navigateFormContinue = () => {
-    if (nameActive === "" || dateOrganize === "DD/MM/YYYY") {
+    if (nameActive === "" || dateOrganize === "DD/MM/YYYY" || soLuongSVMin === "") {
       setDialogNavigateFormContinue1(true);
     } else {
-      navigation.navigate("form2CreateActiveDT");
+      navigation.navigate("form2CreateActiveDT", {
+        act_name: nameActive,
+        act_time: dateOrganize,
+        amount: parseInt(soLuongSVMin, 10),
+      });
     }
   };
 
@@ -198,6 +203,26 @@ export default function FormCreateActiveDT(props) {
                 setNameActive(nameActiveInput);
               }}
               value={nameActive}
+            ></TextInput>
+          </View>
+
+          <View style={[styles.containerFormActive, ]}>
+            <View style={{ flexDirection: "row" }}>
+              <Text style={styles.headerFormActive}>số lượng sinh viên tối thiểu</Text>
+              <Text
+                style={[styles.headerFormActive, { color: Color.colorRemove }]}
+              >
+                (*)
+              </Text>
+            </View>
+
+            <TextInput
+              style={[styles.formActive, {width: '30%'}]}
+              keyboardType='number-pad'
+              onChangeText={(soLuopngSVInput) => {
+                setSoLuongSVMin(soLuopngSVInput);
+              }}
+              value={soLuongSVMin}
             ></TextInput>
           </View>
 

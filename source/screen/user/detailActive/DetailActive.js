@@ -107,7 +107,8 @@ export default function DetailActive(props) {
             style={{
               width: "100%",
               flexDirection: "row",
-              justifyContent: 'space-between'
+              justifyContent: 'space-between',
+              
             }}
           >
             <Text
@@ -137,13 +138,13 @@ export default function DetailActive(props) {
           <View
             style={{
               width: "100%",
-              alignItems: "center",
+              // alignItems: "center",
               flexDirection: "row",
               borderTopWidth: 0.5,
               borderColor: Color.colorTextMain,
               paddingTop: 26,
               paddingBottom: 13,
-              justifyContent: 'space-between'
+              justifyContent: 'space-between',
             }}
           >
             <View

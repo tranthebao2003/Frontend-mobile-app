@@ -14,124 +14,42 @@ import FontSize from "../../../component/FontSize";
 import Color from "../../../component/Color";
 import { screenWidth, screenHeight } from "../../../component/DimensionsScreen";
 import ActiveApproveItemDT from "./ActiveApproveItemDT";
-import { useSelector, useDispatch } from "react-redux";
+import { useDispatch, useSelector } from 'react-redux';
+import {ListActiveAction} from '../../../redux/action/ListActiveAction'
 import Dialog from "react-native-dialog";
+import Spinner from 'react-native-loading-spinner-overlay';
 
-export default function ListActiveApprove({ navigation }) {
-  // ở đây chỉ bao gồm những hoạt động do đoàn trường tạo
-  // do api trả về lun
-  const [active, setActive] = useState([
-    {
-      id: 1,
-      stt: 1,
-      nameActive: "list active approve dt truyền qua detailaciveApproive",
-      timeOrganize: "3/2/2005",
-      // deadline này là thuộc tính tính toán được
-      deadline: "20/1/2005",
-      location: "Học viện cơ sở quận 9 hội trường A",
-      quantityActived: 30,
-      organizer: "Đoàn trường",
-      timeCreateActive: "10/1/2005",
-      cost: 20000,
-      personApprove: "không có",
-      timeApprove: "không có",
-      minNumber: 50,
+export default function ListActiveApprove(props) {
+  const {navigation} = props
 
-      description:
-        "Là hoạt động thiện nguyên cho trẻ em vùng cao có hoàn cảnh khó khăn",
-      status: "register",
-    },
+const dispatch = useDispatch()
 
-    {
-      id: 2,
-      stt: 2,
-      nameActive: "Mùa hè xanh",
-      timeOrganize: "10/2/2005",
-      deadline: "10/10/2005",
-      location: "Học viện cơ sở quận 9 hội trường B",
-      quantityActived: 10,
-      organizer: "Đoàn trường",
-      timeCreateActive: "10/1/2005",
-      cost: 60000,
-      personApprove: "không có",
-      timeApprove: "không có",
-      minNumber: 20,
-      description: "Là hoạt động để sinh viên có 1 mùa hè ý nghĩa",
-      status: "registered",
-    },
+const { loading, listActive, error} = useSelector(state => state.listActiveReducer)
+// console.log(infoUser, 'infoUser màn profileSv')
 
-    {
-      id: 3,
-      stt: 3,
-      nameActive: "Lập trình cho bé từ 10 đến 12 tuổi",
-      timeOrganize: "3/8/2005",
-      deadline: "1/9/2005",
-      location: "Học viện cơ sở quận 1",
-      quantityActived: 50,
-      organizer: "Đoàn trường",
-      timeCreateActive: "10/1/2005",
-      cost: 200000,
-      personApprove: "không có",
-      timeApprove: "không có",
-      minNumber: 80,
-      description: "Là hoạt động giới thiệu lập trình đến các em nh3o",
-      status: "no register",
-    },
 
-    {
-      id: 4,
-      stt: 4,
-      nameActive: "Lập trình cho bé từ 10 đến 12 tuổi",
-      timeOrganize: "4/10/2005",
-      deadline: "12/12/2005",
-      location: "Học viện cơ sở quận 9 phòng 2A11",
-      quantityActived: 60,
-      organizer: "Đoàn trường",
-      timeCreateActive: "10/1/2005",
-      cost: 0,
-      personApprove: "không có",
-      timeApprove: "không có",
-      minNumber: 220,
-      description: "giới thiệu lập trình đến các em nhỏ",
-      status: "registered",
-    },
+const urlListActiveAccept = 'activities/activities_student_created'
+// Khởi tạo useState để lưu trữ dữ liệu
+const [active, setActive] = useState([]);
 
-    {
-      id: 5,
-      stt: 5,
-      nameActive: "Lập trình cho bé từ 10 đến 12 tuổi",
-      timeOrganize: "4/10/2005",
-      deadline: "12/12/2005",
-      location: "Học viện cơ sở quận 9 phòng 2A11",
-      quantityActived: 60,
-      organizer: "Đoàn trường",
-      timeCreateActive: "10/1/2005",
-      cost: 0,
-      personApprove: "không có",
-      timeApprove: "không có",
-      minNumber: 220,
-      description: "giới thiệu lập trình đến các em nhỏ",
-      status: "registered",
-    },
+// Gọi action để lấy dữ liệu khi component được mount
+useEffect(() => {
+  dispatch(ListActiveAction(urlListActiveAccept));
+}, [dispatch]);
 
-    {
-      id: 6,
-      stt: 6,
-      nameActive: "Lập trình cho bé từ 10 đến 12 tuổi",
-      timeOrganize: "4/10/2005",
-      deadline: "12/12/2005",
-      location: "Học viện cơ sở quận 9 phòng 2A11",
-      quantityActived: 60,
-      organizer: "Đoàn trường",
-      timeCreateActive: "10/1/2005",
-      cost: 0,
-      personApprove: "không có",
-      timeApprove: "không có",
-      minNumber: 220,
-      description: "giới thiệu lập trình đến các em nhỏ",
-      status: "registered",
-    },
-  ]);
+// Cập nhật state active khi dữ liệu từ Redux store thay đổi
+useEffect(() => {
+  if (listActive) {
+    setActive(listActive);
+  } else {
+    if(error !== ''){
+      alert('Bạn vui lòng thoát app để vào lại')
+    }
+  }
+}, [listActive]);
+
+// console.log (active.length, 'active màn screenList')
+
 
   const [dialogCancel, setDialogCancel] = useState(false);
   const showHideDialogCancel = () => {
@@ -147,6 +65,11 @@ export default function ListActiveApprove({ navigation }) {
   return (
     <View style={styles.container}>
       <StatusBar style="auto" />
+      <Spinner
+        visible={loading}
+        textContent={"Loading..."}
+        textStyle={{ color: "white", fontSize: FontSize.sizeHeader }}
+      />
       <Image
         source={require("../../../resource/iconListActive/decorTop.png")}
         style={{

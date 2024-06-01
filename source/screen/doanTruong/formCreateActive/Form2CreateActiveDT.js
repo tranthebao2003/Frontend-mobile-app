@@ -9,7 +9,7 @@ import {
   TouchableOpacity,
   ScrollView,
   Alert,
-  Keyboard
+  Keyboard,
 } from "react-native";
 import React, { useState, useEffect} from "react";
 import FontSize from "../../../component/FontSize";
@@ -18,15 +18,19 @@ import { screenWidth, screenHeight } from "../../../component/DimensionsScreen";
 import { useSelector, useDispatch} from "react-redux";
 import {showKeyBoardAction, hideKeyBoardAction} from '../../../redux/action/KeyBoardAction'
 import CreateActiveAction from "../../../redux/action/CreateActiveAction";
+import Spinner from 'react-native-loading-spinner-overlay'
+import { CommonActions } from "@react-navigation/native";
 
 export default function Form2CreateActiveDT(props) {
-  const {act_name, act_time, amount} = props.route.params;
   const dispatch = useDispatch()
 
   const { loading, reponseSuccess, error } = useSelector(
     (state) => state.createActiveReducer
   );
 
+  const {act_name, act_time, amount} = props.route.params;
+
+  
   const [location, setLocation] = useState('');
 
   const [organizer, setOrganizer] = useState('');
@@ -37,9 +41,6 @@ export default function Form2CreateActiveDT(props) {
 
   const [description, setDescription] = useState('');
 
-  
-  // xử lí keyboard
-  
   const navigateCreateActive = () => {
     if (location === "" || organizer === "") {
       Alert.alert("Thông báo", "Bạn vui lòng nhập đủ thông tin");
@@ -54,6 +55,7 @@ export default function Form2CreateActiveDT(props) {
 
         act_address: location,
         act_price: cost,
+        organization: organizer,
 
         act_description: description,
         act_status: 1,
@@ -69,8 +71,10 @@ export default function Form2CreateActiveDT(props) {
     }
   }, [error])
 
-
   const {showKeyBoard} = useSelector(state => state.keyboardShow)
+
+  // xử lí keyboard
+
   useEffect(() => {
     const showSubscription = Keyboard.addListener('keyboardDidShow', () => {
       dispatch(showKeyBoardAction())
@@ -89,6 +93,7 @@ export default function Form2CreateActiveDT(props) {
     };
   }, []);
 
+  
   return (
     <View style={styles.container}>
       <StatusBar style="auto" />
@@ -184,12 +189,11 @@ export default function Form2CreateActiveDT(props) {
 
         <ScrollView
           style={{
-            height: 2/3*screenHeight,
+            height: (2 / 3) * screenHeight,
             // borderWidth: 1,
             marginTop: 20,
-            marginBottom: showKeyBoard ? 1/5*screenHeight : 0,
+            marginBottom: showKeyBoard ? (1 / 5) * screenHeight : 0,
             paddingHorizontal: 20,
-            
           }}
         >
           {/* Location active */}
@@ -302,13 +306,18 @@ export default function Form2CreateActiveDT(props) {
           style={{
             flexDirection: "row",
             justifyContent: "space-between",
-            paddingBottom: 1/5*screenHeight,
-            alignItems: 'center',
-            height: 1/4*screenHeight,
+            paddingBottom: (1 / 5) * screenHeight,
+            alignItems: "center",
+            height: (1 / 4) * screenHeight,
             paddingHorizontal: 20,
           }}
         >
-          <Text style={[styles.headerFormActive, { color: Color.colorRemove, marginBottom: 0}]}>
+          <Text
+            style={[
+              styles.headerFormActive,
+              { color: Color.colorRemove, marginBottom: 0 },
+            ]}
+          >
             (*): Bắt buộc
           </Text>
 

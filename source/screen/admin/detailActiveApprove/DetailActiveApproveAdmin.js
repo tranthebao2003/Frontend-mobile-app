@@ -5,19 +5,75 @@ import {
   StatusBar,
   Image,
   ImageBackground,
+  TextInput,
+  FlatList,
   TouchableOpacity,
   ScrollView,
 } from "react-native";
 import Dialog from "react-native-dialog";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import FontSize from "../../../component/FontSize";
 import Color from "../../../component/Color";
 import { screenWidth, screenHeight } from "../../../component/DimensionsScreen";
+import moment from 'moment'
+import { useSelector, useDispatch} from "react-redux";
+import AcceptActiveByDTAction from '../../../redux/action/putAction/putAcceptAction/AcceptActiveByDTAction'
+import Spinner from 'react-native-loading-spinner-overlay'
 
-// 2 cách:
-// - ListView from a map of objects
-// - FlatList
+
 export default function DetailActiveApproveAdmin(props) {
+
+  const dispatch = useDispatch()
+
+  const { loading, data, error } = useSelector(
+    (state) => state.acceptActiveByDTReducer
+  );
+
+
+  const {
+    id,
+    act_name,
+    act_description,
+    act_address,
+    act_price,
+    act_status,
+    act_time,
+    amount,
+    creater_id,
+    audit_id,
+    createdAt,
+    updatedAt,
+  } = props.route.params.detailActiveApproveAdmin;
+
+  const acceptActiveByDT = () => {
+  
+    const statusAndId = {
+      id: id,
+      // nghĩa là duyệt
+      status: 2
+    };
+
+    dispatch(AcceptActiveByDTAction(statusAndId));
+
+  };
+  const unAcceptActiveByDT = () => {
+  
+    const statusAndId = {
+      id: id,
+      // nghĩa là duyệt
+      status: 4
+    };
+
+    dispatch(AcceptActiveByDTAction(statusAndId));
+
+  };
+
+  useEffect(() => {
+    if(error != '' && error != null && error != 'Chấp nhận thất bại'){
+      alert(error)
+    }
+  }, [error])
+
   // btn cancel
   const [dialogCancel, setDialogCancel] = useState(false);
   const showHideDialogCancel = () => {
@@ -27,41 +83,77 @@ export default function DetailActiveApproveAdmin(props) {
   const [yesNotificationCancel, setYesNotificationCancel] = useState(false);
   const yesBtnCancel = () => {
     setDialogCancel(!dialogCancel);
-    setYesNotificationCancel(!yesNotificationCancel);
+    unAcceptActiveByDT()
+    // setYesNotificationCancel(!yesNotificationCancel);
   };
 
-  // btn approve
-  const [dialogApprove, setDialogApprove] = useState(false);
-  const showHideDialogApprove = () => {
-    setDialogApprove(!dialogApprove);
+  // btn resigter
+  const [dialogResigter, setDialogRegister] = useState(false);
+  const showHideDialogRegister = () => {
+    setDialogRegister(!dialogResigter);
   };
 
-  const [yesNotificationApprove, setYesNotificationApprove] = useState(false);
-  const yesBtnApprove = () => {
-    setDialogApprove(!dialogApprove);
-    setYesNotificationApprove(!yesNotificationApprove);
+  const [yesNotificationResigter, setYesNotificationResigter] = useState(false);
+  const yesBtnResigter = () => {
+    setDialogRegister(!dialogResigter);
+    acceptActiveByDT()
+    // setYesNotificationResigter(!yesNotificationResigter);
+    
   };
 
+  useEffect(() => {
+    console.log(data)
+   
+  }, [data])
 
-  const {
-    nameActive,
-    timeOrganize,
-    deadline,
-    location,
-    quantityActived,
-    organizer,
-    timeCreateActive,
-    cost,
-    personApprove,
-    timeApprove,
-    minNumber,
-    description,
-    status,
-  } = props.route.params.detailActiveApproveAdmin;
+
+  const [statusActive, setStatusActive] = useState()
+
+  const showStatusActive = (act_status) => {
+    switch (act_status) {
+      case 1:
+        setStatusActive("Đợi duyệt");
+        break;
+
+      case 2:
+        setStatusActive("Đã duyệt");
+        break;
+
+      case 3:
+        setStatusActive("Đã kết thúc");
+        break;
+
+      case 4:
+        setStatusActive("Đã hủy");
+        break;
+
+      case 5:
+        setStatusActive("Đang diễn ra");
+        break;
+
+      default:
+        setStatusActive("Trạng thái đã lỗi");
+        break;
+    }
+  };
+  
+  useEffect(() => {
+    showStatusActive(act_status)
+  },[act_status])
+
+  const formatAct_time = moment(act_time).format('DD/MM/YYYY');
+  const formatCreatedAt = moment(createdAt).format('DD/MM/YYYY');
+  const formatUpdatedAte = moment(updatedAt).format('DD/MM/YYYY');
+
 
   return (
     <ScrollView style={styles.container}>
       <StatusBar style="auto" />
+      <Spinner
+        visible={loading}
+        textContent={"Loading..."}
+        textStyle={{ color: "white", fontSize: FontSize.sizeHeader }}
+      />
       <Image
         source={require("../../../resource/iconListActive/decorTop.png")}
         style={{
@@ -102,6 +194,7 @@ export default function DetailActiveApproveAdmin(props) {
             style={{
               width: "100%",
               flexDirection: "row",
+              justifyContent: "space-between",
             }}
           >
             <Text
@@ -125,57 +218,37 @@ export default function DetailActiveApproveAdmin(props) {
             >
               Thời gian
             </Text>
-
-            <Text
-              style={{
-                color: Color.colorTextMain,
-                fontSize: FontSize.sizeMain,
-                fontWeight: 500,
-              }}
-            >
-              Trạng thái
-            </Text>
           </View>
 
           {/* content row */}
           <View
             style={{
               width: "100%",
-              alignItems: "center",
-              marginTop: 20,
+              // alignItems: "center",
               flexDirection: "row",
               borderTopWidth: 0.5,
               borderColor: Color.colorTextMain,
               paddingTop: 26,
               paddingBottom: 13,
+              justifyContent: "space-between",
             }}
           >
             <View
               style={{
-                flex: 2.4,
-                marginRight: 10,
+                width: "50%",
               }}
             >
-              <Text style={styles.contentText}>{nameActive}</Text>
+              <Text style={styles.contentText}>{act_name}</Text>
             </View>
 
             <View
               style={{
-                flex: 2,
+                width: "35%",
+                alignSelf: "flex-end",
                 backgroundColor: Color.colorBtn,
               }}
             >
-              <Text style={styles.contentText}>{timeOrganize}</Text>
-            </View>
-
-            <View
-              style={{
-                flex: 2,
-                backgroundColor: Color.colorBtn,
-                alignItems: "flex-end",
-              }}
-            >
-              <Text style={styles.contentText}>{status}</Text>
+              <Text style={styles.contentText}>{formatAct_time}</Text>
             </View>
           </View>
         </View>
@@ -195,31 +268,7 @@ export default function DetailActiveApproveAdmin(props) {
           }}
         >
           {/* header column */}
-          {/* deadline*/}
-          <View style={{ width: "100%", marginBottom: 20 }}>
-            <Text
-              style={{
-                color: Color.colorTextMain,
-                fontSize: FontSize.sizeMain,
-                fontWeight: 500,
-                marginRight: 20,
-              }}
-            >
-              Hạn chót
-            </Text>
 
-            <Text
-              style={{
-                color: Color.colorTextMain,
-                fontSize: FontSize.sizeMain,
-                fontWeight: 400,
-              }}
-            >
-              {deadline}
-            </Text>
-          </View>
-
-          {/* location*/}
           <View style={{ width: "100%", marginBottom: 20 }}>
             <Text
               style={{
@@ -239,11 +288,10 @@ export default function DetailActiveApproveAdmin(props) {
                 fontWeight: 400,
               }}
             >
-              {location}
+              {act_address}
             </Text>
           </View>
 
-          {/* quantityActived*/}
           <View style={{ width: "100%", marginBottom: 20 }}>
             <Text
               style={{
@@ -253,7 +301,7 @@ export default function DetailActiveApproveAdmin(props) {
                 marginRight: 20,
               }}
             >
-              Số lượng đã đăng kí
+              Số lượng
             </Text>
 
             <Text
@@ -263,11 +311,10 @@ export default function DetailActiveApproveAdmin(props) {
                 fontWeight: 400,
               }}
             >
-              {quantityActived}
+              {amount}
             </Text>
           </View>
 
-          {/* cost */}
           <View style={{ width: "100%", marginBottom: 20 }}>
             <Text
               style={{
@@ -287,155 +334,10 @@ export default function DetailActiveApproveAdmin(props) {
                 fontWeight: 400,
               }}
             >
-              {cost}
+              {act_price == null ? 0 : act_price}
             </Text>
           </View>
 
-          {/* organizer */}
-          <View style={{ width: "100%", marginBottom: 20 }}>
-            <Text
-              style={{
-                color: Color.colorTextMain,
-                fontSize: FontSize.sizeMain,
-                fontWeight: 500,
-                marginRight: 20,
-              }}
-            >
-              Đơn vị tổ chức
-            </Text>
-
-            <Text
-              style={{
-                color: Color.colorTextMain,
-                fontSize: FontSize.sizeMain,
-                fontWeight: 400,
-              }}
-            >
-              {organizer}
-            </Text>
-          </View>
-
-          {/* timeCreateActive */}
-          <View style={{ width: "100%", marginBottom: 20 }}>
-            <Text
-              style={{
-                color: Color.colorTextMain,
-                fontSize: FontSize.sizeMain,
-                fontWeight: 500,
-                marginRight: 20,
-              }}
-            >
-              Thời gian tạo hoạt động
-            </Text>
-
-            <Text
-              style={{
-                color: Color.colorTextMain,
-                fontSize: FontSize.sizeMain,
-                fontWeight: 400,
-              }}
-            >
-              {timeCreateActive}
-            </Text>
-          </View>
-
-          {/* personApprove */}
-          <View style={{ width: "100%", marginBottom: 20 }}>
-            <Text
-              style={{
-                color: Color.colorTextMain,
-                fontSize: FontSize.sizeMain,
-                fontWeight: 500,
-                marginRight: 20,
-              }}
-            >
-              Người duyệt hoạt động
-            </Text>
-
-            <Text
-              style={{
-                color: Color.colorTextMain,
-                fontSize: FontSize.sizeMain,
-                fontWeight: 400,
-              }}
-            >
-              {personApprove}
-            </Text>
-          </View>
-
-          {/* timeCreateActive */}
-          <View style={{ width: "100%", marginBottom: 20 }}>
-            <Text
-              style={{
-                color: Color.colorTextMain,
-                fontSize: FontSize.sizeMain,
-                fontWeight: 500,
-                marginRight: 20,
-              }}
-            >
-              Thời gian tạo hoạt động
-            </Text>
-
-            <Text
-              style={{
-                color: Color.colorTextMain,
-                fontSize: FontSize.sizeMain,
-                fontWeight: 400,
-              }}
-            >
-              {timeCreateActive}
-            </Text>
-          </View>
-
-          {/* timeApprove */}
-          <View style={{ width: "100%", marginBottom: 20 }}>
-            <Text
-              style={{
-                color: Color.colorTextMain,
-                fontSize: FontSize.sizeMain,
-                fontWeight: 500,
-                marginRight: 20,
-              }}
-            >
-              Thời gian duyệt hoạt động
-            </Text>
-
-            <Text
-              style={{
-                color: Color.colorTextMain,
-                fontSize: FontSize.sizeMain,
-                fontWeight: 400,
-              }}
-            >
-              {timeApprove}
-            </Text>
-          </View>
-
-          {/* minNumber */}
-          <View style={{ width: "100%", marginBottom: 20 }}>
-            <Text
-              style={{
-                color: Color.colorTextMain,
-                fontSize: FontSize.sizeMain,
-                fontWeight: 500,
-                marginRight: 20,
-              }}
-            >
-              Số lượng sinh viên tối thiểu
-            </Text>
-
-            <Text
-              style={{
-                color: Color.colorTextMain,
-                fontSize: FontSize.sizeMain,
-                fontWeight: 400,
-              }}
-            >
-              {minNumber}
-            </Text>
-          </View>
-
-          {/* description*/}
           <View style={{ width: "100%", marginBottom: 20 }}>
             <Text
               style={{
@@ -455,177 +357,257 @@ export default function DetailActiveApproveAdmin(props) {
                 fontWeight: 400,
               }}
             >
-              {description}
+              {act_description}
+            </Text>
+          </View>
+
+          <View style={{ width: "100%", marginBottom: 20 }}>
+            <Text
+              style={{
+                color: Color.colorTextMain,
+                fontSize: FontSize.sizeMain,
+                fontWeight: 500,
+                marginRight: 20,
+              }}
+            >
+              Trạng thái hoạt động
+            </Text>
+
+            <Text
+              style={{
+                color: Color.colorTextMain,
+                fontSize: FontSize.sizeMain,
+                fontWeight: 400,
+              }}
+            >
+              {statusActive}
+            </Text>
+          </View>
+          <View style={{ width: "100%", marginBottom: 20 }}>
+            <Text
+              style={{
+                color: Color.colorTextMain,
+                fontSize: FontSize.sizeMain,
+                fontWeight: 500,
+                marginRight: 20,
+              }}
+            >
+              Thời gian tạo
+            </Text>
+
+            <Text
+              style={{
+                color: Color.colorTextMain,
+                fontSize: FontSize.sizeMain,
+                fontWeight: 400,
+              }}
+            >
+              {formatCreatedAt}
+            </Text>
+          </View>
+          <View style={{ width: "100%", marginBottom: 20 }}>
+            <Text
+              style={{
+                color: Color.colorTextMain,
+                fontSize: FontSize.sizeMain,
+                fontWeight: 500,
+                marginRight: 20,
+              }}
+            >
+              Chỉnh sửa lần cuối
+            </Text>
+
+            <Text
+              style={{
+                color: Color.colorTextMain,
+                fontSize: FontSize.sizeMain,
+                fontWeight: 400,
+              }}
+            >
+              {formatUpdatedAte}
+            </Text>
+          </View>
+          <View style={{ width: "100%", marginBottom: 20 }}>
+            <Text
+              style={{
+                color: Color.colorTextMain,
+                fontSize: FontSize.sizeMain,
+                fontWeight: 500,
+                marginRight: 20,
+              }}
+            >
+              Mô tả
+            </Text>
+
+            <Text
+              style={{
+                color: Color.colorTextMain,
+                fontSize: FontSize.sizeMain,
+                fontWeight: 400,
+              }}
+            >
+              {act_description}
             </Text>
           </View>
         </View>
 
-        {/* buttons */}
-        <View
-          style={{
-            width: "100%",
-            flexDirection: "row",
-            justifyContent: "center",
-          }}
-        >
-          {/* btn cancel */}
-          <TouchableOpacity
-            style={styles.btnCancel}
-            onPress={showHideDialogCancel}
+        {act_status == 1 || act_status == 2 ? (
+          <View
+            style={{
+              width: "100%",
+              flexDirection: "row",
+              justifyContent: "center",
+            }}
           >
-            <Text style={[styles.resigter, { color: Color.colorRemove }]}>
-              Không duyệt
-            </Text>
-            <Dialog.Container visible={dialogCancel}>
-              <Dialog.Title
-                style={{ color: Color.colorTextMain, fontWeight: "700" }}
-              >
-                XÁC NHẬN
-              </Dialog.Title>
-              <Dialog.Description
-                style={{ color: "black", fontSize: FontSize.sizeMain - 2 }}
-              >
-                Bạn có chắc không duyệt hoạt động này?
-              </Dialog.Description>
-              <Dialog.Button
-                label="No"
-                onPress={showHideDialogCancel}
-                style={[
-                  styles.btnCancel,
-                  {
-                    width: 60,
-                    height: 40,
-                    marginRight: 30,
-                    fontWeight: 500,
-                    fontSize: 18,
-                    color: Color.colorRemove,
-                  },
-                ]}
-              />
-              <Dialog.Button
-                label="Yes"
-                onPress={yesBtnCancel}
-                style={{
-                  width: 60,
-                  height: 40,
-                  marginRight: 50,
-                  borderRadius: 5,
-                  backgroundColor: "#d9ebfe",
-                  fontWeight: 500,
-                  fontSize: 18,
-                }}
-              />
-            </Dialog.Container>
-            <Dialog.Container visible={yesNotificationCancel}>
-              <Dialog.Title
-                style={{
-                  color: Color.colorTextMain,
-                  fontWeight: "700",
-                  fontSize: FontSize.sizeMain - 2,
-                }}
-              >
-                THÔNG BÁO
-              </Dialog.Title>
-              <Dialog.Description
-                style={{ color: "black", fontSize: FontSize.sizeMain - 2 }}
-              >
-                Bạn đã từ chối duyệt thành công!
-              </Dialog.Description>
-              <Dialog.Button
-                label="Ok"
-                onPress={() => setYesNotificationCancel(!yesNotificationCancel)}
-                style={[
-                  styles.btnCancel,
-                  {
-                    width: 60,
-                    height: 40,
-                    marginRight: 30,
-                    fontWeight: 500,
-                    fontSize: 18,
-                  },
-                ]}
-              />
-            </Dialog.Container>
-          </TouchableOpacity>
+            {/* btn cancel */}
 
-          {/* btn approve */}
-          <TouchableOpacity
-            style={styles.btnResigter}
-            onPress={showHideDialogApprove}
-          >
-            <Text style={styles.resigter}>Duyệt</Text>
-            <Dialog.Container visible={dialogApprove}>
-              <Dialog.Title
-                style={{ color: Color.colorTextMain, fontWeight: "700" }}
-              >
-                XÁC NHẬN
-              </Dialog.Title>
-              <Dialog.Description
-                style={{ color: "black", fontSize: FontSize.sizeMain - 2 }}
-              >
-                Bạn có chắc muốn duyệt hoạt động này?
-              </Dialog.Description>
-              <Dialog.Button
-                label="No"
-                onPress={showHideDialogApprove}
-                style={[
-                  styles.btnCancel,
-                  {
+            <TouchableOpacity
+              style={styles.btnCancel}
+              onPress={showHideDialogCancel}
+            >
+              <Text style={styles.resigter}>Không duyệt</Text>
+              <Dialog.Container visible={dialogCancel}>
+                <Dialog.Title
+                  style={{ color: Color.colorTextMain, fontWeight: "700" }}
+                >
+                  XÁC NHẬN
+                </Dialog.Title>
+                <Dialog.Description style={{ color: "black" }}>
+                  Bạn có chắc không duyệt hoạt động này (chỉ có tác dụng với
+                  những hoạt động do đoàn trường tạo)?
+                </Dialog.Description>
+                <Dialog.Button
+                  label="No"
+                  onPress={showHideDialogCancel}
+                  style={[
+                    styles.btnCancel,
+                    {
+                      width: 60,
+                      height: 40,
+                      marginRight: 30,
+                      fontWeight: 500,
+                      fontSize: 18,
+                    },
+                  ]}
+                />
+                <Dialog.Button
+                  label="Yes"
+                  onPress={yesBtnCancel}
+                  style={{
                     width: 60,
                     height: 40,
-                    marginRight: 30,
+                    marginRight: 50,
+                    borderRadius: 5,
+                    backgroundColor: "#d9ebfe",
                     fontWeight: 500,
                     fontSize: 18,
-                    color: Color.colorRemove,
-                  },
-                ]}
-              />
-              <Dialog.Button
-                label="Yes"
-                onPress={yesBtnApprove}
-                style={{
-                  width: 60,
-                  height: 40,
-                  marginRight: 50,
-                  borderRadius: 5,
-                  backgroundColor: "#d9ebfe",
-                  fontWeight: 500,
-                  fontSize: 18,
-                }}
-              />
-            </Dialog.Container>
-            <Dialog.Container visible={yesNotificationApprove}>
-              <Dialog.Title
-                style={{
-                  color: Color.colorTextMain,
-                  fontWeight: "700",
-                  fontSize: FontSize.sizeMain - 2,
-                }}
-              >
-                THÔNG BÁO
-              </Dialog.Title>
-              <Dialog.Description
-                style={{ color: "black", fontSize: FontSize.sizeMain - 2 }}
-              >
-                Bạn đã duyệt thành công!
-              </Dialog.Description>
-              <Dialog.Button
-                label="Ok"
-                onPress={() => setYesNotificationApprove(!yesNotificationApprove)}
-                style={[
-                  styles.btnCancel,
-                  {
+                  }}
+                />
+              </Dialog.Container>
+              <Dialog.Container visible={yesNotificationCancel}>
+                <Dialog.Title
+                  style={{ color: Color.colorTextMain, fontWeight: "700" }}
+                >
+                  THÔNG BÁO
+                </Dialog.Title>
+                <Dialog.Description style={{ color: "black" }}>
+                  Bạn đã hủy tham gia thành công!
+                </Dialog.Description>
+                <Dialog.Button
+                  label="Ok"
+                  onPress={() =>
+                    setYesNotificationCancel(!yesNotificationCancel)
+                  }
+                  style={[
+                    styles.btnCancel,
+                    {
+                      width: 60,
+                      height: 40,
+                      marginRight: 30,
+                      fontWeight: 500,
+                      fontSize: 18,
+                    },
+                  ]}
+                />
+              </Dialog.Container>
+            </TouchableOpacity>
+
+            {/* btn resigter */}
+            <TouchableOpacity
+              style={styles.btnResigter}
+              onPress={showHideDialogRegister}
+              disabled={act_status == 2 ? true : false}
+            >
+              <Text style={styles.resigter}>Duyệt</Text>
+              <Dialog.Container visible={dialogResigter}>
+                <Dialog.Title
+                  style={{ color: Color.colorTextMain, fontWeight: "700" }}
+                >
+                  XÁC NHẬN
+                </Dialog.Title>
+                <Dialog.Description style={{ color: "black" }}>
+                  Bạn có chắc duyệt hoạt động này (chỉ có tác dụng với
+                  những hoạt động do đoàn trường tạo)?
+                </Dialog.Description>
+                <Dialog.Button
+                  label="No"
+                  onPress={showHideDialogRegister}
+                  style={[
+                    styles.btnCancel,
+                    {
+                      width: 60,
+                      height: 40,
+                      marginRight: 30,
+                      fontWeight: 500,
+                      fontSize: 18,
+                    },
+                  ]}
+                />
+                <Dialog.Button
+                  label="Yes"
+                  onPress={yesBtnResigter}
+                  style={{
                     width: 60,
                     height: 40,
-                    marginRight: 30,
+                    marginRight: 50,
+                    borderRadius: 5,
+                    backgroundColor: "#d9ebfe",
                     fontWeight: 500,
                     fontSize: 18,
-                  },
-                ]}
-              />
-            </Dialog.Container>
-          </TouchableOpacity>
-        </View>
+                  }}
+                />
+              </Dialog.Container>
+              <Dialog.Container visible={yesNotificationResigter}>
+                <Dialog.Title
+                  style={{ color: Color.colorTextMain, fontWeight: "700" }}
+                >
+                  THÔNG BÁO
+                </Dialog.Title>
+                <Dialog.Description style={{ color: "black" }}>
+                  Bạn đã duyệt thành công!
+                </Dialog.Description>
+                <Dialog.Button
+                  label="Ok"
+                  onPress={() =>
+                    setYesNotificationResigter(!yesNotificationResigter)
+                  }
+                  style={[
+                    styles.btnCancel,
+                    {
+                      width: 60,
+                      height: 40,
+                      marginRight: 30,
+                      fontWeight: 500,
+                      fontSize: 18,
+                    },
+                  ]}
+                />
+              </Dialog.Container>
+            </TouchableOpacity>
+          </View>
+        ) : (
+          ""
+        )}
       </ImageBackground>
     </ScrollView>
   );
@@ -662,7 +644,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     borderWidth: 1,
     borderRadius: 10,
-    borderColor: Color.colorRemove,
+    borderColor: "#437173",
   },
 
   btnResigter: {

@@ -42,7 +42,7 @@ import { UITapDoanTruong } from '../screen/doanTruong/UITapDoanTruong';
 import Form2CreateActiveDT from '../screen/doanTruong/formCreateActive/Form2CreateActiveDT'
 
 
-import DetailActiveDTruong from '../screen/doanTruong/detailActive/DetailActiveDoanTruong'
+import DetailActiveDoanTruong from '../screen/doanTruong/detailActive/DetailActiveDoanTruong'
 
 import ScreenListDoanTruong from "../screen/doanTruong/listActive/ScreenListDoanTruong"
 import ListActiveCreatedDT from "../screen/doanTruong/listActiveCreated/ListActiveCreatedDT";
@@ -152,7 +152,7 @@ const DoanTruong = () => {
       <Stack.Screen name="form2CreateActiveDT" component={Form2CreateActiveDT} />
 
       <Stack.Screen name="screenListDoanTruong" component={ScreenListDoanTruong} />
-      <Stack.Screen name="detailActiveDTruong" component={DetailActiveDTruong}/>
+      <Stack.Screen name="detailActiveDoanTruong" component={DetailActiveDoanTruong}/>
 
       <Stack.Screen name="listActiveCreatedDT" component={ListActiveCreatedDT} />
      

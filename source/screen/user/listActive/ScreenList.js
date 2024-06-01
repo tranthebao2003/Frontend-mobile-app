@@ -43,10 +43,8 @@ export function ScreenList(props) {
   // Cập nhật state active khi dữ liệu từ Redux store thay đổi
   useEffect(() => {
     if (listActive) {
-      console.log(listActive, 'listACtive trong if')
       setActive(listActive);
     } else {
-      console.log(listActive, 'listACtive trong else')
       if(error !== ''){
         alert('Bạn vui lòng thoát app để vào lại')
       }

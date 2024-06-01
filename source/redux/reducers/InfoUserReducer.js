@@ -16,17 +16,18 @@ export default (state = initialState, { type, payload }) => {
       return {
         ...state,
         loading: true,
+        error: null
       };
     case INFO_USER_SUCCESS:
       return {
+        ...state,
         loading: false,
         infoUser: payload,
-        error: "",
       };
     case INFO_USER_FAILURE:
       return {
+        ...state,
         loading: false,
-        infoUser: {},
         error: payload,
       };
     default:
