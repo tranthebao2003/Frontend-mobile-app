@@ -8,22 +8,20 @@ import {
   TouchableOpacity,
   TextInput,
   ScrollView,
+  Alert
 } from "react-native";
 import React, { useEffect, useState } from "react";
 import FontSize from "../FontSize";
 import Color from "../Color";
 import { screenWidth, screenHeight } from "../DimensionsScreen";
 import { useDispatch, useSelector } from "react-redux";
-import {
-  LoginAction
-} from "../../redux/action/LoginAction";
+import ResetPasswordAction from "../../redux/action/forgotPasswordAction/ResetPasswordAction";
+import Spinner from "react-native-loading-spinner-overlay";
+import { CommonActions } from '@react-navigation/native';
 
-import Spinner from 'react-native-loading-spinner-overlay';
-import Dialog from "react-native-dialog";
-
-const Login = (props) => {
+export default ForgotPassword2 = (props) => {
   const { navigation } = props;
-  const {loading} = useSelector(state => state.authReducer)
+  const { loading } = useSelector((state) => state.resetPasswordReducer);
 
   return (
     <View style={styles.container}>
@@ -31,7 +29,7 @@ const Login = (props) => {
       <Spinner
         visible={loading}
         textContent={"Loading..."}
-        textStyle={{color: 'white', fontSize: FontSize.sizeHeader}}
+        textStyle={{ color: "white", fontSize: FontSize.sizeHeader }}
       />
       <ImageBackground
         source={require("../../resource/iconLogin/bg.png")}
@@ -96,41 +94,49 @@ const BannerComponent = ({}) => {
         resizeMode="contain"
       ></Image>
       <View style={styles.containerHeader}>
-        <Text style={styles.header}>Hi!</Text>
-        <Text style={styles.header}>Welcome Black,</Text>
+        <Text style={styles.header}>Reset Password !</Text>
       </View>
     </View>
   );
 };
 
 const MainComponent = ({ navigation }) => {
+  const { error, loading,navigateContinue } = useSelector((state) => state.resetPasswordReducer);
 
-  const {error, loading} = useSelector(state => state.authReducer)
 
+  const btnReset = () => {
+    dispatch(ResetPasswordAction(maOtp, password));
+  };
 
-  const [dialogError, setDialogError] = useState(false);
-  const [contentError, setContenError] = useState('')
-
-  const functionBtnLogin = () => {
-     dispatch(LoginAction(userName, password))
+ useEffect(() => {
+  if(error != null){
+    Alert.alert("Thông báo", error)
+  } else if(navigateContinue == true){
+    Alert.alert("Bạn đã đổi mật khẩu thành công")
+    navigation.dispatch(
+      CommonActions.reset({
+        index: 0,
+        routes: [{ name: 'login' }],
+      })
+    );
   }
-  
-    useEffect(() => {
-      if(error != null){
-        setDialogError(true)
-        setContenError(error)
-      }
-    }, [error, loading])
+}, [error, loading])
 
-  const [userName, setUserName] = useState("");
+  const [maOtp, onChangeMaOtp] = useState('')
 
   const [visiblePassword, setVisiblePassword] = useState(true);
+  const [visibleConfirmPassword, setVisibleConfirmPassword] = useState(true);
+  
   const changeIconPassword = () => setVisiblePassword(!visiblePassword);
-
+  const changeIconConfirmPassword = () => setVisibleConfirmPassword(!visibleConfirmPassword);
 
   const [password, onChangePassword] = useState("");
   const [isValidPassword, setIsValidPassword] = useState(false);
-  const verifyPassword = (password) => {
+
+  const [confirmPassword, onChangeConfirmPassword] = useState("");
+  const [samePassword, setSamePassword] = useState(false);
+
+  const vertifyPassword = (password) => {
     // regexPassword: Minimum eight characters, at least one uppercase letter,
     // one lowercase letter and one number:
     let regexPassword = new RegExp(
@@ -142,31 +148,37 @@ const MainComponent = ({ navigation }) => {
     return false;
   };
 
-  const dispatch = useDispatch()
+  const vertifyConfirmPassword = (password, confirmPassword) => {
+    
+    if (password === confirmPassword) {
+      return true;
+    }
+    return false;
+  };
 
-  const navigateForgotPassword = () => navigation.navigate("forgot");
+  const dispatch = useDispatch();
+
 
   return (
     <View style={{ height: 0.6 * screenHeight, paddingHorizontal: 25 }}>
-      {/* username and password */}
+      
       <View style={styles.containerMain}>
-        <View style={styles.containerUserName}>
-          {/* nếu autoFocus = {true} thì khi component được gắn thì nó sẽ tự động focus */}
+        {/* OTP */}
+        <View style={[styles.containerPassword, {marginBottom: 42}]}>
           <TextInput
-            style={styles.username}
-            placeholder="Username"
+            style={styles.password}
+            placeholder="Mã OPT"
             placeholderTextColor={Color.colorTextMain}
-            autoFocus={true}
-            autoCapitalize="none"
-            onChangeText={(username) => {
-              setUserName(username);
+            onChangeText={(maOtpInput) => {
+              onChangeMaOtp(maOtpInput);
             }}
             // value này để hiển thị lên user
-            value={userName}
+            value={maOtp}
           ></TextInput>
         </View>
 
-        <View style={styles.containerPassword}>
+        {/* Password */}
+        <View style={[styles.containerPassword]}>
           <TextInput
             style={styles.password}
             placeholder="Password"
@@ -174,7 +186,7 @@ const MainComponent = ({ navigation }) => {
             secureTextEntry={visiblePassword}
             onChangeText={(password) => {
               onChangePassword(password);
-              const isValidPw = verifyPassword(password);
+              const isValidPw = vertifyPassword(password);
               isValidPw ? setIsValidPassword(true) : setIsValidPassword(false);
             }}
             // value này để hiển thị lên user
@@ -228,48 +240,69 @@ const MainComponent = ({ navigation }) => {
             )}
           </TouchableOpacity>
         </View>
-      </View>
+        
+        {/* Confirm Password */}
+        <View style={styles.containerPassword}>
+          <TextInput
+            style={styles.password}
+            placeholder="Confirm password"
+            placeholderTextColor={Color.colorTextMain}
+            secureTextEntry={visibleConfirmPassword}
+            onChangeText={(confirmPassword) => {
+              onChangeConfirmPassword(confirmPassword);
+              const isValidPw = vertifyConfirmPassword(password, confirmPassword);
+              isValidPw ? setSamePassword(true) : setSamePassword(false);
+            }}
+            // value này để hiển thị lên user
+            value={confirmPassword}
+          ></TextInput>
 
-      {/* btn login and forgot password */}
+          {samePassword === false ? (
+            <View
+              style={{
+                top: 26,
+                position: "absolute",
+                marginTop: 8,
+              }}
+            >
+              <Text
+                style={{
+                  fontSize: 16,
+                  color: "#ff5252",
+                  fontWeight: "500",
+                }}
+              >
+                Password chưa trùng
+              </Text>
+            </View>
+          ) : (
+            ""
+          )}
 
-      <View style={styles.containerBtnLoginFooter}>
-        <TouchableOpacity
-          style={styles.btnLogin}
-          onPress={functionBtnLogin}
-        >
-          <Text style={styles.login}>LOGIN</Text>
-        </TouchableOpacity>
-
-        <View style={styles.footer}>
-          <TouchableOpacity onPress={navigateForgotPassword}>
-            <Text style={styles.footerSignUp}>Forgot Password?</Text>
+          <TouchableOpacity onPress={changeIconConfirmPassword}>
+            {visibleConfirmPassword ? (
+              <Image
+                source={require("../../resource/iconLogin/eyeHide.png")}
+                style={styles.eye}
+                resizeMode="contain"
+              ></Image>
+            ) : (
+              <Image
+                source={require("../../resource/iconLogin/eyeShow.png")}
+                style={styles.eye}
+                resizeMode="contain"
+              ></Image>
+            )}
           </TouchableOpacity>
         </View>
+      </View>
 
-        <Dialog.Container visible={dialogError}>
-          <Dialog.Title
-            style={{ color: Color.colorTextMain, fontWeight: "700" }}
-          >
-            THÔNG BÁO
-          </Dialog.Title>
-          <Dialog.Description style={{ color: "black" }}>
-            {contentError}
-          </Dialog.Description>
-          <Dialog.Button
-            label="Ok"
-            onPress={() => setDialogError(!dialogError)}
-            style={[
-              styles.btnCancel,
-              {
-                width: 60,
-                height: 40,
-                marginRight: 30,
-                fontWeight: 500,
-                fontSize: 18,
-              },
-            ]}
-          />
-        </Dialog.Container>
+      
+
+      <View style={styles.containerBtnLoginFooter}>
+        <TouchableOpacity style={styles.btnLogin} onPress={btnReset}>
+          <Text style={styles.login}>RESET</Text>
+        </TouchableOpacity>
       </View>
 
       <View style={{ flex: 1 }}>
@@ -318,7 +351,6 @@ const styles = StyleSheet.create({
     height: 30,
     borderBottomWidth: 1,
     borderBottomColor: Color.colorBorder,
-    marginBottom: 45,
   },
 
   username: {
@@ -332,7 +364,7 @@ const styles = StyleSheet.create({
     height: 30,
     borderBottomWidth: 1,
     borderBottomColor: Color.colorBorder,
-    marginBottom: 15,
+    marginBottom: 68,
     flexDirection: "row",
     justifyContent: "space-between",
   },
@@ -360,7 +392,7 @@ const styles = StyleSheet.create({
   },
 
   containerBtnLoginFooter: {
-    margin: 80,
+    margin: 20,
     alignItems: "center",
   },
   btnLogin: {
@@ -387,7 +419,7 @@ const styles = StyleSheet.create({
     width: "100%",
     alignItems: "center",
     justifyContent: "center",
-    marginTop: 40,
+    // marginTop: 30,
   },
 
   footerText: {
@@ -403,5 +435,3 @@ const styles = StyleSheet.create({
     borderBottomColor: Color.colorTextMain,
   },
 });
-
-export default Login;

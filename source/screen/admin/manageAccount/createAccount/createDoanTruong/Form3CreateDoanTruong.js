@@ -62,7 +62,7 @@ export default function Form3CreateDoanTruong(props) {
         phone: phone,
 
         address: address,
-        mail: email,
+        email: email,
         position: position
       };
 

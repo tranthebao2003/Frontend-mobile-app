@@ -8,21 +8,28 @@ import {
   TouchableOpacity,
   TextInput,
   ScrollView,
-  Dimensions
+  Dimensions,
+  Alert
 } from 'react-native';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import FontSize from '../FontSize';
 import Color from '../Color';
 import {screenWidth, screenHeight} from '../DimensionsScreen'
-import { useDispatch } from 'react-redux';
-import { LogoutAction } from '../../redux/action/LoginAction';
-
+import { useDispatch, useSelector } from 'react-redux';
+import SendEmailAction from '../../redux/action/forgotPasswordAction/SendEmailAction';
+import Spinner from 'react-native-loading-spinner-overlay';
 
 const ForgotPassword = (props) => {
   const{navigation} = props
+  const {loading} = useSelector(state => state.sendEmailReducer) 
   return (
     <View style={styles.container}>
       <StatusBar barStyle="default"/>
+      <Spinner
+        visible={loading}
+        textContent={"Loading..."}
+        textStyle={{color: 'white', fontSize: FontSize.sizeHeader}}
+      />
       <ImageBackground 
           source={require('../../resource/iconLogin/bg.png')}
           resizeMode='cover'
@@ -30,7 +37,7 @@ const ForgotPassword = (props) => {
       >
         <ScrollView>
          <BannerComponent />
-         <MainComponent navigateLoginPassWord = {navigation}/>
+         <MainComponent navigateForgotPassword2 = {navigation}/>
         </ScrollView>
       </ImageBackground>
     </View>
@@ -38,7 +45,7 @@ const ForgotPassword = (props) => {
 }
 
 
-const BannerComponent = ({}) => {
+const BannerComponent = () => {
 
 return (
   <View
@@ -71,7 +78,6 @@ return (
           top: -140,
           borderRadius: 16,
           zIndex: 2,
-          tintColor: Color.colorTextMain
         }}
         resizeMode="contain"
       ></Image>
@@ -95,11 +101,20 @@ return (
 );
 }
 
-const MainComponent = ({navigateLoginPassWord}) => {
+const MainComponent = ({navigateForgotPassword2}) => {
 const [email, onChangeEmail] = useState('')
 const [isValidEmail, setValidEmail] = useState(false)
  
 const dispatch = useDispatch()
+const {error, navigateContinue, loading} = useSelector(state => state.sendEmailReducer) 
+
+useEffect(() => {
+  if(error != null){
+    Alert.alert("Thông báo", error)
+  } else if(navigateContinue == true){
+    navigateForgotPassword2.navigate("forgotPassword2")
+  }
+}, [error, loading])
 
 const verifyEmail = (email) => {
   let regex = new RegExp(/([!#-'*+-9=?A-Z^-~-]+(\.[!#-'*+-9=?A-Z^-~-]+)*|"([]!#-[^-~ \t]|(\\[\t -~]))+")@([!#-'*+-9=?A-Z^-~-]+(\.[!#-'*+-9=?A-Z^-~-]+)*|\[[\t -Z^-~]*])/)
@@ -154,8 +169,9 @@ return (
         <Text style={styles.login}>CONTINUE</Text>
       </TouchableOpacity> */}
 
-      <TouchableOpacity style={styles.btnLogin} onPress={() => dispatch(LogoutAction())}>
-        <Text style={styles.login}>LOGOUT TEST</Text>
+      
+      <TouchableOpacity style={styles.btnLogin} onPress={() => dispatch(SendEmailAction(email))  }>
+        <Text style={styles.login}>NHẬN MÃ OTP</Text>
       </TouchableOpacity>
     </View>
 

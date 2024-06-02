@@ -4,7 +4,7 @@ const initialState = {
     loading: false,
     token: null,
     role: null,
-    error: ''
+    error: null
 }
 
 

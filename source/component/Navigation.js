@@ -12,6 +12,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 // Xác minh
 import Login from '../component/welcome/Login';
 import ForgotPassword from '../component/welcome/ForgotPassword';
+import ForgotPassword2 from '../component/welcome/ForgotPassword2';
 
 // Sinh viên
 import {UITapSinhVien} from '../screen/user/UITapSinhVien'
@@ -101,6 +102,7 @@ const AuthStack = () => {
     <Stack.Navigator screenOptions={{ headerShown: false }}>
       <Stack.Screen name="login" component={Login} />
       <Stack.Screen name="forgot" component={ForgotPassword} />
+      <Stack.Screen name="forgotPassword2" component={ForgotPassword2} />
     </Stack.Navigator>
   )
 }

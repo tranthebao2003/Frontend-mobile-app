@@ -7,7 +7,7 @@ import {
 const initialState = {
   loading: false,
   infoUser: {},
-  error: "",
+  error: null,
 };
 
 export default (state = initialState, { type, payload }) => {
@@ -20,14 +20,14 @@ export default (state = initialState, { type, payload }) => {
       };
     case INFO_USER_SUCCESS:
       return {
-        ...state,
         loading: false,
         infoUser: payload,
+        error: null,
       };
     case INFO_USER_FAILURE:
       return {
-        ...state,
         loading: false,
+        infoUser: {},
         error: payload,
       };
     default:
