@@ -23,102 +23,51 @@ import {
   hideKeyBoardAction,
 } from "../../../../redux/action/KeyBoardAction";
 
+import GetAllAccountStudentAndDTAction from "../../../../redux/action/GetAllAccountStudentAndDTAction";
+import Spinner from "react-native-loading-spinner-overlay";
+
 export default function ListAccountStudent({ navigation }) {
-  const [account, setAccount] = useState([
-    {
-      MSSV: "N22DCPT008",
-      first_name: "Trần Thế",
-      last_name: "Bảo",
-      phone: "0377253857",
-      role_id: 2,
-      status_id: 1,
-
-      address: "Xã đồi 61",
-      class_id: "D21CQPT01-N",
-      gender_id: 1,
-      birth_date: "22/3/2003",
-      email: 'n221dcpt00@gmail.com'
-    },
-
-    {
-      MSSV: "N22DCPT009",
-      first_name: "Nguyễn Văn",
-      last_name: "An",
-      phone: "0356789123",
-      role_id: 2,
-      status_id: 1,
-      address: "Phường Bình An",
-      class_id: "D21CQPT01-N",
-      gender_id: 1,
-      birth_date: "2003-04-15",
-      email : 'nbkb@gmail.com'
-    },
-    {
-      MSSV: "N21DCPT010",
-      first_name: "Lê Thị",
-      last_name: "Bích",
-      phone: "0387654321",
-      role_id: 3,
-      status_id: 2,
-      address: "Phường Xuân Phú",
-      class_id: "D21CQPT02-N",
-      gender_id: 2,
-      birth_date: "2003-05-10",
-      email : 'nbk2222b@gmail.com'
-    },
-    {
-      MSSV: "N21DCPT011",
-      first_name: "Phạm Công",
-      last_name: "Cường",
-      phone: "0398765432",
-      role_id: 2,
-      status_id: 2,
-      address: "Xã Tân Lập",
-      class_id: "D21CQPT01-N",
-      gender_id: 1,
-      birth_date: "2003-06-20",
-      email : 'n32dcpt0@gmail.com'
-    },
-    {
-      MSSV: "N21DCPT012",
-      first_name: "Đỗ Thị",
-      last_name: "Dung",
-      phone: "0365432109",
-      role_id: 3,
-      status_id: 1,
-      address: "Xã Hòa Bình",
-      class_id: "D21CQPT03-N",
-      gender_id: 2,
-      birth_date: "2003-07-30",
-      email : 'tranthe342@gmail.com'
-    },
-    {
-      MSSV: "N21DCPT013",
-      first_name: "Trịnh Văn",
-      last_name: "Phúc",
-      phone: "0376543210",
-      role_id: 2,
-      status_id: 2,
-      address: "Thị trấn Quang Minh",
-      class_id: "D21CQPT01-N",
-      gender_id: 1,
-      birth_date: "2003-08-25",
-      email : 'rtranthe333@gmail.com'
-    },
-  ]);
-
-  const [searchText, setSearchText] = useState("");
-  const filteredAccounts = () => {
-    return account.filter((eachAccount) =>
-        eachAccount.MSSV.toLowerCase().includes(searchText.toLowerCase())
-    );
-  };
-
-  const { showKeyBoard } = useSelector((state) => state.keyboardShow);
+  const [account, setAccount] = useState([]);
+  const [filterAccount, setFilterAccount] = useState([]);
   const dispatch = useDispatch();
 
-  // event keyboard: event là cho toàn màn hình nằm trong UITapDoanTruong.js là chỉ cần mình ấn vào
-  // ô input ở scrren HĐ đã tham gia hay HĐ thì nó đều bắt đc keyboard
+  const { loading, accountStudentOrDT, error } = useSelector(
+    (state) => state.getAllAccountStudentAndDTReducer
+  );
+
+  const [searchText, setSearchText] = useState("");
+
+  // chưa có api
+  // const urlAccountStudent = "users/student";
+  // Gọi action để lấy dữ liệu khi component được mount
+  useEffect(() => {
+    dispatch(GetAllAccountStudentAndDTAction(urlAccountStudent));
+  }, [dispatch]);
+
+  useEffect(() => {
+    if (accountStudentOrDT) {
+      setAccount(accountStudentOrDT);
+    } else {
+      if (error !== "") {
+        alert("Bạn vui lòng thoát app để vào lại");
+      }
+    }
+  }, [accountStudentOrDT]);
+
+  // Lọc danh sách dựa trên searchText
+  useEffect(() => {
+    const filteredAccount = () => {
+      if (Array.isArray(account)) {
+        return account.filter((eachAccount) =>
+          eachAccount.MSSV.toLowerCase().includes(searchText.toLowerCase())
+        );
+      }
+    };
+
+    setFilterAccount(filteredAccount());
+  }, [searchText, account]);
+
+  const { showKeyBoard } = useSelector((state) => state.keyboardShow);
 
   useEffect(() => {
     const showSubscription = Keyboard.addListener("keyboardDidShow", () => {
@@ -140,6 +89,11 @@ export default function ListAccountStudent({ navigation }) {
   return (
     <View style={styles.container}>
       <StatusBar style="auto" />
+      <Spinner
+        visible={loading}
+        textContent={"Loading..."}
+        textStyle={{ color: "white", fontSize: FontSize.sizeHeader }}
+      />
       <Image
         source={require("../../../../resource/iconListActive/decorTop.png")}
         style={{
@@ -168,7 +122,7 @@ export default function ListAccountStudent({ navigation }) {
         >
           <TextInput
             placeholder="Mã sinh viên"
-            placeholderTextColor='#afdffe'
+            placeholderTextColor="#afdffe"
             onChangeText={(text) => setSearchText(text)}
             style={{
               fontSize: FontSize.sizeMain,
@@ -203,7 +157,7 @@ export default function ListAccountStudent({ navigation }) {
 
         <View
           style={{
-           flex: 1,
+            flex: 1,
             backgroundColor: Color.colorBtn,
             marginHorizontal: 10,
             padding: 20,
@@ -256,38 +210,21 @@ export default function ListAccountStudent({ navigation }) {
             </View>
           </View>
 
-          {filteredAccounts().length > 0 ? (
-            <FlatList
-              style={{ flex: 1, marginBottom: showKeyBoard ? 95 : 150 }}
-              data={filteredAccounts()}
-              renderItem={({ item }) => (
-                <AccountItemStudent
-                  account={item}
-                    onPressItem={() => {
-                      navigation.navigate('detailAccountStudent', {detailAccountStudent : item});
-                    }}
-                />
-              )}
-              keyExtractor={(item) => item.MSSV}
-            />
-          ) : (
-            <View
-              style={{
-                flex: 1,
-                justifyContent: "center",
-                alignItems: "center",
-              }}
-            >
-              <Text
-                style={{
-                  fontSize: FontSize.sizeMain,
-                  color: Color.colorTextMain,
+          <FlatList
+            style={{ flex: 1, marginBottom: showKeyBoard ? 95 : 150 }}
+            data={filterAccount}
+            renderItem={({ item }) => (
+              <AccountItemStudent
+                account={item}
+                onPressItem={() => {
+                  navigation.navigate("detailAccountStudent", {
+                    detailAccountStudent: item,
+                  });
                 }}
-              >
-                Not Found
-              </Text>
-            </View>
-          )}
+              />
+            )}
+            keyExtractor={(item) => item.MSSV}
+          />
         </View>
       </ImageBackground>
     </View>

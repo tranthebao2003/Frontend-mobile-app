@@ -7,7 +7,9 @@ import ListActiveCreatedReducer from"../reducers/ListActiveCreatedReducer";
 import CreateStudentReducer from"../reducers/reducerCreateUser/CreateStudentReducer";
 import CreateDoanTruongReducer from"../reducers/reducerCreateUser/CreateDoanTruongReducer";
 import CreateActiveReducer from"../reducers/CreateActiveReducer";
-import AcceptActiveByDTReducer from"../reducers/putAction/putAcceptReducer/AcceptActiveByDTReducer";
+import AcceptActiveByDTReducer from"../reducers/putReducer/putAcceptReducer/AcceptActiveByDTReducer";
+import AcceptActiveByStudentReducer from"../reducers/putReducer/putAcceptReducer/AcceptActiveByStudentReducer";
+import GetAllAccountStudentAndDTReducer from"../reducers/GetAllAccountStudentAndDTReducer";
 import { thunk } from "redux-thunk";
 
 const rootReducer = combineReducers({
@@ -19,7 +21,9 @@ const rootReducer = combineReducers({
     createStudentReducer: CreateStudentReducer,
     createDoanTruongReducer: CreateDoanTruongReducer,
     createActiveReducer: CreateActiveReducer,
-    acceptActiveByDTReducer: AcceptActiveByDTReducer
+    acceptActiveByDTReducer: AcceptActiveByDTReducer,
+    acceptActiveByStudentReducer: AcceptActiveByStudentReducer,
+    getAllAccountStudentAndDTReducer: GetAllAccountStudentAndDTReducer
 })
 
 export default Store = createStore(rootReducer, applyMiddleware(thunk))

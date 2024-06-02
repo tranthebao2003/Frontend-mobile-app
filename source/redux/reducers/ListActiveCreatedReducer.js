@@ -17,6 +17,7 @@ import {
         return {
           ...state,
           loading: true,
+          error: null
         };
       case LIST_ACTIVE_CREATED_SUCCESS:
         return {

@@ -31,7 +31,7 @@ const { loading, listActive, error} = useSelector(state => state.listActiveReduc
 
 
 // cái này phải thay bằng hoạt động do đoàn trường tạo để admin duyệt
-const urlAllActive = 'activities'
+// const urlAllActive = 'activities'
 // Khởi tạo useState để lưu trữ dữ liệu
 const [active, setActive] = useState([]);
 const [filterActive, setFilterActive] = useState([]);

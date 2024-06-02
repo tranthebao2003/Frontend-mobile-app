@@ -32,10 +32,13 @@ export default function DetailAccountStudent(props) {
     address,
     class_id,
     gender_id,
-    birth_date,
+    birthday,
   } = props.route.params.detailAccountStudent;
 
   const { navigation } = props;
+
+  // const isoDate = "1995-03-03T00:00:00.000Z";
+  // const formattedDate = moment(isoDate).format("DD/MM/YYYY");
 
   const [trangThaiTk, setTrangThaiTK] = useState("");
   useEffect(() => {
@@ -385,7 +388,7 @@ export default function DetailAccountStudent(props) {
                 fontWeight: 400,
               }}
             >
-              {birth_date}
+              {birthday}
             </Text>
           </View>
 
