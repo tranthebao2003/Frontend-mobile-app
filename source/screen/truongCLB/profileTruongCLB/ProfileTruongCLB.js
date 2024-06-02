@@ -6,20 +6,41 @@ import {
   Image,
   ScrollView,
   ImageBackground,
-  TouchableOpacity
+  TouchableOpacity,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import FontSize from "../../../component/FontSize";
 import Color from "../../../component/Color";
 import { screenWidth, screenHeight } from "../../../component/DimensionsScreen";
-import { UserLoginTruongCLB } from "../UITapTruongCLB";
-import { useContext, useState } from "react";
+import { useEffect, useState } from "react";
 import Dialog from "react-native-dialog";
 import { useDispatch, useSelector } from "react-redux";
-import {LogoutAction} from '../../../redux/action/LoginAction'
+import { LogoutAction } from "../../../redux/action/LoginAction";
+import Spinner from "react-native-loading-spinner-overlay";
+import IsoTime from "../../../component/formatTime/IsoTime";
+import { getProfileUser } from "../../../redux/action/InfoUserAction";
 
 function ProfileTruongCLB() {
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
+
+  const { loading, infoUser, error } = useSelector((state) => state.infoUser);
+  // console.log(infoUser, 'infoUser màn profileSv')
+
+  const {
+    MSSV,
+    last_name,
+    first_name,
+    class_id,
+    phone,
+    address,
+    position,
+    birthday,
+    gender_id,
+    email,
+  } = infoUser;
+
+  const formattedDate = IsoTime(birthday);
+
 
   const [dialogCancel, setDialogCancel] = useState(false);
   const showHideDialogCancel = () => {
@@ -27,24 +48,19 @@ function ProfileTruongCLB() {
   };
 
   const [yesNotificationCancel, setYesNotificationCancel] = useState(false);
-    const yesBtnCancel = () => {
-      setDialogCancel(!dialogCancel);
-      setYesNotificationCancel(!yesNotificationCancel);
-    };
-  const user = useContext(UserLoginTruongCLB);
-  const {
-    nameUser,
-    phone,
-    mssv,
-    position,
-    email,
-    dateOfBirth,
-    // backend trả về cũng đc mà select count thui
-    numberOfActived,
-  } = user;
+  const yesBtnCancel = () => {
+    setDialogCancel(!dialogCancel);
+    setYesNotificationCancel(!yesNotificationCancel);
+  };
+
   return (
     <SafeAreaView style={{ flex: 1, zIndex: 0 }}>
       <StatusBar barStyle="auto"></StatusBar>
+      <Spinner
+        visible={loading}
+        textContent={"Loading..."}
+        textStyle={{ color: "white", fontSize: FontSize.sizeHeader }}
+      />
       <ImageBackground
         source={require("../../../resource/iconLogin/bg.png")}
         resizeMode="cover"
@@ -82,7 +98,7 @@ function ProfileTruongCLB() {
 
           <View style={styles.containerNamePhone}>
             <Text style={[styles.textLarge, { marginTop: 95 }]}>
-              {nameUser}
+              {first_name + " " + last_name}
             </Text>
             <Text style={styles.textMain}>{phone}</Text>
 
@@ -116,7 +132,7 @@ function ProfileTruongCLB() {
                   source={require("../../../resource/iconProfile/mssv.png")}
                 />
                 <Text style={[styles.textMain, { fontWeight: "500" }]}>
-                  {mssv}
+                  {MSSV}
                 </Text>
               </View>
 
@@ -151,7 +167,6 @@ function ProfileTruongCLB() {
             style={{
               width: "100%",
               marginVertical: 50,
-              height: (1 / 2) * screenHeight,
               backgroundColor: Color.colorBtn,
               borderRadius: 20,
               padding: 15,
@@ -220,7 +235,7 @@ function ProfileTruongCLB() {
                 <Text
                   style={[styles.textMain, { fontWeight: 400, color: "black" }]}
                 >
-                  {dateOfBirth}
+                  {formattedDate}
                 </Text>
               </View>
             </View>
@@ -238,22 +253,85 @@ function ProfileTruongCLB() {
             >
               <Image
                 style={{
-                  width: 25,
-                  height: 25,
+                  width: 30,
+                  height: 30,
                   marginRight: 20,
                   tintColor: Color.colorTextMain,
                 }}
                 resizeMode="cover"
-                source={require("../../../resource/iconProfile/numberOfActive.png")}
+                source={require("../../../resource/iconProfile/gender.png")}
               />
               <View style={{ flex: 1, flexWrap: "wrap" }}>
                 <Text style={[styles.textLarge, { fontSize: 18 }]}>
-                  Số hoạt động đã tạo
+                  Giới tính
                 </Text>
                 <Text
                   style={[styles.textMain, { fontWeight: 400, color: "black" }]}
                 >
-                  {numberOfActived}
+                  {gender_id}
+                </Text>
+              </View>
+            </View>
+
+            <View
+              style={{
+                width: "100%",
+                padding: 20,
+                marginTop: 20,
+                flexDirection: "row",
+                alignItems: "center",
+                backgroundColor: Color.colorBgUiTap,
+                borderRadius: 6,
+              }}
+            >
+              <Image
+                style={{
+                  width: 30,
+                  height: 30,
+                  marginRight: 20,
+                  tintColor: Color.colorTextMain,
+                }}
+                resizeMode="cover"
+                source={require("../../../resource/iconProfile/address.png")}
+              />
+              <View style={{ flex: 1, flexWrap: "wrap" }}>
+                <Text style={[styles.textLarge, { fontSize: 18 }]}>
+                  Địa chỉ
+                </Text>
+                <Text
+                  style={[styles.textMain, { fontWeight: 400, color: "black" }]}
+                >
+                  {address}
+                </Text>
+              </View>
+            </View>
+            <View
+              style={{
+                width: "100%",
+                padding: 20,
+                marginTop: 20,
+                flexDirection: "row",
+                alignItems: "center",
+                backgroundColor: Color.colorBgUiTap,
+                borderRadius: 6,
+              }}
+            >
+              <Image
+                style={{
+                  width: 30,
+                  height: 30,
+                  marginRight: 20,
+                  tintColor: Color.colorTextMain,
+                }}
+                resizeMode="cover"
+                source={require("../../../resource/iconProfile/class.png")}
+              />
+              <View style={{ flex: 1, flexWrap: "wrap" }}>
+                <Text style={[styles.textLarge, { fontSize: 18 }]}>Lớp</Text>
+                <Text
+                  style={[styles.textMain, { fontWeight: 400, color: "black" }]}
+                >
+                  {class_id}
                 </Text>
               </View>
             </View>
@@ -354,7 +432,7 @@ const styles = StyleSheet.create({
     marginBottom: 60,
     justifyContent: "center",
     alignItems: "center",
-    alignSelf: 'flex-end',
+    alignSelf: "flex-end",
     borderWidth: 1,
     borderRadius: 10,
     borderColor: Color.colorRemove,

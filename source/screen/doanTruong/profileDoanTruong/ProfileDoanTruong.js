@@ -12,34 +12,53 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import FontSize from "../../../component/FontSize";
 import Color from "../../../component/Color";
 import { screenWidth, screenHeight } from "../../../component/DimensionsScreen";
-import { UserLoginDoanTruong } from "../UITapDoanTruong";
-import { useContext, useState } from "react";
+import {useState, useEffect} from "react";
 import Dialog from "react-native-dialog";
 import { useDispatch, useSelector } from "react-redux";
 import {LogoutAction} from '../../../redux/action/LoginAction'
+import {getProfileUser} from '../../../redux/action/InfoUserAction'
+import Spinner from 'react-native-loading-spinner-overlay';
+import isoTime from '../../../component/formatTime/IsoTime'
 
 function ProfileDoanTruong() {
   const dispatch = useDispatch()
+
+
+  const { loading, infoUser, error} = useSelector(state => state.infoUser)
+  // console.log(infoUser, 'infoUser màn profileSv')
+
+  const {
+    last_name,
+    first_name,
+    phone,
+    position,
+    address,
+    mail,
+    createdAt,
+    updatedAt
+  } = infoUser;
+
+ const formatCreatedAt = isoTime(createdAt)
+ const formatUpdatedAt = isoTime(updatedAt)
+
+  useEffect(() => {
+    dispatch(getProfileUser())
+  }
+  , [dispatch])
 
   const [dialogCancel, setDialogCancel] = useState(false);
   const showHideDialogCancel = () => {
     setDialogCancel(!dialogCancel);
   };
 
-  const user = useContext(UserLoginDoanTruong);
-  const {
-    nameUser,
-    phone,
-    mssv,
-    position,
-    email,
-    dateOfBirth,
-    // backend trả về cũng đc mà select count thui
-    numberOfActived,
-  } = user;
   return (
     <SafeAreaView style={{ flex: 1, zIndex: 0 }}>
       <StatusBar barStyle="auto"></StatusBar>
+      <Spinner
+          visible={loading}
+          textContent={"Loading..."}
+          textStyle={{ color: "white", fontSize: FontSize.sizeHeader }}
+        />
       <ImageBackground
         source={require("../../../resource/iconLogin/bg.png")}
         resizeMode="cover"
@@ -77,7 +96,7 @@ function ProfileDoanTruong() {
 
           <View style={styles.containerNamePhone}>
             <Text style={[styles.textLarge, { marginTop: 95 }]}>
-              {nameUser}
+              {first_name + ' ' + last_name}
             </Text>
             <Text style={styles.textMain}>{phone}</Text>
 
@@ -108,10 +127,10 @@ function ProfileDoanTruong() {
                     tintColor: Color.colorTextMain,
                   }}
                   resizeMode="cover"
-                  source={require("../../../resource/iconProfile/mssv.png")}
+                  source={require("../../../resource/iconProfile/address.png")}
                 />
                 <Text style={[styles.textMain, { fontWeight: "500" }]}>
-                  {mssv}
+                  {address}
                 </Text>
               </View>
 
@@ -182,7 +201,7 @@ function ProfileDoanTruong() {
                     { fontWeight: 400, color: "black", width: "80%" },
                   ]}
                 >
-                  {email}
+                  {mail}
                 </Text>
               </View>
             </View>
@@ -206,16 +225,16 @@ function ProfileDoanTruong() {
                   tintColor: Color.colorTextMain,
                 }}
                 resizeMode="cover"
-                source={require("../../../resource/iconProfile/dateOfBirth.png")}
+                source={require("../../../resource/iconProfile/createAccount.png")}
               />
               <View style={{ flex: 1 }}>
                 <Text style={[styles.textLarge, { fontSize: 18 }]}>
-                  Ngày sinh
+                  Ngày tạo tài khoản
                 </Text>
                 <Text
                   style={[styles.textMain, { fontWeight: 400, color: "black" }]}
                 >
-                  {dateOfBirth}
+                  {formatCreatedAt}
                 </Text>
               </View>
             </View>
@@ -243,12 +262,12 @@ function ProfileDoanTruong() {
               />
               <View style={{ flex: 1, flexWrap: "wrap" }}>
                 <Text style={[styles.textLarge, { fontSize: 18 }]}>
-                  Số hoạt động đã tạo
+                  Chỉnh sửa tài khoản lần cuối
                 </Text>
                 <Text
                   style={[styles.textMain, { fontWeight: 400, color: "black" }]}
                 >
-                  {numberOfActived}
+                  {formatUpdatedAt}
                 </Text>
               </View>
             </View>

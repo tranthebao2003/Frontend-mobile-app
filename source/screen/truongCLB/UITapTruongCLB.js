@@ -8,22 +8,11 @@ import HomeTruongCLB from "./HomeTruongCLB";
 import { useSelector } from "react-redux";
 
 const Tab = createBottomTabNavigator();
-export const UserLoginTruongCLB = createContext();
 
 function UITapTruongCLB(props) {
-  const user = {
-    nameUser: "Trần Thế Hải",
-    phone: "0377253857",
-    mssv: "n21dcpt008",
-    position: "Trưởng clb",
-    email: "n21dcpt008@student.ptithcm.edu.vn",
-    dateOfBirth: "22/2/2003",
-    // backend trả về cũng đc mà select count thui
-    numberOfActived: 10,
-  };
   const { showKeyBoard } = useSelector((state) => state.keyboardShow);
   return (
-    <UserLoginTruongCLB.Provider value={user}>
+   
       <Tab.Navigator
         initialRouteName="homeTruongCLB"
         screenOptions={{
@@ -146,7 +135,6 @@ function UITapTruongCLB(props) {
           }}
         />
       </Tab.Navigator>
-    </UserLoginTruongCLB.Provider>
   );
 }
 

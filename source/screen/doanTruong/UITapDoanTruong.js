@@ -1,4 +1,4 @@
-import { createContext, useState } from "react";
+import {useState } from "react";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { Image, Text } from "react-native";
 import Color from "../../component/Color";
@@ -8,22 +8,11 @@ import HomeDoanTruong from "./HomeDoanTruong";
 import { useSelector } from "react-redux";
 
 const Tab = createBottomTabNavigator();
-export const UserLoginDoanTruong = createContext();
 
 function UITapDoanTruong(props) {
-  const user = {
-    nameUser: "Trần Thế Bảo",
-    phone: "0377253857",
-    mssv: "n21dcpt008",
-    position: "Đoàn trường",
-    email: "n21dcpt008@student.ptithcm.edu.vn",
-    dateOfBirth: "22/2/2003",
-    // backend trả về cũng đc mà select count thui
-    numberOfActived: 10,
-  };
   const { showKeyBoard } = useSelector((state) => state.keyboardShow);
   return (
-    <UserLoginDoanTruong.Provider value={user}>
+
       <Tab.Navigator
         initialRouteName="homeDoanTruong"
         screenOptions={{
@@ -146,7 +135,6 @@ function UITapDoanTruong(props) {
           }}
         />
       </Tab.Navigator>
-    </UserLoginDoanTruong.Provider>
   );
 }
 

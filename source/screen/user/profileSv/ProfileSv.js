@@ -12,16 +12,13 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import FontSize from "../../../component/FontSize";
 import Color from "../../../component/Color";
 import { screenWidth, screenHeight } from "../../../component/DimensionsScreen";
-import { UserLogin } from "../UITapSinhVien";
-import { useContext, useEffect, useState } from "react";
+import {useEffect, useState } from "react";
 import Dialog from "react-native-dialog";
 import { useDispatch, useSelector } from "react-redux";
 import {LogoutAction} from '../../../redux/action/LoginAction'
 import {getProfileUser} from '../../../redux/action/InfoUserAction'
 import Spinner from 'react-native-loading-spinner-overlay';
-
-import moment from 'moment';
-
+import IsoTime from "../../../component/formatTime/IsoTime";
 
 
 function Profile() {
@@ -41,8 +38,7 @@ function Profile() {
     class_id
   } = infoUser;
 
-  const isoDate = birthday;
-  const formattedDate = moment(isoDate).format('DD/MM/YYYY');
+  const formattedDate = IsoTime(birthday)
 
   useEffect(() => {
     dispatch(getProfileUser())

@@ -9,11 +9,22 @@ import {
   ImageBackground,
   TouchableOpacity,
 } from "react-native";
-import { screenHeight, screenWidth } from "../../component/DimensionsScreen";
+import {useEffect} from 'react'
+import Spinner from "react-native-loading-spinner-overlay";
+import { screenHeight, screenWidth, } from "../../component/DimensionsScreen";
 import { SafeAreaView } from "react-native-safe-area-context";
-
+import {useSelector, useDispatch } from "react-redux";
+import { getProfileUser } from "../../redux/action/InfoUserAction";
 function HomeTruongCLB(props) {
-  const { navigation } = props;
+  const {navigation} = props
+  const dispatch = useDispatch()
+  const {loading, infoUser} = useSelector((state) => state.infoUser);
+  const {position} = infoUser
+
+  useEffect(() => {
+    dispatch(getProfileUser());
+  }, [dispatch]);
+
   return (
     <SafeAreaView
       style={{
@@ -25,6 +36,11 @@ function HomeTruongCLB(props) {
     >
       <StatusBar barStyle="auto"></StatusBar>
       {/* banner */}
+      <Spinner
+        visible={loading}
+        textContent={"Loading..."}
+        textStyle={{ color: "white", fontSize: FontSize.sizeHeader }}
+      />
       <ImageBackground
         source={require("../../resource/iconLogin/bg.png")}
         resizeMode="cover"
@@ -159,7 +175,7 @@ function HomeTruongCLB(props) {
           }}
           resizeMode="contain"
         ></Image>
-          <Text style={styles.header}>Trưởng câu lạc bộ</Text>
+          <Text style={styles.header}>{position}</Text>
         </View>
 
         <View style={{width: '100%',}}>
