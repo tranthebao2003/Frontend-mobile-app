@@ -108,13 +108,28 @@ const [isValidEmail, setValidEmail] = useState(false)
 const dispatch = useDispatch()
 const {error, navigateContinue, loading} = useSelector(state => state.sendEmailReducer) 
 
+console.log(navigateContinue, loading, error)
 useEffect(() => {
-  if(error != null){
+  console.log(navigateContinue, loading, error, 'màn forgotpassword')
+  if(error != null && loading == false && navigateContinue != false){
     Alert.alert("Thông báo", error)
-  } else if(navigateContinue == true){
-    navigateForgotPassword2.navigate("forgotPassword2")
+    dispatch({type: "RESET"})
   }
-}, [error, loading])
+  else if(navigateContinue == true && loading == false && error == null){
+    navigateForgotPassword2.navigate("forgotPassword2")
+    dispatch({type: "RESET"})
+  }
+}, [navigateContinue, loading, error])
+
+
+   const btnGetOtp = () => {
+     if (isValidEmail) {
+       dispatch(SendEmailAction(email));
+     } else {
+       Alert.alert("Thông báo", "Email không đúng định dạng");
+     }
+   };
+
 
 const verifyEmail = (email) => {
   let regex = new RegExp(/([!#-'*+-9=?A-Z^-~-]+(\.[!#-'*+-9=?A-Z^-~-]+)*|"([]!#-[^-~ \t]|(\\[\t -~]))+")@([!#-'*+-9=?A-Z^-~-]+(\.[!#-'*+-9=?A-Z^-~-]+)*|\[[\t -Z^-~]*])/)
@@ -169,8 +184,7 @@ return (
         <Text style={styles.login}>CONTINUE</Text>
       </TouchableOpacity> */}
 
-      
-      <TouchableOpacity style={styles.btnLogin} onPress={() => dispatch(SendEmailAction(email))  }>
+      <TouchableOpacity style={styles.btnLogin} onPress={btnGetOtp}>
         <Text style={styles.login}>NHẬN MÃ OTP</Text>
       </TouchableOpacity>
     </View>
@@ -184,7 +198,7 @@ return (
           position: "absolute",
           bottom: -190,
           right: -200,
-          zIndex: -1
+          zIndex: -1,
         }}
         resizeMode="contain"
       ></Image>

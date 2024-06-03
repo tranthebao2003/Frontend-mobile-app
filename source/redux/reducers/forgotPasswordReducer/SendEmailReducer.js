@@ -14,22 +14,28 @@ import {
     switch (type) {
       case SEND_EMAIL_REQUEST:
         return {
+          ...state,
           loading: true,
-          navigateContinue: false,
-          error: null
         };
       case SEND_EMAIL_SUCCESS:
         return {
+          ...state,
           loading: false,
           navigateContinue: true,
-          error: null,
         };
       case SEND_EMAIL_FAILURE:
         return {
-          loading: false,
-          navigateContinue: false,
+          ...state,
           error: payload,
+          loading: false
         };
+      case "RESET": 
+        return {
+        loading: false,
+        navigateContinue: false,
+        error: null,
+      };
+
       default:
           return state;
     }

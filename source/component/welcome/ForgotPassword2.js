@@ -8,7 +8,7 @@ import {
   TouchableOpacity,
   TextInput,
   ScrollView,
-  Alert
+  Alert,
 } from "react-native";
 import React, { useEffect, useState } from "react";
 import FontSize from "../FontSize";
@@ -17,7 +17,7 @@ import { screenWidth, screenHeight } from "../DimensionsScreen";
 import { useDispatch, useSelector } from "react-redux";
 import ResetPasswordAction from "../../redux/action/forgotPasswordAction/ResetPasswordAction";
 import Spinner from "react-native-loading-spinner-overlay";
-import { CommonActions } from '@react-navigation/native';
+import { CommonActions } from "@react-navigation/native";
 
 export default ForgotPassword2 = (props) => {
   const { navigation } = props;
@@ -101,34 +101,46 @@ const BannerComponent = ({}) => {
 };
 
 const MainComponent = ({ navigation }) => {
-  const { error, loading,navigateContinue } = useSelector((state) => state.resetPasswordReducer);
+  const { error, loading, navigateContinue } = useSelector(
+    (state) => state.resetPasswordReducer
+  );
+  const dispatch = useDispatch();
 
+  useEffect(() => {
+    console.log(navigateContinue, loading, error, 'màn forgotpassword2');
+    if (error != null && loading == false && navigateContinue != false) {
+      Alert.alert("Thông báo", error);
+      dispatch({ type: "RESET" });
+    } else if (navigateContinue == true && loading == false && error == null) {
+      Alert.alert("Bạn đã đổi mật khẩu thành công");
+      navigation.dispatch(
+        CommonActions.reset({
+          index: 0,
+          routes: [{ name: "login" }],
+        })
+      );
+      dispatch({ type: "RESET" });
+    }
+  }, [navigateContinue, loading, error]);
 
   const btnReset = () => {
-    dispatch(ResetPasswordAction(maOtp, password));
+    if (!isValidPassword) {
+      Alert.alert("Thông báo", "Password chưa đúng định dạng");
+    } else if (!samePassword) {
+      Alert.alert("Thông báo", "Confirm password chưa giống password");
+    } else {
+      dispatch(ResetPasswordAction(maOtp, password));
+    }
   };
 
- useEffect(() => {
-  if(error != null){
-    Alert.alert("Thông báo", error)
-  } else if(navigateContinue == true){
-    Alert.alert("Bạn đã đổi mật khẩu thành công")
-    navigation.dispatch(
-      CommonActions.reset({
-        index: 0,
-        routes: [{ name: 'login' }],
-      })
-    );
-  }
-}, [error, loading])
-
-  const [maOtp, onChangeMaOtp] = useState('')
+  const [maOtp, onChangeMaOtp] = useState("");
 
   const [visiblePassword, setVisiblePassword] = useState(true);
   const [visibleConfirmPassword, setVisibleConfirmPassword] = useState(true);
-  
+
   const changeIconPassword = () => setVisiblePassword(!visiblePassword);
-  const changeIconConfirmPassword = () => setVisibleConfirmPassword(!visibleConfirmPassword);
+  const changeIconConfirmPassword = () =>
+    setVisibleConfirmPassword(!visibleConfirmPassword);
 
   const [password, onChangePassword] = useState("");
   const [isValidPassword, setIsValidPassword] = useState(false);
@@ -149,22 +161,17 @@ const MainComponent = ({ navigation }) => {
   };
 
   const vertifyConfirmPassword = (password, confirmPassword) => {
-    
     if (password === confirmPassword) {
       return true;
     }
     return false;
   };
 
-  const dispatch = useDispatch();
-
-
   return (
     <View style={{ height: 0.6 * screenHeight, paddingHorizontal: 25 }}>
-      
       <View style={styles.containerMain}>
         {/* OTP */}
-        <View style={[styles.containerPassword, {marginBottom: 42}]}>
+        <View style={[styles.containerPassword, { marginBottom: 42 }]}>
           <TextInput
             style={styles.password}
             placeholder="Mã OPT"
@@ -240,7 +247,7 @@ const MainComponent = ({ navigation }) => {
             )}
           </TouchableOpacity>
         </View>
-        
+
         {/* Confirm Password */}
         <View style={styles.containerPassword}>
           <TextInput
@@ -250,7 +257,10 @@ const MainComponent = ({ navigation }) => {
             secureTextEntry={visibleConfirmPassword}
             onChangeText={(confirmPassword) => {
               onChangeConfirmPassword(confirmPassword);
-              const isValidPw = vertifyConfirmPassword(password, confirmPassword);
+              const isValidPw = vertifyConfirmPassword(
+                password,
+                confirmPassword
+              );
               isValidPw ? setSamePassword(true) : setSamePassword(false);
             }}
             // value này để hiển thị lên user
@@ -296,8 +306,6 @@ const MainComponent = ({ navigation }) => {
           </TouchableOpacity>
         </View>
       </View>
-
-      
 
       <View style={styles.containerBtnLoginFooter}>
         <TouchableOpacity style={styles.btnLogin} onPress={btnReset}>

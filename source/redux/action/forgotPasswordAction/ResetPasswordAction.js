@@ -11,7 +11,6 @@ import UrlApi from "../../UrlApi";
 
 export default ResetPasswordAction = (otp, newPassword) => {
   const endPointResetPassword = 'auth/reset-password'
-  console.log(otp, newPassword,`${UrlApi}${endPointResetPassword}`, 'màn ResetPasswordAction')
   return async (dispatch) => {
     dispatch({ type: RESET_PASSWORD_REQUEST });
     try {

@@ -144,7 +144,7 @@ const MainComponent = ({ navigation }) => {
 
   const dispatch = useDispatch()
 
-  const navigateForgotPassword = () => navigation.navigate("forgot");
+  const navigateForgotPassword = () => navigation.navigate("forgotPassword");
 
   return (
     <View style={{ height: 0.6 * screenHeight, paddingHorizontal: 25 }}>

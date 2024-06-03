@@ -14,22 +14,22 @@ import {
     switch (type) {
       case RESET_PASSWORD_REQUEST:
         return {
+          ...state,
           loading: true,
-          navigateContinue: false,
-          error: null
         };
       case RESET_PASSWORD_SUCCESS:
         return {
-          loading: false,
+          ...state,
           navigateContinue: true,
-          error: null,
+          loading: false
         };
       case RESET_PASSWORD_FAILURE:
         return {
-          loading: false,
-          navigateContinue: false,
+          ...state,
           error: payload,
+          loading: false
         };
+      
       default:
           return state;
     }
