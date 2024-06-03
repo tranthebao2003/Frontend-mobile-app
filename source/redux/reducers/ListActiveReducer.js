@@ -1,13 +1,13 @@
 import {
     LIST_ACTIVE_REQUEST,
     LIST_ACTIVE_SUCCESS,
-    LIST_ACTIVE_FAILURE
+    LIST_ACTIVE_FAILURE,
   } from "../types/TypesListActive";
   
   const initialState = {
     loading: false,
     listActive: {},
-    error: "",
+    error: null,
   };
   
   // reducer này để nhận những action trả về list active
@@ -17,12 +17,13 @@ import {
         return {
           ...state,
           loading: true,
+          error: null
         };
       case LIST_ACTIVE_SUCCESS:
         return {
           loading: false,
           listActive: payload,
-          error: "",
+          error: null,
         };
       case LIST_ACTIVE_FAILURE:
         return {

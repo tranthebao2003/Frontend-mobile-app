@@ -37,8 +37,6 @@ export default function DetailAccountStudent(props) {
 
   const { navigation } = props;
 
-  // const isoDate = "1995-03-03T00:00:00.000Z";
-  // const formattedDate = moment(isoDate).format("DD/MM/YYYY");
 
   const [trangThaiTk, setTrangThaiTK] = useState("");
   useEffect(() => {

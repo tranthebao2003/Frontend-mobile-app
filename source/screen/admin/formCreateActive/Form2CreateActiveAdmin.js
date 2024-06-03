@@ -20,10 +20,11 @@ import {showKeyBoardAction, hideKeyBoardAction} from '../../../redux/action/KeyB
 import CreateActiveAction from "../../../redux/action/CreateActiveAction";
 import Spinner from 'react-native-loading-spinner-overlay'
 import { CommonActions } from "@react-navigation/native";
+import { CREATE_ACTIVE_RESET } from "../../../redux/types/TypesCreateActive";
 
 export default function Form2CreateActiveAdmin(props) {
   const dispatch = useDispatch()
-
+  const {navigation} = props
   const { loading, reponseSuccess, error } = useSelector(
     (state) => state.createActiveReducer
   );
@@ -65,10 +66,22 @@ export default function Form2CreateActiveAdmin(props) {
   };
 
   useEffect(() => {
-    if(error != '' && error != null && error != 'Tạo hoạt động thất bại vui lòng thử lại'){
-      alert(error)
+    dispatch({ type: CREATE_ACTIVE_RESET });
+  }, [dispatch]);
+
+  useEffect(() => {
+    if (error != null && loading == false) {
+      Alert.alert("Thông báo", error);
+    } else if (reponseSuccess == true && loading == false) {
+      Alert.alert("Bạn đã tạo hoạt động thành công");
+      navigation.dispatch(
+        CommonActions.reset({
+          index: 0,
+          routes: [{ name: "uiTapAdmin" }],
+        })
+      );
     }
-  }, [error])
+  }, [error, reponseSuccess, loading]);
 
   const {showKeyBoard} = useSelector(state => state.keyboardShow)
 

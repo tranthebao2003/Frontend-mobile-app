@@ -17,7 +17,6 @@ import ActiveItemAdmin from './ActiveItemAdmin'
 import { useDispatch, useSelector } from 'react-redux';
 import {showKeyBoardAction, hideKeyBoardAction} from '../../../redux/action/KeyBoardAction'
 import {ListActiveAction} from '../../../redux/action/ListActiveAction'
-
 import Spinner from 'react-native-loading-spinner-overlay';
 
 export default function ListActiveAdmin(props) {

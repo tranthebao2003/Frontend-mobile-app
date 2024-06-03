@@ -2,6 +2,7 @@ import {
   RESET_PASSWORD_REQUEST,
   RESET_PASSWORD_SUCCESS,
   RESET_PASSWORD_FAILURE,
+  RESET_PASSWORD_RESET
 } from "../../types/typesforgotPassword/TypesResetPassword";
   
   const initialState = {
@@ -29,7 +30,13 @@ import {
           error: payload,
           loading: false
         };
-      
+        case RESET_PASSWORD_RESET:
+          return {
+            ...state,
+            loading: false,
+            navigateContinue: false,
+            error: null,
+          };
       default:
           return state;
     }

@@ -7,7 +7,7 @@ import {
 const initialState = {
   loading: false,
   accountStudentOrDT: {},
-  error: "",
+  error: null,
 };
 
 // reducer này để nhận những action trả về list active
@@ -23,7 +23,7 @@ export default (state = initialState, { type, payload }) => {
       return {
         loading: false,
         accountStudentOrDT: payload,
-        error: "",
+        error: null,
       };
     case GET_USER_STUDENT_DT_FAILURE:
       return {

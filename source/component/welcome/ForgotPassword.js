@@ -18,6 +18,7 @@ import {screenWidth, screenHeight} from '../DimensionsScreen'
 import { useDispatch, useSelector } from 'react-redux';
 import SendEmailAction from '../../redux/action/forgotPasswordAction/SendEmailAction';
 import Spinner from 'react-native-loading-spinner-overlay';
+import { SEND_EMAIL_RESET } from '../../redux/types/typesforgotPassword/TypesSendEmail';
 
 const ForgotPassword = (props) => {
   const{navigation} = props
@@ -108,16 +109,19 @@ const [isValidEmail, setValidEmail] = useState(false)
 const dispatch = useDispatch()
 const {error, navigateContinue, loading} = useSelector(state => state.sendEmailReducer) 
 
+useEffect(() => {
+  console.log(navigateContinue, loading, error, 'màn forgotpassword trong useEffect rest')
+  dispatch({type: SEND_EMAIL_RESET})
+}, [dispatch])
+
 console.log(navigateContinue, loading, error)
 useEffect(() => {
   console.log(navigateContinue, loading, error, 'màn forgotpassword')
-  if(error != null && loading == false && navigateContinue != false){
+  if(error != null && loading == false){
     Alert.alert("Thông báo", error)
-    dispatch({type: "RESET"})
   }
-  else if(navigateContinue == true && loading == false && error == null){
+  else if(navigateContinue == true && loading == false){
     navigateForgotPassword2.navigate("forgotPassword2")
-    dispatch({type: "RESET"})
   }
 }, [navigateContinue, loading, error])
 

@@ -9,6 +9,7 @@ import {
   FlatList,
   TouchableOpacity,
   ScrollView,
+  Alert
 } from "react-native";
 import Dialog from "react-native-dialog";
 import { useEffect, useState } from "react";
@@ -19,10 +20,11 @@ import moment from 'moment'
 import { useSelector, useDispatch} from "react-redux";
 import AcceptActiveByDTAction from '../../../redux/action/putAction/putAcceptAction/AcceptActiveByDTAction'
 import Spinner from 'react-native-loading-spinner-overlay'
-
+import {ACCEPT_ACTIVITY_BY_DT_RESET}from '../../../redux/types/typesPutAccept/typesPutAccept/TypesAcceptActiveByDT'
+import { CommonActions } from "@react-navigation/native";
 
 export default function DetailActiveAdmin(props) {
-
+ const {navigation} = props
   const dispatch = useDispatch()
 
   const { loading, data, error } = useSelector(
@@ -45,6 +47,7 @@ export default function DetailActiveAdmin(props) {
     updatedAt,
   } = props.route.params.detailActiveAdmin;
 
+
   const acceptActiveByDT = () => {
   
     const statusAndId = {
@@ -60,7 +63,7 @@ export default function DetailActiveAdmin(props) {
   
     const statusAndId = {
       id: id,
-      // nghĩa là duyệt
+      // nghĩa là ko duyệt
       status: 4
     };
 
@@ -69,10 +72,24 @@ export default function DetailActiveAdmin(props) {
   };
 
   useEffect(() => {
-    if(error != '' && error != null && error != 'Chấp nhận thất bại'){
-      alert(error)
+    dispatch({ type: ACCEPT_ACTIVITY_BY_DT_RESET });
+  }, [dispatch]);
+
+  useEffect(() => {
+    if (error != null && loading == false) {
+      Alert.alert("Thông báo", error);
+      dispatch({ type: ACCEPT_ACTIVITY_BY_DT_RESET });
+    } else if(data != null && loading == false){
+      Alert.alert("Bạn đã thực hiện thành công");
+      navigation.dispatch(
+        CommonActions.reset({
+          index: 0,
+          routes: [{ name: "uiTapAdmin" }],
+        })
+      );
+      dispatch({ type: ACCEPT_ACTIVITY_BY_DT_RESET });
     }
-  }, [error])
+  }, [error, loading, data]);
 
   // btn cancel
   const [dialogCancel, setDialogCancel] = useState(false);

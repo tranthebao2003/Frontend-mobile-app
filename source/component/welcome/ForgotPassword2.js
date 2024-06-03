@@ -18,6 +18,7 @@ import { useDispatch, useSelector } from "react-redux";
 import ResetPasswordAction from "../../redux/action/forgotPasswordAction/ResetPasswordAction";
 import Spinner from "react-native-loading-spinner-overlay";
 import { CommonActions } from "@react-navigation/native";
+import { RESET_PASSWORD_RESET } from "../../redux/types/typesforgotPassword/TypesResetPassword";
 
 export default ForgotPassword2 = (props) => {
   const { navigation } = props;
@@ -107,11 +108,15 @@ const MainComponent = ({ navigation }) => {
   const dispatch = useDispatch();
 
   useEffect(() => {
+    console.log(navigateContinue, loading, error, 'màn forgotpassword2 trong useEffect reset')
+    dispatch({type: RESET_PASSWORD_RESET})
+  }, [dispatch])
+
+  useEffect(() => {
     console.log(navigateContinue, loading, error, 'màn forgotpassword2');
-    if (error != null && loading == false && navigateContinue != false) {
+    if (error != null && loading == false ) {
       Alert.alert("Thông báo", error);
-      dispatch({ type: "RESET" });
-    } else if (navigateContinue == true && loading == false && error == null) {
+    } else if (navigateContinue == true && loading == false) {
       Alert.alert("Bạn đã đổi mật khẩu thành công");
       navigation.dispatch(
         CommonActions.reset({
@@ -119,7 +124,6 @@ const MainComponent = ({ navigation }) => {
           routes: [{ name: "login" }],
         })
       );
-      dispatch({ type: "RESET" });
     }
   }, [navigateContinue, loading, error]);
 

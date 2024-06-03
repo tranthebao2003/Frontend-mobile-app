@@ -33,7 +33,7 @@ function ProfileDoanTruong() {
     phone,
     position,
     address,
-    mail,
+    email,
     createdAt,
     updatedAt
   } = infoUser;
@@ -201,7 +201,7 @@ function ProfileDoanTruong() {
                     { fontWeight: 400, color: "black", width: "80%" },
                   ]}
                 >
-                  {mail}
+                  {email}
                 </Text>
               </View>
             </View>

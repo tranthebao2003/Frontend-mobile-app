@@ -205,7 +205,7 @@ export default function ListActiveCreatedAdmin({navigation}) {
                 <ActiveCreatedItemAdmin
                   active={item}
                   onPressItem={() => {
-                    navigation.navigate('detailActiveAdmin', {detailActiveAdmin : item});
+                    navigation.navigate('detailActiveCreatedAdmin', {detailActiveCreatedAdmin : item});
                   }}
                 />
               )}

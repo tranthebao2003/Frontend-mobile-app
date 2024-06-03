@@ -66,6 +66,7 @@ import  ListActiveAdmin  from '../screen/admin/listActive/ListActiveAdmin'
 import  DetailActiveAdmin  from '../screen/admin/detailActive/DetailActiveAdmin'
 
 import  ListActiveCreatedAdmin  from '../screen/admin/listActiveCreated/ListActiveCreatedAdmin'
+import  DetailActiveCreatedAdmin  from '../screen/admin/detailActiveCreated/DetailActiveCreatedAdmin'
 
 import  ListActiveApproveAdmin  from '../screen/admin/listActiveApprove/ListActiveApproveAdmin'
 import  DetailActiveApproveAdmin  from '../screen/admin/detailActiveApprove/DetailActiveApproveAdmin'
@@ -184,6 +185,7 @@ const Admin = () => {
       <Stack.Screen name="detailActiveAdmin" component={DetailActiveAdmin} />
 
       <Stack.Screen name="listActiveCreatedAdmin" component={ListActiveCreatedAdmin} />
+      <Stack.Screen name="detailActiveCreatedAdmin" component={DetailActiveCreatedAdmin} />
 
       <Stack.Screen name="listActiveApproveAdmin" component={ListActiveApproveAdmin} />
       <Stack.Screen name="detailActiveApproveAdmin" component={DetailActiveApproveAdmin} />
