@@ -14,6 +14,7 @@ import SendEmailReducer from"../reducers/forgotPasswordReducer/SendEmailReducer"
 import ResetPasswordReducer from"../reducers/forgotPasswordReducer/ResetPasswordReducer";
 import RemoveActiveReducer from"../reducers/removeEditActiveReducer/RemoveActiveReducer";
 import EditActiveReducer from"../reducers/removeEditActiveReducer/EditActiveReducer";
+import RemoveAccountReducer from"../reducers/removeLockAccountReducer/RemoveAccountReducer";
 
 import { thunk } from "redux-thunk";
 
@@ -33,6 +34,7 @@ const rootReducer = combineReducers({
     resetPasswordReducer: ResetPasswordReducer,
     removeActiveReducer: RemoveActiveReducer,
     editActiveReducer: EditActiveReducer,
+    removeAccountReducer: RemoveAccountReducer,
 })
 
 export default Store = createStore(rootReducer, applyMiddleware(thunk))

@@ -5,8 +5,6 @@ import {
   StatusBar,
   Image,
   ImageBackground,
-  TextInput,
-  FlatList,
   TouchableOpacity,
   ScrollView,
   Alert
@@ -49,10 +47,7 @@ export default function DetailActiveCreatedAdmin(props) {
 
 
   const deleteActive = () => {
-    const idActive = {
-      id: id
-    }
-    dispatch(RemoveActiveAction(idActive))
+    dispatch(RemoveActiveAction(id))
   };
 
   useEffect(() => {

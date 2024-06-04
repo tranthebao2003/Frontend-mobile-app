@@ -226,7 +226,7 @@ export default function ListAccountDT({ navigation }) {
                 }}
               />
             )}
-            keyExtractor={(item) => item.id}
+            keyExtractor={(item) => item.account_id}
           />
         </View>
       </ImageBackground>

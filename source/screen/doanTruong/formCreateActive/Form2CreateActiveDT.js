@@ -82,7 +82,7 @@ export default function Form2CreateActiveDT(props) {
       navigation.dispatch(
         CommonActions.reset({
           index: 0,
-          routes: [{ name: "uiTapDTruong" }],
+          routes: [{ name: "uiTapDTruong"}],
         })
       );
       dispatch({ type: CREATE_ACTIVE_RESET });

@@ -7,6 +7,7 @@ import {
   ImageBackground,
   TouchableOpacity,
   ScrollView,
+  Alert
 } from "react-native";
 import Dialog from "react-native-dialog";
 import { useState, useEffect } from "react";
@@ -18,10 +19,13 @@ import {
 } from "../../../../component/DimensionsScreen";
 
 import IsoTime from '../../../../component/formatTime/IsoTime'
+import RemoveAccountAction from "../../../../redux/action/removeLockAccountAction/RemoveAccountAction";
+import Spinner from "react-native-loading-spinner-overlay";
+import { REMOVE_ACCOUNT_RESET } from "../../../../redux/types/typesRemoveLockAccount/TypesRemoveAccount";
+import { CommonActions } from "@react-navigation/native";
+import { useDispatch, useSelector } from "react-redux";
 
-// 2 cách:
-// - ListView from a map of objects
-// - FlatList
+
 export default function DetailAccountDT(props) {
   const {
     // account_id: dùng để xóa, khóa tk
@@ -32,6 +36,7 @@ export default function DetailAccountDT(props) {
     email,
     address,
     account,
+    position
   } = props.route.params.detailAccountDT;
 
   const {status_id, role_id, createdAt, updatedAt} = account;
@@ -40,6 +45,34 @@ export default function DetailAccountDT(props) {
 
   const { navigation } = props;
 
+  const dispatch = useDispatch()
+  const { loading, reponseSuccess, error } = useSelector(
+    (state) => state.removeAccountReducer
+  );
+
+  const deleteAcount = () => {
+    dispatch(RemoveAccountAction(account_id));
+  };
+
+  useEffect(() => {
+    dispatch({ type: REMOVE_ACCOUNT_RESET });
+  }, [dispatch]);
+
+  useEffect(() => {
+    if (error != null && loading == false) {
+      Alert.alert("Thông báo", error);
+      dispatch({ type: REMOVE_ACCOUNT_RESET });
+    } else if (reponseSuccess == true && loading == false) {
+      Alert.alert("Bạn đã thực hiện thành công");
+      navigation.dispatch(
+        CommonActions.reset({
+          index: 0,
+          routes: [{ name: "uiTapAdmin" }],
+        })
+      );
+      dispatch({ type: REMOVE_ACCOUNT_RESET });
+    }
+  }, [error, loading, reponseSuccess])
 
   const [trangThaiTk, setTrangThaiTK] = useState("");
   useEffect(() => {
@@ -47,16 +80,6 @@ export default function DetailAccountDT(props) {
       setTrangThaiTK("Hoạt động");
     } else if (status_id == 2) {
       setTrangThaiTK("Bị khóa");
-    }
-  }, []);
-
-
-  const [chucVu, setChucVu] = useState();
-  useEffect(() => {
-    if (role_id == 4) {
-      setChucVu("Bí thư (trưởng CLB)");
-    } else {
-      setChucVu("Lỗi chức vụ");
     }
   }, []);
 
@@ -71,16 +94,7 @@ export default function DetailAccountDT(props) {
   const yesBtnRemove = () => {
     // let save
     setDialogRemove(!dialogRemove);
-    setYesNotificationRemove(!yesNotificationRemove);
-
-    // mik phải để cho nó hiện thông báo tầm 3s trước khi chuyển text
-    // nếu ko nó sẽ bị lỗi ấn đồng ý duyệt thì nó lại nhảy ra
-    // dialog xóa sv thành công
-
-    setTimeout(() => {
-      setYesNotificationRemove(false);
-      navigation.goBack();
-    }, 2500);
+    deleteAcount()
   };
 
   // btn lock
@@ -103,6 +117,11 @@ export default function DetailAccountDT(props) {
   return (
     <ScrollView style={styles.container}>
       <StatusBar style="auto" />
+      <Spinner
+        visible={loading}
+        textContent={"Loading..."}
+        textStyle={{ color: "white", fontSize: FontSize.sizeHeader }}
+      />
       <Image
         source={require("../../../../resource/iconListActive/decorTop.png")}
         style={{
@@ -406,7 +425,7 @@ export default function DetailAccountDT(props) {
                 fontWeight: "400",
               }}
             >
-              {chucVu}
+              {position}
             </Text>
           </View>
         </View>
