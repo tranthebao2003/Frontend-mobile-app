@@ -38,7 +38,7 @@ export default function ListAccountStudent({ navigation }) {
   const [searchText, setSearchText] = useState("");
 
   // chưa có api
-  // const urlAccountStudent = "users/student";
+  const urlAccountStudent = "users/student";
   // Gọi action để lấy dữ liệu khi component được mount
   useEffect(() => {
     dispatch(GetAllAccountStudentAndDTAction(urlAccountStudent));
@@ -59,7 +59,7 @@ export default function ListAccountStudent({ navigation }) {
     const filteredAccount = () => {
       if (Array.isArray(account)) {
         return account.filter((eachAccount) =>
-          eachAccount.MSSV.toLowerCase().includes(searchText.toLowerCase())
+          (eachAccount.MSSV) ? eachAccount.MSSV.toLowerCase().includes(searchText.toLowerCase()) : ''
         );
       }
     };

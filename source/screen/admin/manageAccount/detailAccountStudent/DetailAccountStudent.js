@@ -22,18 +22,21 @@ import {
 // - FlatList
 export default function DetailAccountStudent(props) {
   const {
+    // account_id này dùng đề xóa, khóa tk
+    account_id,
     MSSV,
     first_name,
     last_name,
     phone,
     email,
-    role_id,
-    status_id,
     address,
     class_id,
     gender_id,
     birthday,
+    account
   } = props.route.params.detailAccountStudent;
+
+  const {status_id, role_id} = account;
 
   const { navigation } = props;
 

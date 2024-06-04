@@ -17,25 +17,29 @@ import {
   screenHeight,
 } from "../../../../component/DimensionsScreen";
 
+import IsoTime from '../../../../component/formatTime/IsoTime'
+
 // 2 cách:
 // - ListView from a map of objects
 // - FlatList
 export default function DetailAccountDT(props) {
   const {
+    // account_id: dùng để xóa, khóa tk
+    account_id,
     first_name,
     last_name,
     phone,
-    role_id,
-    status_id,
-
-    address,
-    gender_id,
-    birth_date,
     email,
-    position
+    address,
+    account,
   } = props.route.params.detailAccountDT;
 
+  const {status_id, role_id, createdAt, updatedAt} = account;
+  const formatCreatedAt = IsoTime(createdAt)
+  const formatUpdatedAt = IsoTime(updatedAt)
+
   const { navigation } = props;
+
 
   const [trangThaiTk, setTrangThaiTK] = useState("");
   useEffect(() => {
@@ -46,21 +50,16 @@ export default function DetailAccountDT(props) {
     }
   }, []);
 
-  const [gioiTinh, setgioiTinh] = useState("");
-  useEffect(() => {
-    if (gender_id == "1") {
-      setgioiTinh("Nam");
-    } else if (gender_id == "2") {
-      setgioiTinh("Nữ");
-    }
-  }, []);
 
   const [chucVu, setChucVu] = useState();
   useEffect(() => {
     if (role_id == 4) {
-      setChucVu("Đoàn trường");
+      setChucVu("Bí thư (trưởng CLB)");
+    } else {
+      setChucVu("Lỗi chức vụ");
     }
   }, []);
+
 
   // btn remove
   const [dialogRemove, setDialogRemove] = useState(false);
@@ -179,7 +178,7 @@ export default function DetailAccountDT(props) {
                 fontWeight: "600",
               }}
             >
-              Tên người dùng
+              Họ và tên
             </Text>
 
             <Text
@@ -189,7 +188,7 @@ export default function DetailAccountDT(props) {
                 fontWeight: "600",
               }}
             >
-              Vị trí
+              Quê quán
             </Text>
           </View>
 
@@ -221,7 +220,7 @@ export default function DetailAccountDT(props) {
               }}
             >
               <Text style={styles.contentText}>
-                {position}
+                {address}
               </Text>
             </View>
           </View>
@@ -290,29 +289,6 @@ export default function DetailAccountDT(props) {
             </Text>
           </View>
 
-          {/* giới tính*/}
-          <View style={{ width: "100%", marginBottom: 20 }}>
-            <Text
-              style={{
-                color: Color.colorTextMain,
-                fontSize: FontSize.sizeMain,
-                fontWeight: 500,
-                marginBottom: 2,
-              }}
-            >
-              Giới tính
-            </Text>
-
-            <Text
-              style={{
-                color: Color.colorTextMain,
-                fontSize: FontSize.sizeMain,
-                fontWeight: 400,
-              }}
-            >
-              {gioiTinh}
-            </Text>
-          </View>
 
           {/* số điện thoại*/}
           <View style={{ width: "100%", marginBottom: 20 }}>
@@ -338,8 +314,7 @@ export default function DetailAccountDT(props) {
             </Text>
           </View>
 
-
-          {/* ngày sinh */}
+          {/* Ngày tạo tài khoản */}
           <View style={{ width: "100%", marginBottom: 20 }}>
             <Text
               style={{
@@ -349,7 +324,7 @@ export default function DetailAccountDT(props) {
                 marginBottom: 2,
               }}
             >
-              Ngày sinh
+              Ngày tạo tài khoản
             </Text>
 
             <Text
@@ -359,7 +334,31 @@ export default function DetailAccountDT(props) {
                 fontWeight: 400,
               }}
             >
-              {birth_date}
+              {formatCreatedAt}
+            </Text>
+          </View>
+
+          {/* Chỉnh sửa lần cuối */}
+          <View style={{ width: "100%", marginBottom: 20 }}>
+            <Text
+              style={{
+                color: Color.colorTextMain,
+                fontSize: FontSize.sizeMain,
+                fontWeight: 500,
+                marginBottom: 2,
+              }}
+            >
+              Chỉnh sửa lần cuối
+            </Text>
+
+            <Text
+              style={{
+                color: Color.colorTextMain,
+                fontSize: FontSize.sizeMain,
+                fontWeight: 400,
+              }}
+            >
+              {formatUpdatedAt}
             </Text>
           </View>
 

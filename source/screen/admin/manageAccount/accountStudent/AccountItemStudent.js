@@ -5,7 +5,8 @@ import { useEffect, useState } from "react";
 
 const AccountItemStudent = (props) => {
 
-    const {MSSV, status_id} = props.account;
+    const {MSSV, account} = props.account;
+    const {status_id} = account;
     const [trangThaiTk, setTrangThaiTK] = useState('')
 
     useEffect(() => {

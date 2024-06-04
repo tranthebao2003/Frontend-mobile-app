@@ -14,60 +14,61 @@ import FontSize from "../../../component/FontSize";
 import Color from "../../../component/Color";
 import { screenWidth, screenHeight } from "../../../component/DimensionsScreen";
 import ActiveApproveItemAdmin from "./ActiveApproveItemAdmin";
-import { useDispatch, useSelector } from 'react-redux';
-import {ListActiveAction} from '../../../redux/action/ListActiveAction'
+import { useDispatch, useSelector } from "react-redux";
+import { ListActiveAction } from "../../../redux/action/ListActiveAction";
 import Dialog from "react-native-dialog";
-import Spinner from 'react-native-loading-spinner-overlay';
+import Spinner from "react-native-loading-spinner-overlay";
 
 export default function ListActiveApproveAdmin(props) {
   // ở đây chỉ bao gồm những hoạt động do đoàn trường tạo
   // do api trả về lun
-  const {navigation} = props
+  const { navigation } = props;
 
-const dispatch = useDispatch()
+  const dispatch = useDispatch();
 
-const { loading, listActive, error} = useSelector(state => state.listActiveReducer)
-// console.log(infoUser, 'infoUser màn profileSv')
+  const { loading, listActive, error } = useSelector(
+    (state) => state.listActiveReducer
+  );
+  // console.log(infoUser, 'infoUser màn profileSv')
 
+  // cái này phải thay bằng hoạt động do đoàn trường tạo để admin duyệt
+  const urlUnacceptActive = "activities/activities_union_created";
+  // Khởi tạo useState để lưu trữ dữ liệu
+  const [active, setActive] = useState([]);
+  const [filterActive, setFilterActive] = useState([]);
+  const [searchText, setSearchText] = useState("");
 
-// cái này phải thay bằng hoạt động do đoàn trường tạo để admin duyệt
-// const urlAllActive = 'activities'
-// Khởi tạo useState để lưu trữ dữ liệu
-const [active, setActive] = useState([]);
-const [filterActive, setFilterActive] = useState([]);
-const [searchText, setSearchText] = useState('');
+  // Gọi action để lấy dữ liệu khi component được mount
+  useEffect(() => {
+    dispatch(ListActiveAction(urlUnacceptActive));
+  }, [dispatch]);
 
-// Gọi action để lấy dữ liệu khi component được mount
-useEffect(() => {
-  dispatch(ListActiveAction(urlAllActive));
-}, [dispatch]);
-
-// Cập nhật state active khi dữ liệu từ Redux store thay đổi
-useEffect(() => {
-  if (listActive) {
-    setActive(listActive);
-  } else {
-    if(error !== ''){
-      alert('Bạn vui lòng thoát app để vào lại')
+  // Cập nhật state active khi dữ liệu từ Redux store thay đổi
+  useEffect(() => {
+    if (listActive) {
+      setActive(listActive);
+    } else {
+      if (error !== "") {
+        alert("Bạn vui lòng thoát app để vào lại");
+      }
     }
-  }
-}, [listActive]);
+  }, [listActive]);
 
-// Lọc danh sách dựa trên searchText
-useEffect(() => {
-  const filteredActives = () => {
-    if (Array.isArray(active)) {
-      return active.filter((eachActive) =>
-        eachActive.act_name.toLowerCase().includes(searchText.toLowerCase())
-      );
-    }
-  };
+  // Lọc danh sách dựa trên searchText
+  useEffect(() => {
+    const filteredActives = () => {
+      if (Array.isArray(active)) {
+        return active.filter((eachActive) =>
+          eachActive.act_name.toLowerCase().includes(searchText.toLowerCase())
+        );
+      }
+    };
 
-  setFilterActive(filteredActives());
-}, [searchText, active]);
+    setFilterActive(filteredActives());
+  }, [searchText, active]);
 
-console.log(active, 'active màn screenList');
-console.log(filterActive, 'filtered active màn screenList');
+  console.log(active, "active màn screenList");
+  console.log(filterActive, "filtered active màn screenList");
 
   // btn duyệt all
   const [dialogCancel, setDialogCancel] = useState(false);
@@ -138,7 +139,7 @@ console.log(filterActive, 'filtered active màn screenList');
         <View
           style={{
             width: 0.92 * screenWidth,
-            height: 0.6 * screenHeight,
+            height: 0.7 * screenHeight,
             backgroundColor: Color.colorBtn,
             marginHorizontal: 10,
             marginBottom: 5,
@@ -155,7 +156,7 @@ console.log(filterActive, 'filtered active màn screenList');
             style={{
               width: "100%",
               flexDirection: "row",
-              alignItems: 'center'
+              alignItems: "center",
             }}
           >
             <Text
@@ -179,29 +180,27 @@ console.log(filterActive, 'filtered active màn screenList');
             >
               Tên hoạt động
             </Text>
-            
-            <View style ={{flex: 1}}>
-            <Text
-              style={{
-                color: Color.colorTextMain,
-                fontSize: FontSize.sizeMain,
-                fontWeight: 500,
-              }}
-            >
-              Đơn vị
-            </Text>
-            <Text
-              style={{
-                color: Color.colorTextMain,
-                fontSize: FontSize.sizeMain,
-                fontWeight: 500,
-              }}
-            >
-              tổ chức
-            </Text>
+
+            <View style={{ flex: 1 }}>
+              <Text
+                style={{
+                  color: Color.colorTextMain,
+                  fontSize: FontSize.sizeMain,
+                  fontWeight: 500,
+                }}
+              >
+                Đơn vị
+              </Text>
+              <Text
+                style={{
+                  color: Color.colorTextMain,
+                  fontSize: FontSize.sizeMain,
+                  fontWeight: 500,
+                }}
+              >
+                tổ chức
+              </Text>
             </View>
-            
-            
           </View>
 
           <FlatList
@@ -220,79 +219,6 @@ console.log(filterActive, 'filtered active màn screenList');
             keyExtractor={(item) => item.id}
           />
         </View>
-
-        {/* btn approve all */}
-        <TouchableOpacity
-          style={styles.btnCancel}
-          onPress={showHideDialogCancel}
-        >
-          <Text style={[styles.resigter, { color: Color.colorApproveAll }]}>
-            Duyệt tất cả
-          </Text>
-          <Dialog.Container visible={dialogCancel}>
-            <Dialog.Title
-              style={{ color: Color.colorTextMain, fontWeight: "700", fontSize: FontSize.sizeMain}}
-            >
-              XÁC NHẬN
-            </Dialog.Title>
-            <Dialog.Description style={{ color: "black", fontSize: FontSize.sizeMain - 2}}>
-              Bạn có chắc muốn duyệt tất cả hoạt động ?
-            </Dialog.Description>
-            <Dialog.Button
-              label="No"
-              onPress={showHideDialogCancel}
-              style={[
-                styles.btnCancel,
-                {
-                  width: 60,
-                  height: 40,
-                  marginRight: 30,
-                  fontWeight: 500,
-                  fontSize: 18,
-                  color: Color.colorRemove,
-                  borderColor: Color.colorRemove
-                },
-              ]}
-            />
-            <Dialog.Button
-              label="Yes"
-              onPress={yesBtnCancel}
-              style={{
-                width: 60,
-                height: 40,
-                marginRight: 50,
-                borderRadius: 5,
-                backgroundColor: "#d9ebfe",
-                fontWeight: 500,
-                fontSize: 18,
-              }}
-            />
-          </Dialog.Container>
-          <Dialog.Container visible={yesNotificationCancel}>
-            <Dialog.Title
-              style={{ color: Color.colorTextMain, fontWeight: "700" }}
-            >
-              THÔNG BÁO
-            </Dialog.Title>
-            <Dialog.Description style={{ color: "black" }}>
-              Bạn đã xóa hoạt động thành công!
-            </Dialog.Description>
-            <Dialog.Button
-              label="Ok"
-              onPress={() => setYesNotificationCancel(!yesNotificationCancel)}
-              style={[
-                styles.btnCancel,
-                {
-                  width: 60,
-                  height: 40,
-                  marginRight: 30,
-                  fontWeight: 500,
-                  fontSize: 18,
-                },
-              ]}
-            />
-          </Dialog.Container>
-        </TouchableOpacity>
       </ImageBackground>
     </View>
   );

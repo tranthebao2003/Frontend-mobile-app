@@ -5,8 +5,9 @@ import { useEffect, useState } from "react";
 
 const AccountItemDT = (props) => {
 
-    const {first_name, last_name, status_id} = props.account;
-    const [trangThaiTk, setTrangThaiTK] = useState('')
+  const {first_name, last_name, account} = props.account;
+  const {status_id} = account;
+  const [trangThaiTk, setTrangThaiTK] = useState('')
 
     useEffect(() => {
       if (status_id == 1) {

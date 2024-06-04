@@ -9,6 +9,7 @@ import {
   FlatList,
   TouchableOpacity,
   ScrollView,
+  Alert
 } from "react-native";
 import Dialog from "react-native-dialog";
 import { useEffect, useState } from "react";
@@ -19,10 +20,11 @@ import moment from 'moment'
 import { useSelector, useDispatch} from "react-redux";
 import AcceptActiveByDTAction from '../../../redux/action/putAction/putAcceptAction/AcceptActiveByDTAction'
 import Spinner from 'react-native-loading-spinner-overlay'
-
+import {ACCEPT_ACTIVITY_BY_DT_RESET}from '../../../redux/types/typesPutAccept/typesPutAccept/TypesAcceptActiveByDT'
+import { CommonActions } from "@react-navigation/native";
 
 export default function DetailActiveApproveAdmin(props) {
-
+ const {navigation} = props
   const dispatch = useDispatch()
 
   const { loading, data, error } = useSelector(
@@ -45,6 +47,7 @@ export default function DetailActiveApproveAdmin(props) {
     updatedAt,
   } = props.route.params.detailActiveApproveAdmin;
 
+
   const acceptActiveByDT = () => {
   
     const statusAndId = {
@@ -60,7 +63,7 @@ export default function DetailActiveApproveAdmin(props) {
   
     const statusAndId = {
       id: id,
-      // nghĩa là duyệt
+      // nghĩa là ko duyệt
       status: 4
     };
 
@@ -69,10 +72,24 @@ export default function DetailActiveApproveAdmin(props) {
   };
 
   useEffect(() => {
-    if(error != '' && error != null && error != 'Chấp nhận thất bại'){
-      alert(error)
+    dispatch({ type: ACCEPT_ACTIVITY_BY_DT_RESET });
+  }, [dispatch]);
+
+  useEffect(() => {
+    if (error != null && loading == false) {
+      Alert.alert("Thông báo", error);
+      dispatch({ type: ACCEPT_ACTIVITY_BY_DT_RESET });
+    } else if(data != null && loading == false){
+      Alert.alert("Bạn đã thực hiện thành công");
+      navigation.dispatch(
+        CommonActions.reset({
+          index: 0,
+          routes: [{ name: "uiTapAdmin" }],
+        })
+      );
+      dispatch({ type: ACCEPT_ACTIVITY_BY_DT_RESET });
     }
-  }, [error])
+  }, [error, loading, data]);
 
   // btn cancel
   const [dialogCancel, setDialogCancel] = useState(false);
@@ -347,29 +364,6 @@ export default function DetailActiveApproveAdmin(props) {
                 marginRight: 20,
               }}
             >
-              Mô tả
-            </Text>
-
-            <Text
-              style={{
-                color: Color.colorTextMain,
-                fontSize: FontSize.sizeMain,
-                fontWeight: 400,
-              }}
-            >
-              {act_description}
-            </Text>
-          </View>
-
-          <View style={{ width: "100%", marginBottom: 20 }}>
-            <Text
-              style={{
-                color: Color.colorTextMain,
-                fontSize: FontSize.sizeMain,
-                fontWeight: 500,
-                marginRight: 20,
-              }}
-            >
               Trạng thái hoạt động
             </Text>
 
@@ -473,8 +467,7 @@ export default function DetailActiveApproveAdmin(props) {
                   XÁC NHẬN
                 </Dialog.Title>
                 <Dialog.Description style={{ color: "black" }}>
-                  Bạn có chắc không duyệt hoạt động này (chỉ có tác dụng với
-                  những hoạt động do đoàn trường tạo)?
+                  Bạn có chắc không duyệt hoạt động này ?
                 </Dialog.Description>
                 <Dialog.Button
                   label="No"
@@ -546,8 +539,7 @@ export default function DetailActiveApproveAdmin(props) {
                   XÁC NHẬN
                 </Dialog.Title>
                 <Dialog.Description style={{ color: "black" }}>
-                  Bạn có chắc duyệt hoạt động này (chỉ có tác dụng với
-                  những hoạt động do đoàn trường tạo)?
+                  Bạn có chắc duyệt hoạt động này ?
                 </Dialog.Description>
                 <Dialog.Button
                   label="No"

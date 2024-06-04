@@ -54,17 +54,6 @@ export default function DetailActiveCreatedAdmin(props) {
     }
     dispatch(RemoveActiveAction(idActive))
   };
-  const editActive = () => {
-  
-    const statusAndId = {
-      id: id,
-      // nghĩa là ko duyệt
-      status: 4
-    };
-
-    dispatch(AcceptActiveByDTAction(statusAndId));
-
-  };
 
   useEffect(() => {
     dispatch({ type: REMOVE_ACTIVE_RESET });

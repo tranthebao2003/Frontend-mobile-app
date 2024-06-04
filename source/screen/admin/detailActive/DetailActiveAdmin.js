@@ -364,29 +364,6 @@ export default function DetailActiveAdmin(props) {
                 marginRight: 20,
               }}
             >
-              Mô tả
-            </Text>
-
-            <Text
-              style={{
-                color: Color.colorTextMain,
-                fontSize: FontSize.sizeMain,
-                fontWeight: 400,
-              }}
-            >
-              {act_description}
-            </Text>
-          </View>
-
-          <View style={{ width: "100%", marginBottom: 20 }}>
-            <Text
-              style={{
-                color: Color.colorTextMain,
-                fontSize: FontSize.sizeMain,
-                fontWeight: 500,
-                marginRight: 20,
-              }}
-            >
               Trạng thái hoạt động
             </Text>
 
