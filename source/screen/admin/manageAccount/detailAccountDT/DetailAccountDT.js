@@ -39,7 +39,7 @@ export default function DetailAccountDT(props) {
     position
   } = props.route.params.detailAccountDT;
 
-  const {status_id, role_id, createdAt, updatedAt} = account;
+  const {status_id, createdAt, updatedAt} = account;
   const formatCreatedAt = IsoTime(createdAt)
   const formatUpdatedAt = IsoTime(updatedAt)
 
@@ -81,7 +81,7 @@ export default function DetailAccountDT(props) {
     } else if (status_id == 2) {
       setTrangThaiTK("Bị khóa");
     }
-  }, []);
+  }, [status_id]);
 
 
   // btn remove
@@ -106,12 +106,7 @@ export default function DetailAccountDT(props) {
   const [yesNotificationLock, setYesNotificationLock] = useState(false);
   const yesBtnLock = () => {
     setDialogLock(!dialogLock);
-    setYesNotificationLock(!yesNotificationLock);
-
-    setTimeout(() => {
-      setYesNotificationLock(false);
-      navigation.goBack();
-    }, 2500);
+  
   };
 
   return (

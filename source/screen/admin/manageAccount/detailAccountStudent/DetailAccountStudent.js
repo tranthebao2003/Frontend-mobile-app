@@ -19,8 +19,10 @@ import {
 } from "../../../../component/DimensionsScreen";
 
 import RemoveAccountAction from "../../../../redux/action/removeLockAccountAction/RemoveAccountAction";
+import LockAccountAction from "../../../../redux/action/removeLockAccountAction/LockAccountAction";
 import Spinner from "react-native-loading-spinner-overlay";
 import { REMOVE_ACCOUNT_RESET } from "../../../../redux/types/typesRemoveLockAccount/TypesRemoveAccount";
+import { LOCK_ACCOUNT_RESET } from "../../../../redux/types/typesRemoveLockAccount/TypesLockAccount";
 import { CommonActions } from "@react-navigation/native";
 import { useDispatch, useSelector } from "react-redux";
 
@@ -49,12 +51,25 @@ export default function DetailAccountStudent(props) {
     (state) => state.removeAccountReducer
   );
 
+  const { loadingLock, reponseSuccessLock, errorLock } = useSelector(
+    (state) => state.lockAccountReducer
+  );
+
   const deleteAcount = () => {
     dispatch(RemoveAccountAction(account_id));
   };
 
+  const clockAcount = () => {
+    const idStatusId = {
+      id: account_id,
+      status_id: 2
+    }
+    dispatch(LockAccountAction(idStatusId));
+  };
+
   useEffect(() => {
     dispatch({ type: REMOVE_ACCOUNT_RESET });
+    dispatch({ type: LOCK_ACCOUNT_RESET });
   }, [dispatch]);
 
   useEffect(() => {
@@ -73,6 +88,22 @@ export default function DetailAccountStudent(props) {
     }
   }, [error, loading, reponseSuccess]);
 
+  useEffect(() => {
+    if (errorLock != null && loadingLock == false) {
+      Alert.alert("Thông báo", errorLock);
+      dispatch({ type: LOCK_ACCOUNT_RESET });
+    } else if (reponseSuccessLock == true && loadingLock == false) {
+      Alert.alert("Bạn đã thực hiện thành công");
+      navigation.dispatch(
+        CommonActions.reset({
+          index: 0,
+          routes: [{ name: "uiTapAdmin" }],
+        })
+      );
+      dispatch({ type: LOCK_ACCOUNT_RESET });
+    }
+  }, [errorLock, loadingLock, reponseSuccessLock]);
+
   const [trangThaiTk, setTrangThaiTK] = useState("");
   useEffect(() => {
     if (status_id == 1) {
@@ -80,7 +111,7 @@ export default function DetailAccountStudent(props) {
     } else if (status_id == 2) {
       setTrangThaiTK("Bị khóa");
     }
-  }, []);
+  }, [status_id]);
 
   const [gioiTinh, setgioiTinh] = useState("");
   useEffect(() => {
@@ -89,7 +120,7 @@ export default function DetailAccountStudent(props) {
     } else if (gender_id == "2") {
       setgioiTinh("Nữ");
     }
-  }, []);
+  }, [gender_id]);
 
   const [chucVu, setChucVu] = useState();
   useEffect(() => {
@@ -98,7 +129,7 @@ export default function DetailAccountStudent(props) {
     } else if (role_id == 2) {
       setChucVu("Sinh viên");
     }
-  }, []);
+  }, [role_id]);
 
   // btn remove
   const [dialogRemove, setDialogRemove] = useState(false);
@@ -122,19 +153,24 @@ export default function DetailAccountStudent(props) {
   const [yesNotificationLock, setYesNotificationLock] = useState(false);
   const yesBtnLock = () => {
     setDialogLock(!dialogLock);
-    setYesNotificationLock(!yesNotificationLock);
-
-    setTimeout(() => {
-      setYesNotificationLock(false);
-      navigation.goBack();
-    }, 2500);
+    clockAcount()
   };
+
+  // const yesBtnUnLock = () => {
+  //   setDialogLock(!dialogLock);
+  //   clockAcount()
+  // };
 
   return (
     <ScrollView style={styles.container}>
       <StatusBar style="auto" />
       <Spinner
         visible={loading}
+        textContent={"Loading..."}
+        textStyle={{ color: "white", fontSize: FontSize.sizeHeader }}
+      />
+      <Spinner
+        visible={loadingLock}
         textContent={"Loading..."}
         textStyle={{ color: "white", fontSize: FontSize.sizeHeader }}
       />
@@ -687,7 +723,7 @@ export default function DetailAccountStudent(props) {
                 <Dialog.Button
                   label="Yes"
                   // call api, sau đó chuyển ko duyệt thành xóa
-                  onPress={yesBtnLock}
+                  onPress={yesBtnUnLock}
                   style={{
                     width: 60,
                     height: 40,
