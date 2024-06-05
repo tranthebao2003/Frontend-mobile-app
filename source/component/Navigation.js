@@ -87,6 +87,10 @@ import  Form1CreateStudent  from '../screen/admin/manageAccount/createAccount/cr
 import  Form2CreateStudent  from '../screen/admin/manageAccount/createAccount/createStudent/Form2CreateStudent'
 import  Form3CreateStudent  from '../screen/admin/manageAccount/createAccount/createStudent/Form3CreateStudent'
 
+import  Form1EditStudent  from '../screen/admin/manageAccount/editAccount/editStudent/Form1EditStudent'
+import  Form2EditStudent  from '../screen/admin/manageAccount/editAccount/editStudent/Form2EditStudent'
+import  Form3EditStudent  from '../screen/admin/manageAccount/editAccount/editStudent/Form3EditStudent'
+
 import  Form1CreateDoanTruong  from '../screen/admin/manageAccount/createAccount/createDoanTruong/Form1CreateDoanTruong'
 import  Form2CreateDoanTruong  from '../screen/admin/manageAccount/createAccount/createDoanTruong/Form2CreateDoanTruong'
 import  Form3CreateDoanTruong  from '../screen/admin/manageAccount/createAccount/createDoanTruong/Form3CreateDoanTruong'
@@ -205,6 +209,10 @@ const Admin = () => {
       <Stack.Screen name="form1CreateStudent" component={Form1CreateStudent} />
       <Stack.Screen name="form2CreateStudent" component={Form2CreateStudent} />
       <Stack.Screen name="form3CreateStudent" component={Form3CreateStudent} />
+
+      <Stack.Screen name="form1EditStudent" component={Form1EditStudent} />
+      <Stack.Screen name="form2EditStudent" component={Form2EditStudent} />
+      <Stack.Screen name="form3EditStudent" component={Form3EditStudent} />
 
       <Stack.Screen name="form1CreateDoanTruong" component={Form1CreateDoanTruong} />
       <Stack.Screen name="form2CreateDoanTruong" component={Form2CreateDoanTruong} />

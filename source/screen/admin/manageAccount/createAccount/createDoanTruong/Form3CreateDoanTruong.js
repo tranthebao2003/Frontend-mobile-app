@@ -23,7 +23,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { CommonActions } from "@react-navigation/native";
 import CreateDoanTruongAction from "../../../../../redux/action/actionCreateUser/CreateDoanTruongAction";
 import Spinner from 'react-native-loading-spinner-overlay'
-
+import { CREATE_DT_RESET } from "../../../../../redux/types/typesCreateUser/TypesCreateDT";
 
 export default function Form3CreateDoanTruong(props) {
   const { navigation } = props;
@@ -74,12 +74,25 @@ export default function Form3CreateDoanTruong(props) {
 
 
   useEffect(() => {
-    if(error != '' && error != null && error != 'Tạo tài khoản thất bại vui lòng thử lại'){
-      alert(error)
-    }
-  }, [error])
+    dispatch({ type: CREATE_DT_RESET });
+  }, [dispatch]);
 
-  
+  useEffect(() => {
+    if (error != null && loading == false) {
+      Alert.alert("Thông báo", error);
+      dispatch({ type: CREATE_DT_RESET });
+    } else if (reponseSuccess == true && loading == false) {
+      Alert.alert("Bạn đã tạo tài khoản thành công");
+      navigation.dispatch(
+        CommonActions.reset({
+          index: 0,
+          routes: [{ name: "uiTapAdmin" }],
+        })
+      );
+      dispatch({ type: CREATE_DT_RESET });
+    }
+  }, [error, reponseSuccess, loading]);
+
 
   const { showKeyBoard } = useSelector((state) => state.keyboardShow);
 

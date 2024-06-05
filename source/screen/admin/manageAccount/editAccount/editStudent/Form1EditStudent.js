@@ -8,50 +8,122 @@ import {
     TextInput,
     TouchableOpacity,
     ScrollView,
-    Modal,
-    Alert,
     Keyboard
   } from "react-native";
   import React, { useState, useEffect} from "react";
   import FontSize from "../../../../../component/FontSize";
   import Color from "../../../../../component/Color";
   import { screenWidth, screenHeight } from "../../../../../component/DimensionsScreen";
+  // import { DarkTheme } from "@react-navigation/native";
+  import DropDownPicker from 'react-native-dropdown-picker';
   import Dialog from 'react-native-dialog'
-  import {useSelector} from "react-redux";
+  import {useDispatch} from "react-redux";
+  import {showKeyBoardAction, hideKeyBoardAction} from '../../../../../redux/action/KeyBoardAction'
   
-  export default function Form2CreateStudent(props) {
+  export default function Form1EditStudent(props) {
     const {navigation} = props
-    const { username, password, role_id } = props.route.params;
-    
+    const  {
+      // account_id này dùng đề xóa, khóa tk
+      MSSV,
+      account_id,
+      first_name,
+      last_name,
+      phone,
+      email,
+      address,
+      class_id,
+      gender_id,
+      birthday,
+      account,
+    } = props.route.params.accountStudent;
+
+
+    const [userName, setUserName] = useState(MSSV);
+
+    const [visiblePassword, setVisiblePassword] = useState(true);
+    const changeIconPassword = () => setVisiblePassword(!visiblePassword);
+  
+  
+    const [password, onChangePassword] = useState("");
+    const [isValidPassword, setIsValidPassword] = useState(false);
+    const verifyPassword = (password) => {
+      // regexPassword: Minimum eight characters, at least one uppercase letter,
+      // one lowercase letter and one number:
+      let regexPassword = new RegExp(
+        /((?=^.{8,}$)((?=.*\d)|(?=.*\W+))(?![.\n])(?=.*[A-Z])(?=.*[a-z]).*$)/
+      );
+      if (regexPassword.test(password)) {
+        return true;
+      }
+      return false;
+    };
+
+    const [openDropPicker, setOpenDropPicker] = useState(false);
+    const [value, setValue] = useState('2');
+    const [items, setItems] = useState([
+      { label: 'Sinh viên', value: '2' },
+      { label: 'Trưởng CLB', value: '5' },
+      { label: 'Bí thư', value: '6' }
+    ]);
+
+    // role id này để chuyển value từ 5, 6 thành 3 (vì trưởng clb, bí thư)
+    // cùng cấp và role_id của sv là 2
+    const [role_id, setRole_Id] = useState('2')
 
     const [dialogThongtin, setDialogThongtin] = useState(false);
 
-    const [mssv, setMssv] = useState(username);
-    const [hoVaTenLot, setHoVaTenLot] = useState('');
-    const [ten, setTen] = useState('');
-    const [sdt, setSdt] = useState('');
+    const [dialogPassword, setDialogPassword] = useState(false);
 
     const navigateFormContinue = () => {
   
       // console.log(date1, date2)
-      if (mssv == "" || hoVaTenLot == "" || ten == "" || sdt == "") {
-        setDialogThongtin(true);
+      if (
+        userName == '' || password == '' || value == null
+      ) {
+        setDialogThongtin(true)
+      }
+
+      else if (!isValidPassword) {
+        setDialogPassword (true)
       }
       else {
-        navigation.navigate("form3CreateStudent", {
-          username: username,
+        navigation.navigate("form2EditStudent", {
+          username: userName,
           password: password,
           role_id: role_id,
- 
-          MSSV: mssv,
-          first_name: hoVaTenLot,
-          last_name: ten,
-          phone: sdt,
+
+          account_id : account_id,
+          first_name : first_name,
+          last_name: last_name,
+          phone: phone,
+          email: email,
+          address: address,
+          class_id: class_id,
+          gender_id: gender_id,
+          birthday: birthday,
+          account: account,
         });
       }
     };
 
-    const {showKeyBoard} = useSelector(state => state.keyboardShow)
+    const dispatch = useDispatch()
+    useEffect(() => {
+      const showSubscription = Keyboard.addListener('keyboardDidShow', () => {
+        dispatch(showKeyBoardAction())
+      });
+      const hideSubscription = Keyboard.addListener('keyboardDidHide', () => {
+        dispatch(hideKeyBoardAction())
+      });
+  
+      // showSubscription.remove() và hideSubscription.remove() là các phương thức được 
+      // sử dụng để gỡ bỏ các hàm xử lý sự kiện đã được đăng ký trước đó thông qua addListener.
+      // Khi component bị unmount hoặc useEffect được gọi lại, các hàm xử lý sự kiện này 
+      // không còn cần thiết nữa, vì vậy chúng ta gọi remove() để loại bỏ chúng
+      return () => {
+        showSubscription.remove();
+        hideSubscription.remove();
+      };
+    }, []);
   
     return (
       <View style={styles.container}>
@@ -66,7 +138,7 @@ import {
               // borderWidth: 1,
               flexDirection: "row",
               height: (screenHeight * 1) / 8,
-              marginBottom: 10,
+              marginBottom: 20,
               justifyContent: "center",
               alignItems: "center",
             }}
@@ -124,14 +196,15 @@ import {
               style={{
                 width: 100,
                 height: 2,
-                backgroundColor: Color.colorDecorateStep,
+                backgroundColor: "#b1ceef",
+                // borderRadius: 50,
               }}
             />
             <View
               style={{
                 width: 15,
                 height: 15,
-                backgroundColor: Color.colorDecorateStep,
+                backgroundColor: "#b1ceef",
                 borderRadius: 50,
               }}
             />
@@ -159,35 +232,14 @@ import {
           <ScrollView
             style={{
               flex: 1,
-              marginTop: 10,
+              marginTop: 20,
               paddingHorizontal: 20,
-              marginBottom: showKeyBoard ? 1/2*screenHeight - 40: 0
             }}
           >
-            {/* MSSV */}
-            <View style={[styles.containerFormActive]}>
-              <View style={{ flexDirection: "row" }}>
-                <Text style={styles.headerFormActive}>Mã số sinh viên</Text>
-                <Text
-                  style={[
-                    styles.headerFormActive,
-                    { color: Color.colorRemove },
-                  ]}
-                >
-                  (*)
-                </Text>
-              </View>
-
-              <TextInput
-                style={styles.formActive}
-                value={mssv}
-              ></TextInput>
-            </View>
-
-            {/* Họ và tên lót */}
+            {/* Name active */}
             <View style={styles.containerFormActive}>
               <View style={{ flexDirection: "row" }}>
-                <Text style={styles.headerFormActive}>Họ và tên lót</Text>
+                <Text style={styles.headerFormActive}>Tên tài khoản</Text>
                 <Text
                   style={[
                     styles.headerFormActive,
@@ -201,17 +253,16 @@ import {
               <TextInput
                 style={styles.formActive}
                 autoFocus={true}
-                onChangeText={(hoVaTenLotInput) => {
-                  setHoVaTenLot(hoVaTenLotInput);
+                onChangeText={(userNameInput) => {
+                  setUserName(userNameInput);
                 }}
-                value={hoVaTenLot}
+                value={userName}
               ></TextInput>
             </View>
 
-            {/*Tên */}
             <View style={styles.containerFormActive}>
               <View style={{ flexDirection: "row" }}>
-                <Text style={styles.headerFormActive}>Tên</Text>
+                <Text style={styles.headerFormActive}>Mật khẩu</Text>
                 <Text
                   style={[
                     styles.headerFormActive,
@@ -221,20 +272,72 @@ import {
                   (*)
                 </Text>
               </View>
+              <View style={styles.containerPassword}>
+                <TextInput
+                  style={styles.password}
+                  placeholderTextColor={Color.colorTextMain}
+                  secureTextEntry={visiblePassword}
+                  onChangeText={(password) => {
+                    onChangePassword(password);
+                    const isValidPw = verifyPassword(password);
+                    isValidPw
+                      ? setIsValidPassword(true)
+                      : setIsValidPassword(false);
+                  }}
+                  // value này để hiển thị lên user
+                  value={password}
+                ></TextInput>
 
-              <TextInput
-                style={styles.formActive}
-                onChangeText={(tenInput) => {
-                  setTen(tenInput);
-                }}
-                value={ten}
-              ></TextInput>
+                {isValidPassword === false ? (
+                  <View style={{
+                    top: 26,
+                    position: "absolute",
+                    marginTop: 8,
+                  }}>
+                    <Text
+                      style={{
+                        fontSize: 16,
+                        color: "#ff5252",
+                        fontWeight: "500",
+                      }}
+                    >
+                      Password phải đủ 8 kí tự trong đó ít nhất 1 chữ số, 
+                    </Text>
+                    <Text
+                      style={{
+                        fontSize: 16,
+                        color: "#ff5252",
+                        fontWeight: "500",
+                      }}
+                    >
+                     1 chữ hoa và 1 chữ thường
+                    </Text>
+                  </View>
+                ) : (
+                  ""
+                )}
+
+                <TouchableOpacity onPress={changeIconPassword}>
+                  {visiblePassword ? (
+                    <Image
+                      source={require("../../../../../resource/iconLogin/eyeHide.png")}
+                      style={styles.eye}
+                      resizeMode="contain"
+                    ></Image>
+                  ) : (
+                    <Image
+                      source={require("../../../../../resource/iconLogin/eyeShow.png")}
+                      style={styles.eye}
+                      resizeMode="contain"
+                    ></Image>
+                  )}
+                </TouchableOpacity>
+              </View>
             </View>
 
-            {/* Số diện thoại */}
-            <View style={[styles.containerFormActive, {marginBottom: 32,}]}>
+            <View style={[styles.containerFormActive, { marginBottom: 50 }]}>
               <View style={{ flexDirection: "row" }}>
-                <Text style={styles.headerFormActive}>Số điện thoại</Text>
+                <Text style={styles.headerFormActive}>Chức vụ</Text>
                 <Text
                   style={[
                     styles.headerFormActive,
@@ -244,24 +347,13 @@ import {
                   (*)
                 </Text>
               </View>
-
-              <TextInput
-                keyboardType='number-pad'
-                style={styles.formActive}
-                onChangeText={(sdtInput) => {
-                  setSdt(sdtInput);
-                }}
-                value={sdt}
-              ></TextInput>
             </View>
 
             <View
               style={{
-                flex: 1,
                 flexDirection: "row",
                 alignItems: "center",
                 justifyContent: "space-between",
-                marginBottom: showKeyBoard ? 30: 0
               }}
             >
               <Text
@@ -316,9 +408,77 @@ import {
                   />
                 </Dialog.Container>
 
+                {/* dialogPassword */}
+                <Dialog.Container
+                  visible={dialogPassword}
+                  contentStyle={{
+                    backgroundColor: "#EEF7FF",
+                    borderRadius: 10,
+                    width: (1 / 2) * screenWidth + 150,
+                    height: (1 / 5) * screenHeight,
+                  }}
+                >
+                  <Dialog.Title
+                    style={{
+                      color: Color.colorTextMain,
+                      fontWeight: "700",
+                      fontSize: 20,
+                    }}
+                  >
+                    Thông báo
+                  </Dialog.Title>
+                  <Dialog.Description
+                    style={{ color: "black", fontSize: FontSize.sizeSmall + 2 }}
+                  >
+                    Mật khẩu chưa đúng định dạng
+                  </Dialog.Description>
+                  <Dialog.Button
+                    label="Ok"
+                    onPress={() => setDialogPassword(!dialogPassword)}
+                    style={[
+                      styles.btnCancel,
+                      {
+                        width: 60,
+                        height: 40,
+                        fontWeight: "700",
+                        fontSize: FontSize.sizeMain,
+                        color: Color.colorTextMain,
+                      },
+                    ]}
+                  />
+                </Dialog.Container>
               </TouchableOpacity>
             </View>
           </ScrollView>
+          <View style={styles.containerDropPicker}>
+            <DropDownPicker
+              open={openDropPicker}
+              value={value}
+              items={items}
+              setOpen={setOpenDropPicker}
+              setValue={setValue}
+              setItems={setItems}
+              onSelectItem={(item) => {
+                if (item.value == 5 || item.value == 6) {
+                  setRole_Id(3);
+                } else if (item.value == 2) {
+                  setRole_Id(2);
+                }
+              }}
+              placeholder="Chức vụ"
+              dropDownContainerStyle={{
+                borderWidth: 0,
+                elevation: 5,
+                shadowColor: Color.colorTextMain,
+              }}
+              style={styles.dropdown}
+              textStyle={{
+                fontSize: 17,
+                color: Color.colorTextMain,
+                fontWeight: "600",
+              }}
+            />
+          </View>
         </ImageBackground>
       </View>
     );
@@ -359,8 +519,9 @@ import {
   
     containerFormActive: {
       width: "100%",
-      height: 90,
+      height: 100,
       marginBottom: 20,
+      // borderWidth: 1,
       justifyContent: "center",
     },
   
@@ -434,5 +595,42 @@ import {
       fontWeight: "600",
       color: "white",
     },
- 
+
+    containerDropPicker: {
+      position: 'absolute',
+      top: 2/3*screenHeight - 70,
+      right: 20,
+      marginBottom: 20,
+    },
+    
+    dropdown: {
+      width: 72 * 2,
+      height: 28 * 1.6,
+      backgroundColor: Color.colorBgUiTap,
+      borderWidth: 0,
+      elevation: 2,
+      shadowColor: Color.colorTextMain
+    },
+
+    containerPassword: {
+      width: "100%",
+      height: 30,
+      borderBottomWidth: 1,
+      borderBottomColor: Color.colorBorder,
+      marginBottom: 15,
+      flexDirection: "row",
+      justifyContent: "space-between",
+    },
+  
+    password: {
+      fontSize: 20,
+      color: Color.colorTextMain,
+      width: "85%",
+    },
+  
+    
+  eye: {
+    height: 26,
+    width: 26,
+  },
   });

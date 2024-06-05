@@ -72,6 +72,7 @@ export default function Form2CreateActiveAdmin(props) {
   useEffect(() => {
     if (error != null && loading == false) {
       Alert.alert("Thông báo", error);
+      dispatch({ type: CREATE_ACTIVE_RESET });
     } else if (reponseSuccess == true && loading == false) {
       Alert.alert("Bạn đã tạo hoạt động thành công");
       navigation.dispatch(
@@ -80,6 +81,7 @@ export default function Form2CreateActiveAdmin(props) {
           routes: [{ name: "uiTapAdmin" }],
         })
       );
+      dispatch({ type: CREATE_ACTIVE_RESET });
     }
   }, [error, reponseSuccess, loading]);
 

@@ -19,17 +19,32 @@ import {
   import Dialog from 'react-native-dialog'
   import {useSelector} from "react-redux";
   
-  export default function Form2CreateStudent(props) {
+  export default function Form2EditStudent(props) {
     const {navigation} = props
-    const { username, password, role_id } = props.route.params;
+    const {
+      username,
+      password,
+      role_id,
+
+      account_id,
+      first_name,
+      last_name,
+      phone,
+      email,
+      address,
+      class_id,
+      gender_id,
+      birthday,
+      account,
+    } = props.route.params;
     
 
     const [dialogThongtin, setDialogThongtin] = useState(false);
 
     const [mssv, setMssv] = useState(username);
-    const [hoVaTenLot, setHoVaTenLot] = useState('');
-    const [ten, setTen] = useState('');
-    const [sdt, setSdt] = useState('');
+    const [hoVaTenLot, setHoVaTenLot] = useState(first_name);
+    const [ten, setTen] = useState(last_name);
+    const [sdt, setSdt] = useState(phone);
 
     const navigateFormContinue = () => {
   
@@ -38,15 +53,23 @@ import {
         setDialogThongtin(true);
       }
       else {
-        navigation.navigate("form3CreateStudent", {
+        navigation.navigate("form3EditStudent", {
           username: username,
           password: password,
           role_id: role_id,
- 
+
           MSSV: mssv,
           first_name: hoVaTenLot,
           last_name: ten,
           phone: sdt,
+
+          account_id:account_id ,
+          email2:email ,
+          address2:address ,
+          class_id2:class_id ,
+          gender_id2:gender_id ,
+          birthday2:birthday ,
+          account:account ,
         });
       }
     };

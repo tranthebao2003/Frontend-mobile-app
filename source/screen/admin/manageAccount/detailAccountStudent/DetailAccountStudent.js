@@ -27,7 +27,7 @@ import { CommonActions } from "@react-navigation/native";
 import { useDispatch, useSelector } from "react-redux";
 
 export default function DetailAccountStudent(props) {
-  const {
+  const accountStudent = {
     // account_id này dùng đề xóa, khóa tk
     account_id,
     MSSV,
@@ -175,8 +175,8 @@ export default function DetailAccountStudent(props) {
   };
 
   const yesBtnEdit = () => {
-    setDialogLock(!dialogLock);
-    // lockAcount()
+    setDialogEdit(!dialogEdit);
+    navigation.navigate('form1EditStudent', {accountStudent})
   };
 
   return (

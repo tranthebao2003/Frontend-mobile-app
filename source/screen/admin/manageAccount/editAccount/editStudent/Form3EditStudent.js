@@ -8,7 +8,6 @@ import {
   TextInput,
   TouchableOpacity,
   ScrollView,
-  Alert,
   Modal,
 } from "react-native";
 import React, { useState, useEffect } from "react";
@@ -24,22 +23,39 @@ import DatePicker from "react-native-modern-datepicker";
 import Dialog from "react-native-dialog";
 import { useDispatch, useSelector } from "react-redux";
 import { CommonActions } from "@react-navigation/native";
-import CreateStudentAction from "../../../../../redux/action/actionCreateUser/CreateStudentAction";
+import EditStudentAction from "../../../../../redux/action/editAccountStudentDTAction/EditStudentAction";
 import Spinner from 'react-native-loading-spinner-overlay'
-import { CREATE_STUDENT_RESET } from "../../../../../redux/types/typesCreateUser/TypesCreateStudent";
+import formatTime from '../../../../../component/formatTime/DDMMYYYY'
+import { EDIT_STUDENT_RESET } from "../../../../../redux/types/typesEditStudentDT/TypesEditStudent";
 
-
-export default function Form3CreateStudent(props) {
+export default function Form3EditStudent(props) {
   const { navigation } = props;
   const dispatch = useDispatch();
   const { loading, reponseSuccess, error } = useSelector(
-    (state) => state.createStudentReducer
+    (state) => state.editStudentReducer
   );
 
-  const { username, password, role_id, MSSV, first_name, last_name, phone } =
-    props.route.params;
+  const {
+    username,
+    password,
+    role_id,
+    MSSV,
+    first_name,
+    last_name,
+    phone,
+    account_id,
+    email2,
+    address2,
+    class_id2,
+    gender_id2,
+    birthday2,
+    account,
+  } = props.route.params;
 
-  const [dateOfBirth, setDateOfBirth] = useState("Chọn ngày");
+  const { status_id } = account;
+
+  const formatBirthday2 = formatTime(birthday2)
+  const [dateOfBirth, setDateOfBirth] = useState(formatBirthday2);
   const [openDateOfBirth, setOpenDateOfBirth] = useState(false); // open and close the modal
   const handleOnPressDateOfBirth = () => {
     setOpenDateOfBirth(!openDateOfBirth);
@@ -51,7 +67,7 @@ export default function Form3CreateStudent(props) {
   };
 
   const [openDropPicker, setOpenDropPicker] = useState(false);
-  const [value, setValue] = useState(null);
+  const [value, setValue] = useState(`${gender_id2}`);
   const [items, setItems] = useState([
     { label: "Nam", value: "1" },
     { label: "Nữ", value: "0" },
@@ -59,9 +75,9 @@ export default function Form3CreateStudent(props) {
 
   const [dialogThongtin, setDialogThongtin] = useState(false);
 
-  const [address, setAddress] = useState("");
-  const [maSoLop, setMaSoLop] = useState("");
-  const [email, setEmail] = useState("");
+  const [address, setAddress] = useState(address2);
+  const [maSoLop, setMaSoLop] = useState(class_id2);
+  const [email, setEmail] = useState(email2);
 
   // parseInt(role_id,10): chuyển qua kiểu số cơ số 10
   const roleIdConvertNumber = parseInt(role_id, 10);
@@ -80,11 +96,14 @@ export default function Form3CreateStudent(props) {
       const [day, month, year] = dateOfBirth.split('/');
       const formattedDate = `${year}/${month}/${day}`;
 
-      const accountStudent = {
+      const editAccountStudent = {
+        account_id: account_id,
         username: username,
         password: password,
         role_id: roleIdConvertNumber,
-        status_id: 1,
+
+        status_id: status_id,
+
         MSSV: MSSV,
         first_name: first_name,
         last_name: last_name,
@@ -96,28 +115,28 @@ export default function Form3CreateStudent(props) {
         birth_date: formattedDate,
       };
 
-      dispatch(CreateStudentAction(accountStudent));
+      dispatch(EditStudentAction(editAccountStudent));
     }
   };
 
 
   useEffect(() => {
-    dispatch({ type: CREATE_STUDENT_RESET });
+    dispatch({ type: EDIT_STUDENT_RESET });
   }, [dispatch]);
 
   useEffect(() => {
     if (error != null && loading == false) {
       Alert.alert("Thông báo", error);
-      dispatch({ type: CREATE_STUDENT_RESET });
+      dispatch({ type: EDIT_STUDENT_RESET });
     } else if (reponseSuccess == true && loading == false) {
-      Alert.alert("Bạn đã tạo tài khoản thành công");
+      Alert.alert("Bạn đã sửa tài khoản thành công");
       navigation.dispatch(
         CommonActions.reset({
           index: 0,
           routes: [{ name: "uiTapAdmin" }],
         })
       );
-      dispatch({ type: CREATE_STUDENT_RESET });
+      dispatch({ type: EDIT_STUDENT_RESET });
     }
   }, [error, reponseSuccess, loading]);
 
