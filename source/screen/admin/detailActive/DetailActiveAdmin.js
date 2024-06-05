@@ -253,6 +253,7 @@ export default function DetailActiveAdmin(props) {
             <View
               style={{
                 width: "50%",
+                alignSelf: "center",
               }}
             >
               <Text style={styles.contentText}>{act_name}</Text>

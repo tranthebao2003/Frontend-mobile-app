@@ -1,4 +1,4 @@
-import { createContext, useState } from "react";
+import { useState } from "react";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { Image, Text } from "react-native";
 import Color from "../../../component/Color";
@@ -8,28 +8,15 @@ import SelectTypeAccount from "./createAccount/SelectTypeAccount";
 import { useSelector } from "react-redux";
 
 const Tab = createBottomTabNavigator();
-export const UserLoginAdmin = createContext();
 
 function UITapManageAccount(props) {
-  const user = {
-    nameUser: "Trần Thế Bảo",
-    phone: "0377253857",
-    mssv: "n21dcpt008",
-    position: "Admin",
-    email: "n21dcpt008@student.ptithcm.edu.vn",
-    dateOfBirth: "22/2/2003",
-    // backend trả về cũng đc mà select count thui
-    numberOfActived: 10,
-  };
+
   const { showKeyBoard } = useSelector((state) => state.keyboardShow);
   return (
-    <UserLoginAdmin.Provider value={user}>
       <Tab.Navigator
         initialRouteName="listAccountStudent"
         screenOptions={{
           headerShown: false,
-          // tabBarActiveTintColor: Color.colorTextMain,
-          // tabBarInactiveTintColor: Color.inactive,
           tabBarStyle: {
             backgroundColor: Color.colorBgUiTap,
             position: "absolute",
@@ -42,6 +29,7 @@ function UITapManageAccount(props) {
         <Tab.Screen
           name="listAccountStudent"
           component={ListAccountStudent}
+          
           options={{
             tabBarIcon: ({ focused }) => {
               return (
@@ -56,7 +44,7 @@ function UITapManageAccount(props) {
                 ></Image>
               );
             },
-
+            
             tabBarLabel: ({ focused }) => {
               return (
                 <Text
@@ -143,7 +131,6 @@ function UITapManageAccount(props) {
           }}
         />
       </Tab.Navigator>
-    </UserLoginAdmin.Provider>
   );
 }
 

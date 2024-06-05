@@ -48,7 +48,6 @@ export default function FormCreateActiveAdmin(props) {
   const handleChangeOrganize = (propDate) => {
     const reversedStrOrganize = propDate.split("/").reverse().join("/");
     setdateOrganize(reversedStrOrganize);
-
   };
 
 

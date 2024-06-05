@@ -19,14 +19,14 @@ import OrganizedActiveItemAdmin from "./OrganizedActiveItemAdmin";
 import { useSelector, useDispatch } from "react-redux";
 import DatePicker from "react-native-modern-datepicker";
 import moment from "moment";
-import {
-  showKeyBoardAction,
-  hideKeyBoardAction,
-} from "../../../redux/action/KeyBoardAction";
+import ThongKeAdminDTAction from '../../../redux/action/thongKeAction/ThongKeAdminDTAction'
+import Spinner from 'react-native-loading-spinner-overlay';
+
 
 export default function ListOrganizedActiveAdmin({ navigation }) {
   const today = new Date();
   const dispatch = useDispatch();
+  const { loading, reponseSuccess, error, data} = useSelector(state => state.thongKeAdminDTReducer)
 
   // ngày tổ chức cách ngày hiện tại ít nhất 7 ngày
   const convertDateOrganize = moment(today.setDate(today.getDate())).format(
@@ -47,9 +47,47 @@ export default function ListOrganizedActiveAdmin({ navigation }) {
     setdateOrganize(reversedStrOrganize);
   };
 
+  const filterActiveThongKe = () => {
+    const [month, year] = dateOrganize.split("/")
+       
+    const monthYearLimit = {
+      year: parseInt(year, 10),
+      month: parseInt(month, 10),
+      limit: parseInt(limitActive, 10)
+    }
+    dispatch(ThongKeAdminDTAction(monthYearLimit));
+  }
+
+    useEffect(() => {
+     const [month, year] = dateOrganize.split("/")
+       
+      const monthYearLimit = {
+        year: parseInt(year, 10),
+        month: parseInt(month, 10),
+        limit: parseInt(limitActive, 10)
+      }
+      dispatch(ThongKeAdminDTAction(monthYearLimit));
+    }, [dispatch]);
+  
+    // Cập nhật state active khi dữ liệu từ Redux store thay đổi
+    useEffect(() => {
+      if (data) {
+        setActiveOrganize(data);
+      } else {
+        if (error != null) {
+          alert("Bạn vui lòng thoát app để vào lại");
+        }
+      }
+    }, [data]);
+
   return (
     <View style={styles.container}>
       <StatusBar style="auto" />
+      <Spinner
+        visible={loading}
+        textContent={"Loading..."}
+        textStyle={{ color: "white", fontSize: FontSize.sizeHeader }}
+      />
       <Image
         source={require("../../../resource/iconListActive/decorTop.png")}
         style={{
@@ -239,7 +277,7 @@ export default function ListOrganizedActiveAdmin({ navigation }) {
                 borderColor: Color.colorApproveAll,
               },
             ]}
-            onPress={() => alert("lọc hoạt động theo tháng, năm")}
+            onPress={filterActiveThongKe}
             disabled={dateOrganize == "MM/YYYY" ? true : false}
           >
             <Text

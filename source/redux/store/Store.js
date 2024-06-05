@@ -16,6 +16,7 @@ import RemoveActiveReducer from"../reducers/removeEditActiveReducer/RemoveActive
 import EditActiveReducer from"../reducers/removeEditActiveReducer/EditActiveReducer";
 import RemoveAccountReducer from"../reducers/removeLockAccountReducer/RemoveAccountReducer";
 import LockAccountReducer from"../reducers/removeLockAccountReducer/LockAccountReducer";
+import ThongKeAdminDTReducer from"../reducers/thongKeAction/ThongKeAdminDTReducer";
 
 import { thunk } from "redux-thunk";
 
@@ -37,6 +38,7 @@ const rootReducer = combineReducers({
     editActiveReducer: EditActiveReducer,
     removeAccountReducer: RemoveAccountReducer,
     lockAccountReducer: LockAccountReducer,
+    thongKeAdminDTReducer: ThongKeAdminDTReducer,
 })
 
 export default Store = createStore(rootReducer, applyMiddleware(thunk))

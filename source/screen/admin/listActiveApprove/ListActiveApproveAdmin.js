@@ -48,7 +48,7 @@ export default function ListActiveApproveAdmin(props) {
     if (listActive) {
       setActive(listActive);
     } else {
-      if (error !== "") {
+      if (error != null) {
         alert("Bạn vui lòng thoát app để vào lại");
       }
     }

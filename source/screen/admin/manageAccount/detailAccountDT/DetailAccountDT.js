@@ -20,8 +20,10 @@ import {
 
 import IsoTime from '../../../../component/formatTime/IsoTime'
 import RemoveAccountAction from "../../../../redux/action/removeLockAccountAction/RemoveAccountAction";
+import LockAccountAction from "../../../../redux/action/removeLockAccountAction/LockAccountAction";
 import Spinner from "react-native-loading-spinner-overlay";
 import { REMOVE_ACCOUNT_RESET } from "../../../../redux/types/typesRemoveLockAccount/TypesRemoveAccount";
+import { LOCK_ACCOUNT_RESET } from "../../../../redux/types/typesRemoveLockAccount/TypesLockAccount";
 import { CommonActions } from "@react-navigation/native";
 import { useDispatch, useSelector } from "react-redux";
 
@@ -50,12 +52,33 @@ export default function DetailAccountDT(props) {
     (state) => state.removeAccountReducer
   );
 
+  const { loadingLock, reponseSuccessLock, errorLock } = useSelector(
+    (state) => state.lockAccountReducer
+  );
+
   const deleteAcount = () => {
     dispatch(RemoveAccountAction(account_id));
   };
 
+  const lockAccount = () => {
+    const idStatusId = {
+      id: account_id,
+      status_id: 2
+    }
+    dispatch(LockAccountAction(idStatusId));
+  }
+
+  const unlockAccount = () => {
+    const idStatusId = {
+      id: account_id,
+      status_id: 1
+    }
+    dispatch(LockAccountAction(idStatusId));
+  }
+
   useEffect(() => {
     dispatch({ type: REMOVE_ACCOUNT_RESET });
+    dispatch({ type: LOCK_ACCOUNT_RESET });
   }, [dispatch]);
 
   useEffect(() => {
@@ -73,6 +96,22 @@ export default function DetailAccountDT(props) {
       dispatch({ type: REMOVE_ACCOUNT_RESET });
     }
   }, [error, loading, reponseSuccess])
+
+  useEffect(() => {
+    if (errorLock != null && loadingLock == false) {
+      Alert.alert("Thông báo", errorLock);
+      dispatch({ type: LOCK_ACCOUNT_RESET });
+    } else if (reponseSuccessLock == true && loadingLock == false) {
+      Alert.alert("Bạn đã thực hiện thành công");
+      navigation.dispatch(
+        CommonActions.reset({
+          index: 0,
+          routes: [{ name: "uiTapAdmin" }],
+        })
+      );
+      dispatch({ type: LOCK_ACCOUNT_RESET });
+    }
+  }, [errorLock, loadingLock, reponseSuccessLock]);
 
   const [trangThaiTk, setTrangThaiTK] = useState("");
   useEffect(() => {
@@ -106,14 +145,30 @@ export default function DetailAccountDT(props) {
   const [yesNotificationLock, setYesNotificationLock] = useState(false);
   const yesBtnLock = () => {
     setDialogLock(!dialogLock);
-  
+    lockAccount()
   };
+
+  const yesBtnUnLock = () => {
+    setDialogLock(!dialogLock);
+    unlockAccount()
+  };
+
+    // btn edit
+    const [dialogEdit, setDialogEdit] = useState(false);
+    const showHideDialogEdit = () => {
+      setDialogEdit(!dialogEdit);
+    };
+  
+    const yesBtnEdit = () => {
+      setDialogLock(!dialogLock);
+      // lockAcount()
+    };
 
   return (
     <ScrollView style={styles.container}>
       <StatusBar style="auto" />
       <Spinner
-        visible={loading}
+        visible={loading || loadingLock}
         textContent={"Loading..."}
         textStyle={{ color: "white", fontSize: FontSize.sizeHeader }}
       />
@@ -222,7 +277,7 @@ export default function DetailAccountDT(props) {
           >
             <View
               style={{
-                marginRight: 10,
+                marginRight: 30,
               }}
             >
               <Text style={styles.contentText}>{first_name + ' ' + last_name}</Text>
@@ -230,7 +285,8 @@ export default function DetailAccountDT(props) {
 
             <View
               style={{
-                backgroundColor: Color.colorBtn,
+                width: 0.5 *screenWidth - 50,
+                alignItems: 'center'
               }}
             >
               <Text style={styles.contentText}>
@@ -646,7 +702,7 @@ export default function DetailAccountDT(props) {
                 <Dialog.Button
                   label="Yes"
                   // call api, sau đó chuyển ko duyệt thành xóa
-                  onPress={yesBtnLock}
+                  onPress={yesBtnUnLock}
                   style={{
                     width: 60,
                     height: 40,
@@ -692,6 +748,67 @@ export default function DetailAccountDT(props) {
               </Dialog.Container>
             </TouchableOpacity>
           )}
+        </View>
+
+                {/* edit account */}
+                <View
+          style={{
+            width: "100%",
+            flexDirection: "row",
+            justifyContent: "center",
+          }}
+        >
+          <TouchableOpacity
+            style={[
+              styles.btnCancel,
+              { borderColor: Color.colorApproveAll, margin: 20, marginTop: 0 },
+            ]}
+            onPress={showHideDialogEdit}
+          >
+            <Text style={[styles.resigter, { color: Color.colorApproveAll }]}>
+              Sửa tài khoản
+            </Text>
+            <Dialog.Container visible={dialogEdit}>
+              <Dialog.Title
+                style={{ color: Color.colorTextMain, fontWeight: "700" }}
+              >
+                XÁC NHẬN
+              </Dialog.Title>
+              <Dialog.Description
+                style={{ color: "black", fontSize: FontSize.sizeMain - 2 }}
+              >
+                Bạn có muốn sửa tài khoản này không ?
+              </Dialog.Description>
+              <Dialog.Button
+                label="No"
+                onPress={showHideDialogEdit}
+                style={[
+                  styles.btnCancel,
+                  {
+                    width: 60,
+                    height: 40,
+                    marginRight: 30,
+                    fontWeight: 500,
+                    fontSize: 18,
+                    color: Color.colorRemove,
+                  },
+                ]}
+              />
+              <Dialog.Button
+                label="Yes"
+                onPress={yesBtnEdit}
+                style={{
+                  width: 60,
+                  height: 40,
+                  marginRight: 50,
+                  borderRadius: 5,
+                  backgroundColor: "#d9ebfe",
+                  fontWeight: 500,
+                  fontSize: 18,
+                }}
+              />
+            </Dialog.Container>
+          </TouchableOpacity>
         </View>
       </ImageBackground>
     </ScrollView>

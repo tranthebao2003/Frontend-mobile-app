@@ -7,7 +7,7 @@ import {
   ImageBackground,
   TouchableOpacity,
   ScrollView,
-  Alert
+  Alert,
 } from "react-native";
 import Dialog from "react-native-dialog";
 import { useState, useEffect } from "react";
@@ -59,11 +59,19 @@ export default function DetailAccountStudent(props) {
     dispatch(RemoveAccountAction(account_id));
   };
 
-  const clockAcount = () => {
+  const lockAcount = () => {
     const idStatusId = {
       id: account_id,
-      status_id: 2
-    }
+      status_id: 2,
+    };
+    dispatch(LockAccountAction(idStatusId));
+  };
+
+  const unlockAcount = () => {
+    const idStatusId = {
+      id: account_id,
+      status_id: 1,
+    };
     dispatch(LockAccountAction(idStatusId));
   };
 
@@ -78,6 +86,7 @@ export default function DetailAccountStudent(props) {
       dispatch({ type: REMOVE_ACCOUNT_RESET });
     } else if (reponseSuccess == true && loading == false) {
       Alert.alert("Bạn đã thực hiện thành công");
+
       navigation.dispatch(
         CommonActions.reset({
           index: 0,
@@ -137,7 +146,6 @@ export default function DetailAccountStudent(props) {
     setDialogRemove(!dialogRemove);
   };
 
-  const [yesNotificationRemove, setYesNotificationRemove] = useState(false);
   const yesBtnRemove = () => {
     // let save
     setDialogRemove(!dialogRemove);
@@ -150,27 +158,32 @@ export default function DetailAccountStudent(props) {
     setDialogLock(!dialogLock);
   };
 
-  const [yesNotificationLock, setYesNotificationLock] = useState(false);
   const yesBtnLock = () => {
     setDialogLock(!dialogLock);
-    clockAcount()
+    lockAcount();
   };
 
-  // const yesBtnUnLock = () => {
-  //   setDialogLock(!dialogLock);
-  //   clockAcount()
-  // };
+  const yesBtnUnLock = () => {
+    setDialogLock(!dialogLock);
+    unlockAcount();
+  };
+
+  // btn edit
+  const [dialogEdit, setDialogEdit] = useState(false);
+  const showHideDialogEdit = () => {
+    setDialogEdit(!dialogEdit);
+  };
+
+  const yesBtnEdit = () => {
+    setDialogLock(!dialogLock);
+    // lockAcount()
+  };
 
   return (
     <ScrollView style={styles.container}>
       <StatusBar style="auto" />
       <Spinner
-        visible={loading}
-        textContent={"Loading..."}
-        textStyle={{ color: "white", fontSize: FontSize.sizeHeader }}
-      />
-      <Spinner
-        visible={loadingLock}
+        visible={loading || loadingLock}
         textContent={"Loading..."}
         textStyle={{ color: "white", fontSize: FontSize.sizeHeader }}
       />
@@ -279,7 +292,7 @@ export default function DetailAccountStudent(props) {
           >
             <View
               style={{
-                marginRight: 10,
+                marginRight: 30,
               }}
             >
               <Text style={styles.contentText}>{MSSV}</Text>
@@ -287,7 +300,8 @@ export default function DetailAccountStudent(props) {
 
             <View
               style={{
-                backgroundColor: Color.colorBtn,
+                width: 0.5 * screenWidth - 30,
+                alignItems: "center",
               }}
             >
               <Text style={styles.contentText}>
@@ -513,7 +527,7 @@ export default function DetailAccountStudent(props) {
             justifyContent: "center",
           }}
         >
-          {/* remove sinh viên khỏi hđ */}
+          {/* remove tài khoản*/}
 
           <TouchableOpacity
             style={styles.btnCancel}
@@ -561,22 +575,6 @@ export default function DetailAccountStudent(props) {
                   fontSize: 18,
                 }}
               />
-            </Dialog.Container>
-            <Dialog.Container visible={yesNotificationRemove}>
-              <Dialog.Title
-                style={{
-                  color: Color.colorTextMain,
-                  fontWeight: "700",
-                  fontSize: FontSize.sizeMain - 2,
-                }}
-              >
-                THÔNG BÁO
-              </Dialog.Title>
-              <Dialog.Description
-                style={{ color: "black", fontSize: FontSize.sizeMain - 2 }}
-              >
-                Bạn đã xóa sinh viên thành công !
-              </Dialog.Description>
             </Dialog.Container>
           </TouchableOpacity>
 
@@ -642,36 +640,6 @@ export default function DetailAccountStudent(props) {
                   }}
                 />
               </Dialog.Container>
-              <Dialog.Container visible={yesNotificationLock}>
-                <Dialog.Title
-                  style={{
-                    color: Color.colorTextMain,
-                    fontWeight: "700",
-                    fontSize: FontSize.sizeMain - 2,
-                  }}
-                >
-                  THÔNG BÁO
-                </Dialog.Title>
-                <Dialog.Description
-                  style={{ color: "black", fontSize: FontSize.sizeMain - 2 }}
-                >
-                  Bạn đã khóa tài khoản thành công!
-                </Dialog.Description>
-                <Dialog.Button
-                  label="Ok"
-                  onPress={() => setYesNotificationLock(!yesNotificationLock)}
-                  style={[
-                    styles.btnCancel,
-                    {
-                      width: 60,
-                      height: 40,
-                      marginRight: 30,
-                      fontWeight: 500,
-                      fontSize: 18,
-                    },
-                  ]}
-                />
-              </Dialog.Container>
             </TouchableOpacity>
           ) : (
             // btn unlock
@@ -735,38 +703,69 @@ export default function DetailAccountStudent(props) {
                   }}
                 />
               </Dialog.Container>
-              <Dialog.Container visible={yesNotificationLock}>
-                <Dialog.Title
-                  style={{
-                    color: Color.colorTextMain,
-                    fontWeight: "700",
-                    fontSize: FontSize.sizeMain - 2,
-                  }}
-                >
-                  THÔNG BÁO
-                </Dialog.Title>
-                <Dialog.Description
-                  style={{ color: "black", fontSize: FontSize.sizeMain - 2 }}
-                >
-                  Bạn đã mở tài khoản thành công!
-                </Dialog.Description>
-                <Dialog.Button
-                  label="Ok"
-                  onPress={() => setYesNotificationLock(!yesNotificationLock)}
-                  style={[
-                    styles.btnCancel,
-                    {
-                      width: 60,
-                      height: 40,
-                      marginRight: 30,
-                      fontWeight: 500,
-                      fontSize: 18,
-                    },
-                  ]}
-                />
-              </Dialog.Container>
             </TouchableOpacity>
           )}
+        </View>
+
+        {/* edit account */}
+        <View
+          style={{
+            width: "100%",
+            flexDirection: "row",
+            justifyContent: "center",
+          }}
+        >
+          <TouchableOpacity
+            style={[
+              styles.btnCancel,
+              { borderColor: Color.colorApproveAll, margin: 20, marginTop: 0 },
+            ]}
+            onPress={showHideDialogEdit}
+          >
+            <Text style={[styles.resigter, { color: Color.colorApproveAll }]}>
+              Sửa tài khoản
+            </Text>
+            <Dialog.Container visible={dialogEdit}>
+              <Dialog.Title
+                style={{ color: Color.colorTextMain, fontWeight: "700" }}
+              >
+                XÁC NHẬN
+              </Dialog.Title>
+              <Dialog.Description
+                style={{ color: "black", fontSize: FontSize.sizeMain - 2 }}
+              >
+                Bạn có muốn sửa tài khoản này không ?
+              </Dialog.Description>
+              <Dialog.Button
+                label="No"
+                onPress={showHideDialogEdit}
+                style={[
+                  styles.btnCancel,
+                  {
+                    width: 60,
+                    height: 40,
+                    marginRight: 30,
+                    fontWeight: 500,
+                    fontSize: 18,
+                    color: Color.colorRemove,
+                  },
+                ]}
+              />
+              <Dialog.Button
+                label="Yes"
+                onPress={yesBtnEdit}
+                style={{
+                  width: 60,
+                  height: 40,
+                  marginRight: 50,
+                  borderRadius: 5,
+                  backgroundColor: "#d9ebfe",
+                  fontWeight: 500,
+                  fontSize: 18,
+                }}
+              />
+            </Dialog.Container>
+          </TouchableOpacity>
         </View>
       </ImageBackground>
     </ScrollView>
