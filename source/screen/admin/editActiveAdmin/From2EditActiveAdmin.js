@@ -21,6 +21,7 @@ import EditActiveAction from "../../../redux/action/removeEditActiveAction/EditA
 import Spinner from 'react-native-loading-spinner-overlay'
 import { CommonActions } from "@react-navigation/native";
 import { EDIT_ACTIVE_RESET } from "../../../redux/types/typesRemoveEditActive/TypesEditActive";
+import formatTime from "../../../component/formatTime/DDMMYYYY";
 
 export default function From2EditActiveAdmin(props) {
   const dispatch = useDispatch()
@@ -51,16 +52,8 @@ export default function From2EditActiveAdmin(props) {
     if (location === "" || organizer === "") {
       Alert.alert("Thông báo", "Bạn vui lòng nhập đủ thông tin");
     } else {
-      let formattedDate = ''
-      if(act_time.includes('/')){
-        const [day, month, year] = act_time.split('/');
-        formattedDate= `${year}/${month}/${day}`;
-      } else if (act_time.includes('-')){
-        const [day, month, year] = act_time.split('-');
-        formattedDate = `${year}/${month}/${day}`;
-      }
+      let formattedDate = formatTime(act_time)
      
-
       const editActive = {
         id : id,
         act_name: act_name,

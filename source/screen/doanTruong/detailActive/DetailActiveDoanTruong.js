@@ -9,6 +9,7 @@ import {
   FlatList,
   TouchableOpacity,
   ScrollView,
+  Alert
 } from "react-native";
 import Dialog from "react-native-dialog";
 import { useEffect, useState } from "react";
@@ -27,7 +28,7 @@ export default function DetailActiveDoanTruong(props) {
   const dispatch = useDispatch()
 
   const { loading, data, error } = useSelector(
-    (state) => state.acceptActiveByDTReducer
+    (state) => state.acceptActiveByStudentReducer
   );
 
 
@@ -44,6 +45,7 @@ export default function DetailActiveDoanTruong(props) {
     audit_id,
     createdAt,
     updatedAt,
+    organization
   } = props.route.params.detailActiveDoanTruong;
 
   const acceptActiveByDT = () => {
@@ -95,11 +97,9 @@ export default function DetailActiveDoanTruong(props) {
     setDialogCancel(!dialogCancel);
   };
 
-  const [yesNotificationCancel, setYesNotificationCancel] = useState(false);
   const yesBtnCancel = () => {
     setDialogCancel(!dialogCancel);
     unAcceptActiveByDT()
-    // setYesNotificationCancel(!yesNotificationCancel);
   };
 
   // btn resigter
@@ -108,18 +108,10 @@ export default function DetailActiveDoanTruong(props) {
     setDialogRegister(!dialogResigter);
   };
 
-  const [yesNotificationResigter, setYesNotificationResigter] = useState(false);
   const yesBtnResigter = () => {
     setDialogRegister(!dialogResigter);
-    acceptActiveByDT()
-    // setYesNotificationResigter(!yesNotificationResigter);
-    
+    acceptActiveByDT() 
   };
-
-  useEffect(() => {
-    console.log(data)
-   
-  }, [data])
 
 
   const [statusActive, setStatusActive] = useState()
@@ -362,7 +354,7 @@ export default function DetailActiveDoanTruong(props) {
                 marginRight: 20,
               }}
             >
-              Mô tả
+              Đơn vị tổ chức
             </Text>
 
             <Text
@@ -372,7 +364,7 @@ export default function DetailActiveDoanTruong(props) {
                 fontWeight: 400,
               }}
             >
-              {act_description}
+              {organization}
             </Text>
           </View>
 
@@ -519,32 +511,6 @@ export default function DetailActiveDoanTruong(props) {
                   }}
                 />
               </Dialog.Container>
-              <Dialog.Container visible={yesNotificationCancel}>
-                <Dialog.Title
-                  style={{ color: Color.colorTextMain, fontWeight: "700" }}
-                >
-                  THÔNG BÁO
-                </Dialog.Title>
-                <Dialog.Description style={{ color: "black" }}>
-                  Bạn đã hủy tham gia thành công!
-                </Dialog.Description>
-                <Dialog.Button
-                  label="Ok"
-                  onPress={() =>
-                    setYesNotificationCancel(!yesNotificationCancel)
-                  }
-                  style={[
-                    styles.btnCancel,
-                    {
-                      width: 60,
-                      height: 40,
-                      marginRight: 30,
-                      fontWeight: 500,
-                      fontSize: 18,
-                    },
-                  ]}
-                />
-              </Dialog.Container>
             </TouchableOpacity>
 
             {/* btn resigter */}
@@ -590,32 +556,6 @@ export default function DetailActiveDoanTruong(props) {
                     fontWeight: 500,
                     fontSize: 18,
                   }}
-                />
-              </Dialog.Container>
-              <Dialog.Container visible={yesNotificationResigter}>
-                <Dialog.Title
-                  style={{ color: Color.colorTextMain, fontWeight: "700" }}
-                >
-                  THÔNG BÁO
-                </Dialog.Title>
-                <Dialog.Description style={{ color: "black" }}>
-                  Bạn đã duyệt thành công!
-                </Dialog.Description>
-                <Dialog.Button
-                  label="Ok"
-                  onPress={() =>
-                    setYesNotificationResigter(!yesNotificationResigter)
-                  }
-                  style={[
-                    styles.btnCancel,
-                    {
-                      width: 60,
-                      height: 40,
-                      marginRight: 30,
-                      fontWeight: 500,
-                      fontSize: 18,
-                    },
-                  ]}
                 />
               </Dialog.Container>
             </TouchableOpacity>

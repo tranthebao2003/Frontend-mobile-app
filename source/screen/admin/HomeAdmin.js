@@ -8,29 +8,37 @@ import {
   Image,
   ImageBackground,
   TouchableOpacity,
+  ScrollView,
 } from "react-native";
 import { screenHeight, screenWidth } from "../../component/DimensionsScreen";
 import { SafeAreaView } from "react-native-safe-area-context";
+import Dialog from "react-native-dialog";
+import { LogoutAction } from "../../redux/action/LoginAction";
+import { useState } from "react";
+import { useDispatch } from "react-redux";
 
 function HomeAdmin(props) {
   const { navigation } = props;
+  const dispatch = useDispatch()
+  const [dialogCancel, setDialogCancel] = useState(false);
+  const showHideDialogCancel = () => {
+    setDialogCancel(!dialogCancel);
+  };
   return (
-    <SafeAreaView
-      style={{
-        flex: 1,
-        zIndex: 0,
-        alignItems: "center",
-        backgroundColor: Color.colorBgUiTap,
-      }}
+    <ImageBackground
+      source={require("../../resource/iconLogin/bg.png")}
+      resizeMode="cover"
+      style={{ width: "100%", height: "120%" }}
     >
-      <StatusBar barStyle="auto"></StatusBar>
-      {/* banner */}
-      <ImageBackground
-        source={require("../../resource/iconLogin/bg.png")}
-        resizeMode="cover"
-        style={{ width: "100%", height: "120%",}}
+      <View>
+      <ScrollView
+        style={{
+          height: screenHeight -146,
+        }}
       >
-        
+        <StatusBar barStyle="auto"></StatusBar>
+        {/* banner */}
+
         {/* banner */}
         <View
           style={{
@@ -39,7 +47,7 @@ function HomeAdmin(props) {
             overflow: "hidden",
             justifyContent: "center",
             alignItems: "center",
-            opacity: 0.6
+            opacity: 0.6,
           }}
         >
           <Image
@@ -56,12 +64,12 @@ function HomeAdmin(props) {
         <View
           style={{
             width: screenWidth,
-            height: 0.35*screenHeight,
+            height: 0.35 * screenHeight,
             padding: 35,
             paddingTop: 30,
-            alignItems: 'center',
+            alignItems: "center",
             borderWidth: 0.15,
-            borderColor: Color.colorTextMain
+            borderColor: Color.colorTextMain,
           }}
         >
           {/* three item top */}
@@ -144,7 +152,9 @@ function HomeAdmin(props) {
                 />
               </TouchableOpacity>
               <Text style={styles.bottomText}>Thống kê</Text>
-              <Text style={[styles.bottomText, { marginTop: -2 }]}>hoạt động</Text>
+              <Text style={[styles.bottomText, { marginTop: -2 }]}>
+                hoạt động
+              </Text>
             </View>
 
             {/* list actived */}
@@ -154,13 +164,15 @@ function HomeAdmin(props) {
                 onPress={() => navigation.navigate("uiTapManageAccount")}
               >
                 <Image
-                  style={{width: 45,height: 45}}
-                  resizeMode='contain'
+                  style={{ width: 45, height: 45 }}
+                  resizeMode="contain"
                   source={require("../../resource/iconHomeDoanTruong/manageAccount.png")}
                 />
               </TouchableOpacity>
               <Text style={styles.bottomText}>Quản lý</Text>
-              <Text style={[styles.bottomText, { marginTop: -2 }]}>tài khoản</Text>
+              <Text style={[styles.bottomText, { marginTop: -2 }]}>
+                tài khoản
+              </Text>
             </View>
 
             {/* list approve active  */}
@@ -185,51 +197,108 @@ function HomeAdmin(props) {
 
         {/* posision, logo */}
         <View style={styles.containerPositionLogo}>
-        <Image
-          source={require("../../resource/iconHomeAdmin/iconAdmin.png")}
-          style={{
-            height: 42,
-            width: 42,
-            position: "absolute",
-            left: 12,
-            top: 13,
-            zIndex: 2,
-          }}
-          resizeMode="contain"
-        ></Image>
+          <Image
+            source={require("../../resource/iconHomeAdmin/iconAdmin.png")}
+            style={{
+              height: 42,
+              width: 42,
+              position: "absolute",
+              left: 12,
+              top: 13,
+              zIndex: 2,
+            }}
+            resizeMode="contain"
+          ></Image>
           <Text style={styles.header}>Admin</Text>
         </View>
 
-        <View style={{width: '100%',}}>
-        <Image
-          source={require("../../resource/iconLogin/lotLogo2.png")}
-          style={{
-            height: 68,
-            width: 68,
-            position: "absolute",
-            right: 42,
-            bottom: 0,
-            borderRadius: 8,
-            zIndex: 1,
-          }}
-          resizeMode="contain"
-        ></Image>
-        <Image
-          source={require("../../resource/iconLogin/logo.png")}
-          style={{
-            height: 60,
-            width: 60,
-            position: "absolute",
-            right: 45,
-            bottom: 2,
-            borderRadius: 16,
-            zIndex: 2,
-          }}
-          resizeMode="contain"
-        ></Image>
+        <View style={{ width: "100%" }}>
+          <Image
+            source={require("../../resource/iconLogin/lotLogo2.png")}
+            style={{
+              height: 68,
+              width: 68,
+              position: "absolute",
+              right: 42,
+              bottom: 0,
+              borderRadius: 8,
+              zIndex: 1,
+            }}
+            resizeMode="contain"
+          ></Image>
+          <Image
+            source={require("../../resource/iconLogin/logo.png")}
+            style={{
+              height: 60,
+              width: 60,
+              position: "absolute",
+              right: 45,
+              bottom: 2,
+              borderRadius: 16,
+              zIndex: 2,
+            }}
+            resizeMode="contain"
+          ></Image>
         </View>
-      </ImageBackground>
-    </SafeAreaView>
+
+        {/* btn logout*/}
+        <TouchableOpacity
+          style={styles.btnCancel}
+          onPress={showHideDialogCancel}
+        >
+          <Text style={[styles.resigter, { color: Color.colorRemove }]}>
+            Đăng xuất
+          </Text>
+          <Dialog.Container
+            visible={dialogCancel}
+            contentStyle={{
+              width: (3 / 4) * screenWidth,
+              height: (1 / 5) * screenHeight,
+            }}
+          >
+            <Dialog.Title
+              style={{ color: Color.colorTextMain, fontWeight: "700" }}
+            >
+              XÁC NHẬN
+            </Dialog.Title>
+            <Dialog.Description style={{ color: "black" }}>
+              Bạn có chắc muốn đăng xuất?
+            </Dialog.Description>
+            <Dialog.Button
+              label="No"
+              onPress={showHideDialogCancel}
+              style={{
+                width: 60,
+                height: 40,
+                marginRight: 30,
+                marginTop: 10,
+                borderRadius: 5,
+                fontWeight: 500,
+                fontSize: 18,
+                borderWidth: 1,
+                borderColor: Color.colorRemove,
+                color: Color.colorRemove,
+              }}
+            />
+            <Dialog.Button
+              label="Yes"
+              onPress={() => dispatch(LogoutAction())}
+              style={{
+                width: 60,
+                height: 40,
+                marginTop: 10,
+                marginRight: 50,
+                borderRadius: 5,
+                backgroundColor: "#d9ebfe",
+                fontWeight: 500,
+                fontSize: 18,
+              }}
+            />
+          </Dialog.Container>
+        </TouchableOpacity>
+      </ScrollView>
+      </View>
+    </ImageBackground>
   );
 }
 const styles = StyleSheet.create({
@@ -241,7 +310,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     borderRadius: 10,
     elevation: 2,
-    shadowColor: 'black'
+    shadowColor: "black",
   },
 
   icon: {
@@ -256,7 +325,7 @@ const styles = StyleSheet.create({
   },
 
   containerPositionLogo: {
-    width: 0.8*screenWidth,
+    width: 0.8 * screenWidth,
     marginLeft: 40,
     marginTop: 25,
     paddingVertical: 20,
@@ -264,14 +333,33 @@ const styles = StyleSheet.create({
     backgroundColor: Color.colorBgUiTap,
     borderRadius: 10,
     elevation: 2,
-    shadowColor: 'black',
+    shadowColor: "black",
   },
 
   header: {
     fontSize: FontSize.sizeMain,
     fontWeight: "600",
     color: Color.colorTextMain,
-    marginLeft: 50
+    marginLeft: 50,
+  },
+
+  btnCancel: {
+    width: 85 * 2,
+    height: 30 * 1.6,
+    marginVertical: 30,
+    marginRight: 44,
+    justifyContent: "center",
+    alignItems: "center",
+    alignSelf: "flex-end",
+    borderWidth: 1,
+    borderRadius: 10,
+    borderColor: Color.colorRemove,
+  },
+
+  resigter: {
+    fontSize: FontSize.sizeSmall + 6,
+    fontWeight: "700",
+    color: Color.colorTextMain,
   },
 });
 export default HomeAdmin;

@@ -16,20 +16,21 @@ import Color from "../../../component/Color";
 import { screenWidth, screenHeight } from "../../../component/DimensionsScreen";
 import moment from 'moment'
 import { useSelector, useDispatch} from "react-redux";
-import AcceptActiveByStudentAction from '../../../redux/action/putAction/putAcceptAction/AcceptActiveByStudentAction'
+import RemoveActiveAction from '../../../redux/action/removeEditActiveAction/RemoveActiveAction'
 import Spinner from 'react-native-loading-spinner-overlay'
-import {ACCEPT_ACTIVITY_BY_STUDENT_RESET}from '../../../redux/types/typesPutAccept/typesPutAccept/TypesAcceptActiveByStudent'
+import {REMOVE_ACTIVE_RESET}from '../../../redux/types/typesRemoveEditActive/TypesRemoveActive'
 import { CommonActions } from "@react-navigation/native";
 
-export default function DetailActiveApprove(props) {
-  const {navigation} = props
+export default function DetailActiveCreatedDT(props) {
+ const {navigation} = props
   const dispatch = useDispatch()
 
-  const { loading, data, error } = useSelector(
-    (state) => state.acceptActiveByStudentReducer
+  const { loading, reponseSuccess, error } = useSelector(
+    (state) => state.removeActiveReducer
   );
 
-  const {
+
+  const active = {
     id,
     act_name,
     act_description,
@@ -43,40 +44,22 @@ export default function DetailActiveApprove(props) {
     createdAt,
     updatedAt,
     organization
-  } = props.route.params.detailActiveApprove;
+  } = props.route.params.detailActiveCreatedDT;
 
-  const acceptActiveByStudent = () => {
-  
-    const statusAndId = {
-      id: id,
-      // nghĩa là duyệt
-      status: 2
-    };
 
-    dispatch(AcceptActiveByStudentAction(statusAndId));
-
-  };
-  const unAcceptActiveByStudent = () => {
-  
-    const statusAndId = {
-      id: id,
-      // nghĩa là duyệt
-      status: 4
-    };
-
-    dispatch(AcceptActiveByStudentAction(statusAndId));
-
+  const deleteActive = () => {
+    dispatch(RemoveActiveAction(id))
   };
 
   useEffect(() => {
-    dispatch({ type: ACCEPT_ACTIVITY_BY_STUDENT_RESET });
+    dispatch({ type: REMOVE_ACTIVE_RESET });
   }, [dispatch]);
 
   useEffect(() => {
     if (error != null && loading == false) {
       Alert.alert("Thông báo", error);
-      dispatch({ type: ACCEPT_ACTIVITY_BY_STUDENT_RESET });
-    } else if(data != null && loading == false){
+      dispatch({ type: REMOVE_ACTIVE_RESET });
+    } else if(reponseSuccess == true && loading == false){
       Alert.alert("Bạn đã thực hiện thành công");
       navigation.dispatch(
         CommonActions.reset({
@@ -84,9 +67,9 @@ export default function DetailActiveApprove(props) {
           routes: [{ name: "uiTapDTruong" }],
         })
       );
-      dispatch({ type: ACCEPT_ACTIVITY_BY_STUDENT_RESET });
+      dispatch({ type: REMOVE_ACTIVE_RESET });
     }
-  }, [error, loading, data]);
+  }, [error, loading, reponseSuccess]);
 
   // btn cancel
   const [dialogCancel, setDialogCancel] = useState(false);
@@ -94,11 +77,11 @@ export default function DetailActiveApprove(props) {
     setDialogCancel(!dialogCancel);
   };
 
-
+  const [yesNotificationCancel, setYesNotificationCancel] = useState(false);
   const yesBtnCancel = () => {
     setDialogCancel(!dialogCancel);
-    unAcceptActiveByStudent()
-    // setYesNotificationCancel(!yesNotificationCancel);
+
+    deleteActive()
   };
 
   // btn resigter
@@ -107,18 +90,13 @@ export default function DetailActiveApprove(props) {
     setDialogRegister(!dialogResigter);
   };
 
-  
+  const [yesNotificationResigter, setYesNotificationResigter] = useState(false);
   const yesBtnResigter = () => {
     setDialogRegister(!dialogResigter);
-    acceptActiveByStudent()
+    navigation.navigate('from1EditActiveDoanTruong', {from1EditActiveDoanTruong : active})
     // setYesNotificationResigter(!yesNotificationResigter);
     
   };
-
-  useEffect(() => {
-    console.log(data)
-   
-  }, [data])
 
 
   const [statusActive, setStatusActive] = useState()
@@ -465,7 +443,7 @@ export default function DetailActiveApprove(props) {
           </View>
         </View>
 
-        {act_status == 1 || act_status == 2 ? (
+        {act_status == 1 ? (
           <View
             style={{
               width: "100%",
@@ -476,10 +454,10 @@ export default function DetailActiveApprove(props) {
             {/* btn cancel */}
 
             <TouchableOpacity
-              style={styles.btnCancel}
+              style={[styles.btnCancel, {borderColor : Color.colorRemove}]}
               onPress={showHideDialogCancel}
             >
-              <Text style={styles.resigter}>Không duyệt</Text>
+              <Text style={[styles.resigter, {color: Color.colorRemove}]}>Xóa</Text>
               <Dialog.Container visible={dialogCancel}>
                 <Dialog.Title
                   style={{ color: Color.colorTextMain, fontWeight: "700" }}
@@ -487,7 +465,7 @@ export default function DetailActiveApprove(props) {
                   XÁC NHẬN
                 </Dialog.Title>
                 <Dialog.Description style={{ color: "black" }}>
-                  Bạn có chắc không duyệt hoạt động này ?
+                  Bạn có chắc xóa hoạt động này ?
                 </Dialog.Description>
                 <Dialog.Button
                   label="No"
@@ -517,15 +495,40 @@ export default function DetailActiveApprove(props) {
                   }}
                 />
               </Dialog.Container>
+              <Dialog.Container visible={yesNotificationCancel}>
+                <Dialog.Title
+                  style={{ color: Color.colorTextMain, fontWeight: "700" }}
+                >
+                  THÔNG BÁO
+                </Dialog.Title>
+                <Dialog.Description style={{ color: "black" }}>
+                  Bạn đã hủy tham gia thành công!
+                </Dialog.Description>
+                <Dialog.Button
+                  label="Ok"
+                  onPress={() =>
+                    setYesNotificationCancel(!yesNotificationCancel)
+                  }
+                  style={[
+                    styles.btnCancel,
+                    {
+                      width: 60,
+                      height: 40,
+                      marginRight: 30,
+                      fontWeight: 500,
+                      fontSize: 18,
+                    },
+                  ]}
+                />
+              </Dialog.Container>
             </TouchableOpacity>
 
             {/* btn resigter */}
             <TouchableOpacity
               style={styles.btnResigter}
               onPress={showHideDialogRegister}
-              disabled={act_status == 2 ? true : false}
             >
-              <Text style={styles.resigter}>Duyệt</Text>
+              <Text style={styles.resigter}>Sửa</Text>
               <Dialog.Container visible={dialogResigter}>
                 <Dialog.Title
                   style={{ color: Color.colorTextMain, fontWeight: "700" }}
@@ -533,7 +536,7 @@ export default function DetailActiveApprove(props) {
                   XÁC NHẬN
                 </Dialog.Title>
                 <Dialog.Description style={{ color: "black" }}>
-                  Bạn có chắc duyệt hoạt động này ?
+                  Bạn có chắc sửa hoạt động này ?
                 </Dialog.Description>
                 <Dialog.Button
                   label="No"
@@ -561,6 +564,32 @@ export default function DetailActiveApprove(props) {
                     fontWeight: 500,
                     fontSize: 18,
                   }}
+                />
+              </Dialog.Container>
+              <Dialog.Container visible={yesNotificationResigter}>
+                <Dialog.Title
+                  style={{ color: Color.colorTextMain, fontWeight: "700" }}
+                >
+                  THÔNG BÁO
+                </Dialog.Title>
+                <Dialog.Description style={{ color: "black" }}>
+                  Bạn đã duyệt thành công!
+                </Dialog.Description>
+                <Dialog.Button
+                  label="Ok"
+                  onPress={() =>
+                    setYesNotificationResigter(!yesNotificationResigter)
+                  }
+                  style={[
+                    styles.btnCancel,
+                    {
+                      width: 60,
+                      height: 40,
+                      marginRight: 30,
+                      fontWeight: 500,
+                      fontSize: 18,
+                    },
+                  ]}
                 />
               </Dialog.Container>
             </TouchableOpacity>

@@ -43,6 +43,7 @@ export default function DetailActiveCreatedAdmin(props) {
     audit_id,
     createdAt,
     updatedAt,
+    organization
   } = props.route.params.detailActiveCreatedAdmin;
 
 
@@ -338,7 +339,7 @@ export default function DetailActiveCreatedAdmin(props) {
                 marginRight: 20,
               }}
             >
-              Mô tả
+              Đơn vị tổ chức
             </Text>
 
             <Text
@@ -348,7 +349,7 @@ export default function DetailActiveCreatedAdmin(props) {
                 fontWeight: 400,
               }}
             >
-              {act_description}
+              {organization}
             </Text>
           </View>
 

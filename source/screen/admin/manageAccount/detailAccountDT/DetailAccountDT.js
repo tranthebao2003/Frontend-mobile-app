@@ -29,7 +29,7 @@ import { useDispatch, useSelector } from "react-redux";
 
 
 export default function DetailAccountDT(props) {
-  const {
+  const accountDT = {
     // account_id: dùng để xóa, khóa tk
     account_id,
     first_name,
@@ -160,8 +160,8 @@ export default function DetailAccountDT(props) {
     };
   
     const yesBtnEdit = () => {
-      setDialogLock(!dialogLock);
-      // lockAcount()
+      setDialogEdit(!dialogEdit);
+      navigation.navigate('form1EditDoanTruong', {accountDT})
     };
 
   return (

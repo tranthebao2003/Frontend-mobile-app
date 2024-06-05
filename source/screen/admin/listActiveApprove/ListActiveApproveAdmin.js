@@ -70,18 +70,6 @@ export default function ListActiveApproveAdmin(props) {
   console.log(active, "active màn screenList");
   console.log(filterActive, "filtered active màn screenList");
 
-  // btn duyệt all
-  const [dialogCancel, setDialogCancel] = useState(false);
-  const showHideDialogCancel = () => {
-    setDialogCancel(!dialogCancel);
-  };
-
-  const [yesNotificationCancel, setYesNotificationCancel] = useState(false);
-  const yesBtnCancel = () => {
-    setDialogCancel(!dialogCancel);
-    setYesNotificationCancel(!yesNotificationCancel);
-  };
-
   return (
     <View style={styles.container}>
       <StatusBar style="auto" />
@@ -157,48 +145,31 @@ export default function ListActiveApproveAdmin(props) {
               width: "100%",
               flexDirection: "row",
               alignItems: "center",
+              justifyContent: 'space-between'
             }}
           >
-            <Text
-              style={{
-                color: Color.colorTextMain,
-                fontSize: FontSize.sizeMain,
-                fontWeight: 500,
-                marginRight: 28,
-              }}
-            >
-              STT
-            </Text>
 
             <Text
               style={{
                 color: Color.colorTextMain,
                 fontSize: FontSize.sizeMain,
                 fontWeight: 500,
-                marginRight: 58,
+                marginRight: 50,
               }}
             >
               Tên hoạt động
             </Text>
 
-            <View style={{ flex: 1 }}>
+            <View style={{ flex: 1, }}>
               <Text
                 style={{
                   color: Color.colorTextMain,
                   fontSize: FontSize.sizeMain,
                   fontWeight: 500,
+                  
                 }}
               >
-                Đơn vị
-              </Text>
-              <Text
-                style={{
-                  color: Color.colorTextMain,
-                  fontSize: FontSize.sizeMain,
-                  fontWeight: 500,
-                }}
-              >
-                tổ chức
+                Thời gian tổ chức
               </Text>
             </View>
           </View>
@@ -242,20 +213,5 @@ const styles = StyleSheet.create({
     width: (2 / 4) * screenWidth,
   },
 
-  btnCancel: {
-    width: 85 * 2,
-    height: 30 * 1.6,
-    margin: 20,
-    justifyContent: "center",
-    alignItems: "center",
-    borderWidth: 1,
-    borderRadius: 10,
-    borderColor: Color.colorApproveAll,
-  },
 
-  resigter: {
-    fontSize: FontSize.sizeSmall + 6,
-    fontWeight: "700",
-    color: Color.colorTextMain,
-  },
 });

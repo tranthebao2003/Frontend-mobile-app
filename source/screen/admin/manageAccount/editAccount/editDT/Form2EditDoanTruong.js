@@ -19,12 +19,13 @@ import {
   import Dialog from 'react-native-dialog'
   import {useSelector} from "react-redux";
   
-  export default function Form2EditStudent(props) {
+  export default function Form2EditDoanTruong(props) {
     const {navigation} = props
     const {
       username,
       password,
       role_id,
+      position,
 
       account_id,
       first_name,
@@ -32,16 +33,11 @@ import {
       phone,
       email,
       address,
-      class_id,
-      gender_id,
-      birthday,
       account,
     } = props.route.params;
-    
 
     const [dialogThongtin, setDialogThongtin] = useState(false);
 
-    const [mssv, setMssv] = useState(username);
     const [hoVaTenLot, setHoVaTenLot] = useState(first_name);
     const [ten, setTen] = useState(last_name);
     const [sdt, setSdt] = useState(phone);
@@ -49,27 +45,24 @@ import {
     const navigateFormContinue = () => {
   
       // console.log(date1, date2)
-      if (mssv == "" || hoVaTenLot == "" || ten == "" || sdt == "") {
+      if (hoVaTenLot == "" || ten == "" || sdt == "") {
         setDialogThongtin(true);
       }
       else {
-        navigation.navigate("form3EditStudent", {
+        navigation.navigate("form3EditDoanTruong", {
           username: username,
           password: password,
           role_id: role_id,
-
-          MSSV: mssv,
+ 
           first_name: hoVaTenLot,
           last_name: ten,
           phone: sdt,
+          position: position,
 
-          account_id:account_id ,
-          email2:email ,
-          address2:address ,
-          class_id2:class_id ,
-          gender_id2:gender_id ,
-          birthday2:birthday ,
-          account:account ,
+          account_id: account_id,
+          email: email,
+          address: address,
+          account: account,
         });
       }
     };
@@ -176,7 +169,7 @@ import {
             />
           </View>
           <View style={styles.containerHeader}>
-            <Text style={styles.header}>Sửa tài khoản sinh viên</Text>
+            <Text style={styles.header}>Tạo tài khoản đoàn trường</Text>
           </View>
 
           <ScrollView
@@ -187,25 +180,6 @@ import {
               marginBottom: showKeyBoard ? 1/2*screenHeight - 40: 0
             }}
           >
-            {/* MSSV */}
-            <View style={[styles.containerFormActive]}>
-              <View style={{ flexDirection: "row" }}>
-                <Text style={styles.headerFormActive}>Mã số sinh viên</Text>
-                <Text
-                  style={[
-                    styles.headerFormActive,
-                    { color: Color.colorRemove },
-                  ]}
-                >
-                  (*)
-                </Text>
-              </View>
-
-              <TextInput
-                style={styles.formActive}
-                value={mssv}
-              ></TextInput>
-            </View>
 
             {/* Họ và tên lót */}
             <View style={styles.containerFormActive}>
@@ -223,7 +197,7 @@ import {
 
               <TextInput
                 style={styles.formActive}
-                autoFocus={true}
+                autoFocus = {true}
                 onChangeText={(hoVaTenLotInput) => {
                   setHoVaTenLot(hoVaTenLotInput);
                 }}
@@ -369,7 +343,6 @@ import {
     },
     containerHeader: {
       height: (1 / 12) * screenHeight,
-      // borderWidth: 1,
       alignItems: "center",
       justifyContent: "center",
       zIndex: 2,
@@ -382,7 +355,7 @@ import {
   
     containerFormActive: {
       width: "100%",
-      height: 90,
+      height: 110,
       marginBottom: 20,
       justifyContent: "center",
     },

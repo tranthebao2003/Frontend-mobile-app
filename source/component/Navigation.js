@@ -57,6 +57,8 @@ import DetailApproveSv from "../screen/doanTruong/detailApproveSv/DetailApproveS
 import From1EditActiveDoanTruong from "../screen/doanTruong/editActiveDoanTruong/From1EditActiveDoanTruong";
 import From2EditActiveDoanTruong from "../screen/doanTruong/editActiveDoanTruong/From2EditActiveDoanTruong";
 
+import DetailActiveCreatedDT from "../screen/doanTruong/detailActiveCreated/DetailActiveCreatedDT";
+
 
 // Admin
 import { UITapAdmin } from '../screen/admin/UITapAdmin';
@@ -94,6 +96,10 @@ import  Form3EditStudent  from '../screen/admin/manageAccount/editAccount/editSt
 import  Form1CreateDoanTruong  from '../screen/admin/manageAccount/createAccount/createDoanTruong/Form1CreateDoanTruong'
 import  Form2CreateDoanTruong  from '../screen/admin/manageAccount/createAccount/createDoanTruong/Form2CreateDoanTruong'
 import  Form3CreateDoanTruong  from '../screen/admin/manageAccount/createAccount/createDoanTruong/Form3CreateDoanTruong'
+
+import  Form1EditDoanTruong  from '../screen/admin/manageAccount/editAccount/editDT/Form1EditDoanTruong'
+import  Form2EditDoanTruong  from '../screen/admin/manageAccount/editAccount/editDT/Form2EditDoanTruong'
+import  Form3EditDoanTruong  from '../screen/admin/manageAccount/editAccount/editDT/Form3EditDoanTruong'
 
 import  DetailAccountStudent  from '../screen/admin/manageAccount/detailAccountStudent/DetailAccountStudent'
 import  DetailAccountDT  from '../screen/admin/manageAccount/detailAccountDT/DetailAccountDT'
@@ -162,6 +168,7 @@ const DoanTruong = () => {
       <Stack.Screen name="detailActiveDoanTruong" component={DetailActiveDoanTruong}/>
 
       <Stack.Screen name="listActiveCreatedDT" component={ListActiveCreatedDT} />
+      <Stack.Screen name="detailActiveCreatedDT" component={DetailActiveCreatedDT} />
      
       <Stack.Screen name="listActiveApproveDT" component={ListActiveApproveDT} />
       <Stack.Screen name="detailActiveApprove" component={DetailActiveApprove} />
@@ -217,6 +224,10 @@ const Admin = () => {
       <Stack.Screen name="form1CreateDoanTruong" component={Form1CreateDoanTruong} />
       <Stack.Screen name="form2CreateDoanTruong" component={Form2CreateDoanTruong} />
       <Stack.Screen name="form3CreateDoanTruong" component={Form3CreateDoanTruong} />
+
+      <Stack.Screen name="form1EditDoanTruong" component={Form1EditDoanTruong} />
+      <Stack.Screen name="form2EditDoanTruong" component={Form2EditDoanTruong} />
+      <Stack.Screen name="form3EditDoanTruong" component={Form3EditDoanTruong} />
 
       <Stack.Screen name="detailAccountStudent" component={DetailAccountStudent} />
       <Stack.Screen name="detailAccountDT" component={DetailAccountDT} />

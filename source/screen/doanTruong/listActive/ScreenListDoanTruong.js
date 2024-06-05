@@ -214,7 +214,7 @@ return (
               <ActiveItemDoanTruong
                 active={item}
                 onPressItem={() =>
-                  navigation.navigate("detailActiveApprove", { detailActiveApprove: item })
+                  navigation.navigate("detailActiveDoanTruong", { detailActiveDoanTruong: item })
                 }
               />
             )}

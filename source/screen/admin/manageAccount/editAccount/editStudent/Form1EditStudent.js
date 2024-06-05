@@ -226,7 +226,7 @@ import {
             />
           </View>
           <View style={styles.containerHeader}>
-            <Text style={styles.header}>Tạo tài khoản sinh viên</Text>
+            <Text style={styles.header}>Sửa tài khoản sinh viên</Text>
           </View>
 
           <ScrollView

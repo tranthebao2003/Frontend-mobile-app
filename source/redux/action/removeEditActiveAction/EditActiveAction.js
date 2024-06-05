@@ -11,7 +11,6 @@ import SetAuthToken from '../../../component/SetAuthToken'
 // api trả về token sau đó dispatch này sẽ gửi object chứ type và token đó lên store
 export default EditActiveAction = (editActive) => {
   const editActiveUrl = "activities/update-act/";
-  
   return async (dispatch) => {
     dispatch({ type: EDIT_ACTIVE_REQUEST });
     console.log(`${UrlApi}${editActiveUrl}`, 'link màn EditActiveAction')

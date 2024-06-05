@@ -50,18 +50,6 @@ useEffect(() => {
 
 // console.log (active.length, 'active màn screenList')
 
-
-  const [dialogCancel, setDialogCancel] = useState(false);
-  const showHideDialogCancel = () => {
-    setDialogCancel(!dialogCancel);
-  };
-
-  const [yesNotificationCancel, setYesNotificationCancel] = useState(false);
-  const yesBtnCancel = () => {
-    setDialogCancel(!dialogCancel);
-    setYesNotificationCancel(!yesNotificationCancel);
-  };
-
   return (
     <View style={styles.container}>
       <StatusBar style="auto" />
@@ -136,49 +124,32 @@ useEffect(() => {
             style={{
               width: "100%",
               flexDirection: "row",
-              alignItems: 'center'
+              alignItems: 'center',
+              justifyContent: 'space-between'
             }}
           >
-            <Text
-              style={{
-                color: Color.colorTextMain,
-                fontSize: FontSize.sizeMain,
-                fontWeight: 500,
-                marginRight: 28,
-              }}
-            >
-              STT
-            </Text>
 
             <Text
               style={{
                 color: Color.colorTextMain,
                 fontSize: FontSize.sizeMain,
                 fontWeight: 500,
-                marginRight: 58,
+                marginRight: 50,
               }}
             >
               Tên hoạt động
             </Text>
             
-            <View style ={{flex: 1}}>
+            <View style ={{flex: 1,}}>
             <Text
               style={{
                 color: Color.colorTextMain,
                 fontSize: FontSize.sizeMain,
                 fontWeight: 500,
+                textAlign: 'right',
               }}
             >
-              Đơn vị
-            </Text>
-            <Text
-              style={{
-                color: Color.colorTextMain,
-                fontSize: FontSize.sizeMain,
-                fontWeight: 500,
-              }}
-            >
-              tổ chức
+              Thời gian tổ chức
             </Text>
             </View>
             
@@ -201,79 +172,6 @@ useEffect(() => {
             keyExtractor={(item) => item.id}
           />
         </View>
-
-        {/* btn approve all */}
-        <TouchableOpacity
-          style={styles.btnCancel}
-          onPress={showHideDialogCancel}
-        >
-          <Text style={[styles.resigter, { color: Color.colorApproveAll }]}>
-            Duyệt tất cả
-          </Text>
-          <Dialog.Container visible={dialogCancel}>
-            <Dialog.Title
-              style={{ color: Color.colorTextMain, fontWeight: "700", fontSize: FontSize.sizeMain}}
-            >
-              XÁC NHẬN
-            </Dialog.Title>
-            <Dialog.Description style={{ color: "black", fontSize: FontSize.sizeMain - 2}}>
-              Bạn có chắc muốn duyệt tất cả hoạt động ?
-            </Dialog.Description>
-            <Dialog.Button
-              label="No"
-              onPress={showHideDialogCancel}
-              style={[
-                styles.btnCancel,
-                {
-                  width: 60,
-                  height: 40,
-                  marginRight: 30,
-                  fontWeight: 500,
-                  fontSize: 18,
-                  color: Color.colorRemove,
-                  borderColor: Color.colorRemove
-                },
-              ]}
-            />
-            <Dialog.Button
-              label="Yes"
-              onPress={yesBtnCancel}
-              style={{
-                width: 60,
-                height: 40,
-                marginRight: 50,
-                borderRadius: 5,
-                backgroundColor: "#d9ebfe",
-                fontWeight: 500,
-                fontSize: 18,
-              }}
-            />
-          </Dialog.Container>
-          <Dialog.Container visible={yesNotificationCancel}>
-            <Dialog.Title
-              style={{ color: Color.colorTextMain, fontWeight: "700" }}
-            >
-              THÔNG BÁO
-            </Dialog.Title>
-            <Dialog.Description style={{ color: "black" }}>
-              Bạn đã xóa hoạt động thành công!
-            </Dialog.Description>
-            <Dialog.Button
-              label="Ok"
-              onPress={() => setYesNotificationCancel(!yesNotificationCancel)}
-              style={[
-                styles.btnCancel,
-                {
-                  width: 60,
-                  height: 40,
-                  marginRight: 30,
-                  fontWeight: 500,
-                  fontSize: 18,
-                },
-              ]}
-            />
-          </Dialog.Container>
-        </TouchableOpacity>
       </ImageBackground>
     </View>
   );
@@ -295,22 +193,5 @@ const styles = StyleSheet.create({
     fontWeight: "600",
     color: Color.colorTextMain,
     width: (2 / 4) * screenWidth,
-  },
-
-  btnCancel: {
-    width: 85 * 2,
-    height: 30 * 1.6,
-    margin: 20,
-    justifyContent: "center",
-    alignItems: "center",
-    borderWidth: 1,
-    borderRadius: 10,
-    borderColor: Color.colorApproveAll,
-  },
-
-  resigter: {
-    fontSize: FontSize.sizeSmall + 6,
-    fontWeight: "700",
-    color: Color.colorTextMain,
   },
 });

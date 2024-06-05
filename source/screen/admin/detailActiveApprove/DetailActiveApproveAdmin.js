@@ -118,11 +118,6 @@ export default function DetailActiveApproveAdmin(props) {
     
   };
 
-  useEffect(() => {
-    console.log(data)
-   
-  }, [data])
-
 
   const [statusActive, setStatusActive] = useState()
 

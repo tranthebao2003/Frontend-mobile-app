@@ -8,7 +8,6 @@ import {
   TextInput,
   TouchableOpacity,
   ScrollView,
-  Modal,
   Alert
 } from "react-native";
 import React, { useState, useEffect } from "react";
@@ -18,117 +17,81 @@ import {
   screenWidth,
   screenHeight,
 } from "../../../../../component/DimensionsScreen";
-// import { DarkTheme } from "@react-navigation/native";
-import DropDownPicker from "react-native-dropdown-picker";
-import DatePicker from "react-native-modern-datepicker";
+
 import Dialog from "react-native-dialog";
 import { useDispatch, useSelector } from "react-redux";
 import { CommonActions } from "@react-navigation/native";
-import EditStudentAction from "../../../../../redux/action/editAccountStudentDTAction/EditStudentAction";
+import EditDTACtion from "../../../../../redux/action/editAccountStudentDTAction/EditDTACtion";
 import Spinner from 'react-native-loading-spinner-overlay'
-import formatTime from '../../../../../component/formatTime/DDMMYYYY'
-import { EDIT_STUDENT_RESET } from "../../../../../redux/types/typesEditStudentDT/TypesEditStudent";
+import { EDIT_DT_RESET } from "../../../../../redux/types/typesEditStudentDT/TypesEditDT";
 
-export default function Form3EditStudent(props) {
+export default function Form3EditDoanTruong(props) {
   const { navigation } = props;
   const dispatch = useDispatch();
   const { loading, reponseSuccess, error } = useSelector(
-    (state) => state.editStudentReducer
+    (state) => state.editDTACReducer
   );
 
   const {
     username,
     password,
     role_id,
-    MSSV,
+
     first_name,
     last_name,
     phone,
+    position,
+
+    
     account_id,
-    email2,
-    address2,
-    class_id2,
-    gender_id2,
-    birthday2,
     account,
   } = props.route.params;
 
-  const { status_id } = account;
+  const {status_id} = account
 
-  const formatBirthday2 = formatTime(birthday2)
-  const [dateOfBirth, setDateOfBirth] = useState(formatBirthday2);
-  const [openDateOfBirth, setOpenDateOfBirth] = useState(false); // open and close the modal
-  const handleOnPressDateOfBirth = () => {
-    setOpenDateOfBirth(!openDateOfBirth);
-  };
+  const emailOld = props.route.params.email
+  const addressOld = props.route.params.address
 
-  const handleChangeDateOfBirth = (propDate) => {
-    const reversedStrDateOfBirth = propDate.split("/").reverse().join("/");
-    setDateOfBirth(reversedStrDateOfBirth);
-  };
-
-  const [openDropPicker, setOpenDropPicker] = useState(false);
-  const [value, setValue] = useState(`${gender_id2}`);
-  const [items, setItems] = useState([
-    { label: "Nam", value: "1" },
-    { label: "Nữ", value: "0" },
-  ]);
 
   const [dialogThongtin, setDialogThongtin] = useState(false);
 
-  const [address, setAddress] = useState(address2);
-  const [maSoLop, setMaSoLop] = useState(class_id2);
-  const [email, setEmail] = useState(email2);
-
-  // parseInt(role_id,10): chuyển qua kiểu số cơ số 10
-  const roleIdConvertNumber = parseInt(role_id, 10);
- 
+  const [address, setAddress] = useState(addressOld);
+  const [email, setEmail] = useState(emailOld);
 
   const navigateFormContinue = () => {
-    if (
-      (address == "" ||
-        maSoLop == "" ||
-        email == "" ||
-        dateOfBirth == "Chọn ngày",
-      value == null)
-    ) {
+    if (address == "" || email == "") {
       setDialogThongtin(true);
     } else {
-      const [day, month, year] = dateOfBirth.split('/');
-      const formattedDate = `${year}/${month}/${day}`;
-
-      const editAccountStudent = {
-        account_id: account_id,
+      const accountDTNew = {
+        id_union: account_id,
         username: username,
         password: password,
-        role_id: roleIdConvertNumber,
-
+        role_id: role_id,
         status_id: status_id,
 
-        MSSV: MSSV,
         first_name: first_name,
         last_name: last_name,
         phone: phone,
+
         address: address,
-        class_id: maSoLop,
         email: email,
-        gender_id: value,
-        birth_date: formattedDate,
+        position: position
       };
 
-      dispatch(EditStudentAction(editAccountStudent));
+      dispatch(EditDTACtion(accountDTNew));
+    
     }
+   
   };
 
-
   useEffect(() => {
-    dispatch({ type: EDIT_STUDENT_RESET });
+    dispatch({ type: EDIT_DT_RESET });
   }, [dispatch]);
 
   useEffect(() => {
     if (error != null && loading == false) {
       Alert.alert("Thông báo", error);
-      dispatch({ type: EDIT_STUDENT_RESET });
+      dispatch({ type: EDIT_DT_RESET });
     } else if (reponseSuccess == true && loading == false) {
       Alert.alert("Bạn đã sửa tài khoản thành công");
       navigation.dispatch(
@@ -137,9 +100,10 @@ export default function Form3EditStudent(props) {
           routes: [{ name: "uiTapAdmin" }],
         })
       );
-      dispatch({ type: EDIT_STUDENT_RESET });
+      dispatch({ type: EDIT_DT_RESET });
     }
   }, [error, reponseSuccess, loading]);
+
 
   const { showKeyBoard } = useSelector((state) => state.keyboardShow);
 
@@ -247,7 +211,7 @@ export default function Form3EditStudent(props) {
           />
         </View>
         <View style={styles.containerHeader}>
-          <Text style={styles.header}>Sửa tài khoản sinh viên</Text>
+          <Text style={styles.header}>Sửa tài khoản đoàn trường</Text>
         </View>
 
         <ScrollView
@@ -279,26 +243,6 @@ export default function Form3EditStudent(props) {
             ></TextInput>
           </View>
 
-          {/* Mã số lớp */}
-          <View style={styles.containerFormActive}>
-            <View style={{ flexDirection: "row" }}>
-              <Text style={styles.headerFormActive}>Mã số lớp</Text>
-              <Text
-                style={[styles.headerFormActive, { color: Color.colorRemove }]}
-              >
-                (*)
-              </Text>
-            </View>
-
-            <TextInput
-              style={styles.formActive}
-              onChangeText={(maSoLopInput) => {
-                setMaSoLop(maSoLopInput);
-              }}
-              value={maSoLop}
-            ></TextInput>
-          </View>
-
           {/* Email*/}
           <View style={styles.containerFormActive}>
             <View style={{ flexDirection: "row" }}>
@@ -318,122 +262,6 @@ export default function Form3EditStudent(props) {
               value={email}
             ></TextInput>
           </View>
-
-          {/* giới tính */}
-          <View
-            style={{
-              height: 70,
-              position: "absolute",
-              top: -5,
-              right: 15,
-            }}
-          >
-            <View style={{ flexDirection: "row" }}>
-              <Text style={styles.headerFormActive}>Giới tính</Text>
-              <Text
-                style={[styles.headerFormActive, { color: Color.colorRemove }]}
-              >
-                (*)
-              </Text>
-            </View>
-          </View>
-
-          {/* Ngày sinh */}
-          <View
-            style={{
-              position: "absolute",
-              top: 0.22 * screenHeight + 4,
-              right: 15,
-            }}
-          >
-            <View style={{ flexDirection: "row" }}>
-              <Text style={styles.headerFormActive}>Ngày sinh</Text>
-              <Text
-                style={[styles.headerFormActive, { color: Color.colorRemove }]}
-              >
-                (*)
-              </Text>
-            </View>
-          </View>
-
-          {/* giới tính */}
-          <View style={styles.containerDropPicker}>
-            <DropDownPicker
-              open={openDropPicker}
-              value={value}
-              items={items}
-              setOpen={setOpenDropPicker}
-              setValue={setValue}
-              setItems={setItems}
-              placeholder="Giới tính"
-              dropDownContainerStyle={{
-                borderWidth: 0,
-                elevation: 5,
-                shadowColor: Color.colorTextMain,
-              }}
-              style={styles.dropdown}
-              textStyle={{
-                fontSize: 17,
-                color: Color.colorTextMain,
-                fontWeight: "600",
-              }}
-            />
-          </View>
-
-          {/* Ngày sinh */}
-          <TouchableOpacity
-            style={[
-              styles.formActive,
-              {
-                position: "absolute",
-                top: 0.27 * screenHeight - 3,
-                right: 0,
-                width: 0.3 * screenWidth + 12,
-                justifyContent: "center",
-              },
-            ]}
-            onPress={handleOnPressDateOfBirth}
-          >
-            <Text style={{ color: Color.colorTextMain, fontSize: 20 }}>
-              {dateOfBirth}
-            </Text>
-            <Image
-              source={require("../../../../../resource/iconFormCreateActive/triangleDowm.png")}
-              style={{
-                height: 18,
-                width: 18,
-                position: "absolute",
-                right: 0,
-                top: "25%",
-                borderRadius: 16,
-                zIndex: 2,
-                tintColor: Color.colorTextMain,
-              }}
-              resizeMode="contain"
-            ></Image>
-          </TouchableOpacity>
-
-          <Modal
-            animationType="fade"
-            transparent={true}
-            visible={openDateOfBirth}
-          >
-            <View style={styles.centeredView}>
-              <View style={styles.modalView}>
-                <DatePicker
-                  mode="calendar"
-                  selected={dateOfBirth.split("/").reverse().join("/")}
-                  onDateChange={handleChangeDateOfBirth}
-                />
-                <TouchableOpacity
-                  onPress={handleOnPressDateOfBirth}
-                  style={styles.btnDate}
-                >
-                  <Text>Ok</Text>
-                </TouchableOpacity>
-              </View>
-            </View>
-          </Modal>
 
           <View
             style={{
@@ -583,8 +411,8 @@ const styles = StyleSheet.create({
   },
 
   containerFormActive: {
-    width: "55%",
-    height: 70,
+    width: "100%",
+    height: 110,
     marginBottom: 26,
     // borderWidth: 1,
     justifyContent: "center",
