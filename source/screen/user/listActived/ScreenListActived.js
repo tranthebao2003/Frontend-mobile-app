@@ -9,111 +9,73 @@ import {
     FlatList,
     TouchableOpacity
   } from 'react-native';
-import React, { useState } from 'react';
+import React, { useState, useEffect} from 'react';
 import FontSize from '../../../component/FontSize';
 import Color from '../../../component/Color';
 import {screenWidth, screenHeight} from '../../../component/DimensionsScreen'
 import ActivedItem from './ActivedItem'
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch} from 'react-redux';
+import ActiveParticipatedAction from '../../../redux/action/ActiveParticipatedAction';
+import Spinner from 'react-native-loading-spinner-overlay';
 
 export default function ListActive({navigation}) {
   // đây cũng gọi api trả về từ server những họa động mà
   // sv đã đăng kí tham gia
-  const {showKeyBoard} = useSelector(state => state.keyboardShow)
-  const [actived, setActived] = useState([
-    {
-      id: 1,
-      stt: 1,
-      nameActive: "Trăng cho em",
-      timeOrganize: "3/2/2005",
-      deadline: '1/10/2005',
-      location: "Học viện cơ sở quận 9 hội trường A",
-      quantityActived: 30,
-      organizer: "Học viện bưu chính viễn thông",
-      description:
-        "Là hoạt động thiện nguyên cho trẻ em vùng cao có hoàn cảnh khó khăn",
-      status: 'register'
-    },
-
-    {
-      id: 2,
-      stt: 2,
-      nameActive: "Mùa hè xanh",
-      timeOrganize: "10/2/2005",
-      deadline: '10/10/2005',
-      location: "Học viện cơ sở quận 9 hội trường B",
-      quantityActived: 10,
-      organizer: "Câu lạc bộ cầu lông",
-      description:
-        "Là hoạt động để sinh viên có 1 mùa hè ý nghĩa",
-      status: 'registered'
-    },
-
-    {
-      id: 3,
-      stt: 3,
-      nameActive: "Lập trình cho bé từ 10 đến 12 tuổi",
-      timeOrganize: "3/8/2005",
-      deadline: '1/9/2005',
-      location: "Học viện cơ sở quận 1",
-      quantityActived: 50,
-      organizer: "Câu lạc bộ bóng rỗ",
-      description:
-        "Là hoạt động giới thiệu lập trình đến các em nh3o",
-      status: 'no register'
-    },
-
-    {
-      id: 4,
-      stt: 4,
-      nameActive: "Lập trình cho bé từ 10 đến 12 tuổi",
-      timeOrganize: "4/10/2005",
-      deadline: '12/12/2005',
-      location: "Học viện cơ sở quận 9 phòng 2A11",
-      quantityActived: 60,
-      organizer: "Học viện bưu chính viễn thông",
-      description:
-        "giới thiệu lập trình đến các em nhỏ",
-      status: 'registered'
-    },
-
-    {
-      id: 5,
-      stt: 5,
-      nameActive: "Vẽ tay",
-      timeOrganize: "13/8/2005",
-      deadline: '22/12/2005',
-      location: "Học viện cơ sở quận 9 sân trường",
-      quantityActived: 36,
-      organizer: "Trung tâm hỗ trợ trẻ em",
-      description: "Hỗ trợ giáo dục và phát triển cho trẻ em mồ côi",
-      status: 'no register'
-    },
-
-    {
-      id: 6,
-      stt: 6,
-      nameActive: "Vẽ tay",
-      timeOrganize: "13/8/2005",
-      deadline: '22/12/2005',
-      location: "Học viện cơ sở quận 9 sân trường",
-      quantityActived: 36,
-      organizer: "Trung tâm hỗ trợ trẻ em",
-      description: "Hỗ trợ giáo dục và phát triển cho trẻ em mồ côi",
-      status: 'no register'
-    },
-  ]);
-
   
-  const [searchText, setSearchText] = useState('')
-  const filteredActives = () => {
-    return actived.filter((eachActive) =>
-        eachActive.nameActive.toLowerCase().includes(searchText.toLowerCase())
-    );
-  };
+  const dispatch = useDispatch()
+
+  const { loading, activeParticipated, error } = useSelector(
+    (state) => state.activeParticipatedReducer
+  );
+  // console.log(infoUser, 'infoUser màn profileSv')
+  
+  
+  // Khởi tạo useState để lưu trữ dữ liệu
+  const [active, setActive] = useState([]);
+  const [filterActive, setFilterActive] = useState([]);
+  const [searchText, setSearchText] = useState('');
+
+  // Gọi action để lấy dữ liệu khi component được mount
+  useEffect(() => {
+    dispatch(ActiveParticipatedAction());
+  }, [dispatch]);
+
+  // Cập nhật state active khi dữ liệu từ Redux store thay đổi
+  useEffect(() => {
+    if (activeParticipated) {
+      setActive(activeParticipated);
+    } else {
+      if(error !== ''){
+        alert('Bạn vui lòng thoát app để vào lại')
+      }
+    }
+  }, [activeParticipated]);
+
+  // Lọc danh sách dựa trên searchText
+  useEffect(() => {
+    const filteredActives = () => {
+      if (Array.isArray(active)) {
+        return active.filter((eachActive) =>
+          eachActive.act_name.toLowerCase().includes(searchText.toLowerCase())
+        );
+      }
+    };
+
+    setFilterActive(filteredActives());
+  }, [searchText, active]);
+
+  console.log(active, 'active màn ScreenListActived');
+  console.log(filterActive, 'filtered active màn ScreenListActived');
+
+  const {showKeyBoard} = useSelector(state => state.keyboardShow)
   return (
     <View style={styles.container}>
       <StatusBar style="auto" />
+      <Spinner
+          visible={loading}
+          textContent={"Loading..."}
+          textStyle={{ color: "white", fontSize: FontSize.sizeHeader }}
+        />
       <Image
         source={require("../../../resource/iconListActive/decorTop.png")}
         style={{
@@ -229,11 +191,9 @@ export default function ListActive({navigation}) {
               Thời gian
             </Text>
           </View>
-
-          {filteredActives().length > 0 ? (
             <FlatList
               style={{flex: 1,  marginBottom: showKeyBoard ? 95 : 200}}
-              data={filteredActives()}
+              data={filterActive}
               renderItem={({ item }) => (
                 <ActivedItem
                   active={item}
@@ -244,24 +204,7 @@ export default function ListActive({navigation}) {
               )}
               keyExtractor={(item) => item.id}
             />
-          ) : (
-            <View
-              style={{
-                flex: 1,
-                justifyContent: "center",
-                alignItems: "center",
-              }}
-            >
-              <Text
-                style={{
-                  fontSize: FontSize.sizeMain,
-                  color: Color.colorTextMain,
-                }}
-              >
-                Not Found
-              </Text>
-            </View>
-          )}
+    
         </View>
       </ImageBackground>
     </View>
