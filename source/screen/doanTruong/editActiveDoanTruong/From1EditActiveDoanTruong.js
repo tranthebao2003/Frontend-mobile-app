@@ -84,6 +84,7 @@ export default function From1EditActiveDoanTruong(props) {
         act_address: act_address,
         act_price: act_price,
         act_status: act_status,
+        organizationOld: organization
       });
     }
   };

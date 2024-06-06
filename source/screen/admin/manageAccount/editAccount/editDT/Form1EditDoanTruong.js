@@ -22,6 +22,7 @@ import {
   export default function Form1EditDoanTruong(props) {
     const {navigation} = props
     const accountDT = {
+      id,
       // account_id: dùng để xóa, khóa tk
       account_id,
       first_name,
@@ -31,6 +32,7 @@ import {
       address,
       account,
     } = props.route.params.accountDT
+    
     const {username} = account;
     const positionOld = props.route.params.accountDT.position
 
@@ -51,7 +53,6 @@ import {
       }
       return false;
     };
-
 
     const [dialogThongtin, setDialogThongtin] = useState(false);
 
@@ -74,6 +75,7 @@ import {
       }
       else {
         navigation.navigate("form2EditDoanTruong", {
+          id: id,
           username: userName,
           password: password,
           role_id: 4,

@@ -22,31 +22,6 @@ import moment from 'moment'
 // - FlatList
 export default function DetailActiveTruongCLB(props) {
   // btn cancel
-  const [dialogCancel, setDialogCancel] = useState(false);
-  const showHideDialogCancel = () => {
-    setDialogCancel(!dialogCancel);
-  };
-
-  const [yesNotificationCancel, setYesNotificationCancel] = useState(false);
-  const yesBtnCancel = () => {
-    setDialogCancel(!dialogCancel);
-    setYesNotificationCancel(!yesNotificationCancel);
-  };
-
-  // btn resigter
-  const [dialogResigter, setDialogRegister] = useState(false);
-  const showHideDialogRegister = () => {
-    setDialogRegister(!dialogResigter);
-  };
-
-  const [yesNotificationResigter, setYesNotificationResigter] = useState(false);
-  const yesBtnResigter = () => {
-    setDialogRegister(!dialogResigter);
-    setYesNotificationResigter(!yesNotificationResigter);
-  };
-
-
-  
   const {
     act_name,
     act_description,
@@ -58,8 +33,30 @@ export default function DetailActiveTruongCLB(props) {
     creater_id,
     audit_id,
     createdAt,
-    updatedAt
+    updatedAt,
+    organization
   } = props.route.params.detailActiveTruongCLB;
+
+  // btn cancel
+  const [dialogCancel, setDialogCancel] = useState(false);
+  const showHideDialogCancel = () => {
+    setDialogCancel(!dialogCancel);
+  };
+
+  const yesBtnCancel = () => {
+    setDialogCancel(!dialogCancel);
+  };
+
+  // btn 
+  const [dialogResigter, setDialogRegister] = useState(false);
+  const showHideDialogRegister = () => {
+    setDialogRegister(!dialogResigter);
+  };
+
+  const yesBtnResigter = () => {
+    setDialogRegister(!dialogResigter);
+  };
+  
 
   const isoDate = act_time;
   const formatAct_time = moment(isoDate).format('DD/MM/YYYY');
@@ -237,6 +234,29 @@ export default function DetailActiveTruongCLB(props) {
                 marginRight: 20,
               }}
             >
+              Đơn vị tổ chứ
+            </Text>
+
+            <Text
+              style={{
+                color: Color.colorTextMain,
+                fontSize: FontSize.sizeMain,
+                fontWeight: 400,
+              }}
+            >
+              {organization}
+            </Text>
+          </View>
+
+          <View style={{ width: "100%", marginBottom: 20 }}>
+            <Text
+              style={{
+                color: Color.colorTextMain,
+                fontSize: FontSize.sizeMain,
+                fontWeight: 500,
+                marginRight: 20,
+              }}
+            >
               Lệ phí
             </Text>
 
@@ -325,30 +345,6 @@ export default function DetailActiveTruongCLB(props) {
                 }}
               />
             </Dialog.Container>
-            <Dialog.Container visible={yesNotificationCancel}>
-              <Dialog.Title
-                style={{ color: Color.colorTextMain, fontWeight: "700" }}
-              >
-                THÔNG BÁO
-              </Dialog.Title>
-              <Dialog.Description style={{ color: "black" }}>
-                Bạn đã hủy tham gia thành công!
-              </Dialog.Description>
-              <Dialog.Button
-                label="Ok"
-                onPress={() => setYesNotificationCancel(!yesNotificationCancel)}
-                style={[
-                  styles.btnCancel,
-                  {
-                    width: 60,
-                    height: 40,
-                    marginRight: 30,
-                    fontWeight: 500,
-                    fontSize: 18,
-                  },
-                ]}
-              />
-            </Dialog.Container>
           </TouchableOpacity>
 
           {/* btn resigter */}
@@ -394,30 +390,6 @@ export default function DetailActiveTruongCLB(props) {
                 }}
               />
             </Dialog.Container>
-            <Dialog.Container visible={yesNotificationResigter}>
-                <Dialog.Title
-                  style={{ color: Color.colorTextMain, fontWeight: "700" }}
-                >
-                  THÔNG BÁO
-                </Dialog.Title>
-                <Dialog.Description style={{ color: "black" }}>
-                  Bạn đã tham gia thành công!
-                </Dialog.Description>
-                <Dialog.Button
-                  label="Ok"
-                  onPress={() => setYesNotificationResigter(!yesNotificationResigter)}
-                  style={[
-                    styles.btnCancel,
-                    {
-                      width: 60,
-                      height: 40,
-                      marginRight: 30,
-                      fontWeight: 500,
-                      fontSize: 18,
-                    },
-                  ]}
-                />
-              </Dialog.Container>
           </TouchableOpacity>
         </View>
       </ImageBackground>

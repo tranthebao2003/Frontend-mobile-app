@@ -22,6 +22,7 @@ import {
   export default function Form2EditDoanTruong(props) {
     const {navigation} = props
     const {
+      id,
       username,
       password,
       role_id,
@@ -35,6 +36,7 @@ import {
       address,
       account,
     } = props.route.params;
+
 
     const [dialogThongtin, setDialogThongtin] = useState(false);
 
@@ -50,6 +52,7 @@ import {
       }
       else {
         navigation.navigate("form3EditDoanTruong", {
+          id: id,
           username: username,
           password: password,
           role_id: role_id,

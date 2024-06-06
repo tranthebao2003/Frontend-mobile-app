@@ -31,6 +31,7 @@ import { useDispatch, useSelector } from "react-redux";
 export default function DetailAccountDT(props) {
   const accountDT = {
     // account_id: dùng để xóa, khóa tk
+    id,
     account_id,
     first_name,
     last_name,
@@ -40,6 +41,7 @@ export default function DetailAccountDT(props) {
     account,
     position
   } = props.route.params.detailAccountDT;
+  
 
   const {status_id, createdAt, updatedAt} = account;
   const formatCreatedAt = IsoTime(createdAt)
@@ -273,11 +275,12 @@ export default function DetailAccountDT(props) {
               borderColor: Color.colorTextMain,
               paddingTop: 26,
               paddingBottom: 13,
+             
             }}
           >
             <View
               style={{
-                marginRight: 30,
+                width: 0.5 *screenWidth-15,
               }}
             >
               <Text style={styles.contentText}>{first_name + ' ' + last_name}</Text>
@@ -285,8 +288,8 @@ export default function DetailAccountDT(props) {
 
             <View
               style={{
-                width: 0.5 *screenWidth - 50,
-                alignItems: 'center'
+                width: 0.5 *screenWidth - 80,
+                alignItems: 'center',
               }}
             >
               <Text style={styles.contentText}>

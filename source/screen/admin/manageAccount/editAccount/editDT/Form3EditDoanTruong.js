@@ -33,6 +33,7 @@ export default function Form3EditDoanTruong(props) {
   );
 
   const {
+    id,
     username,
     password,
     role_id,
@@ -43,7 +44,6 @@ export default function Form3EditDoanTruong(props) {
     position,
 
     
-    account_id,
     account,
   } = props.route.params;
 
@@ -63,7 +63,7 @@ export default function Form3EditDoanTruong(props) {
       setDialogThongtin(true);
     } else {
       const accountDTNew = {
-        id_union: account_id,
+        id_union: id,
         username: username,
         password: password,
         role_id: role_id,

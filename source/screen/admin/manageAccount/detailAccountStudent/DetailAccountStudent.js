@@ -292,7 +292,8 @@ export default function DetailAccountStudent(props) {
           >
             <View
               style={{
-                marginRight: 30,
+                width: 0.5 *screenWidth-15,
+                borderWidth: 1
               }}
             >
               <Text style={styles.contentText}>{MSSV}</Text>
@@ -300,8 +301,9 @@ export default function DetailAccountStudent(props) {
 
             <View
               style={{
-                width: 0.5 * screenWidth - 30,
-                alignItems: "center",
+                width: 0.5 *screenWidth - 80,
+                alignItems: 'center',
+                borderWidth: 1
               }}
             >
               <Text style={styles.contentText}>

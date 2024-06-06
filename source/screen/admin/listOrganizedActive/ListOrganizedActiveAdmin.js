@@ -71,14 +71,14 @@ export default function ListOrganizedActiveAdmin({ navigation }) {
   
     // Cập nhật state active khi dữ liệu từ Redux store thay đổi
     useEffect(() => {
-      if (data) {
+      if (data!= null && loading == false, reponseSuccess == true) {
         setActiveOrganize(data);
       } else {
-        if (error != null) {
+        if (error != null && loading == false, reponseSuccess == false) {
           alert("Bạn vui lòng thoát app để vào lại");
         }
       }
-    }, [data]);
+    }, [data, error, loading, reponseSuccess]);
 
   return (
     <View style={styles.container}>

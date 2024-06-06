@@ -6,7 +6,7 @@ import {
   
   const initialState = {
     loading: false,
-    listActive: {},
+    listActive: null,
     error: null,
   };
   
@@ -28,7 +28,7 @@ import {
       case LIST_ACTIVE_FAILURE:
         return {
           loading: false,
-          listActive: {},
+          listActive: null,
           error: payload,
         };
       default:
