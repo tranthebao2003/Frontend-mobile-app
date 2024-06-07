@@ -34,16 +34,12 @@ export default function Form3EditDoanTruong(props) {
 
   const {
     id,
-    username,
-    password,
-    role_id,
-
+ 
     first_name,
     last_name,
     phone,
     position,
 
-    
     account,
   } = props.route.params;
 
@@ -64,9 +60,6 @@ export default function Form3EditDoanTruong(props) {
     } else {
       const accountDTNew = {
         id_union: id,
-        username: username,
-        password: password,
-        role_id: role_id,
         status_id: status_id,
 
         first_name: first_name,
@@ -79,7 +72,6 @@ export default function Form3EditDoanTruong(props) {
       };
 
       dispatch(EditDTACtion(accountDTNew));
-    
     }
    
   };

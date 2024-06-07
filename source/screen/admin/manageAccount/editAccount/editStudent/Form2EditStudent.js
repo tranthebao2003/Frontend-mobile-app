@@ -22,11 +22,7 @@ import {
   export default function Form2EditStudent(props) {
     const {navigation} = props
     const {
-      username,
-      password,
-      role_id,
-
-      account_id,
+      MSSV,
       first_name,
       last_name,
       phone,
@@ -36,12 +32,11 @@ import {
       gender_id,
       birthday,
       account,
-    } = props.route.params;
+    } = props.route.params.infoStudent;
     
 
     const [dialogThongtin, setDialogThongtin] = useState(false);
 
-    const [mssv, setMssv] = useState(username);
     const [hoVaTenLot, setHoVaTenLot] = useState(first_name);
     const [ten, setTen] = useState(last_name);
     const [sdt, setSdt] = useState(phone);
@@ -49,21 +44,16 @@ import {
     const navigateFormContinue = () => {
   
       // console.log(date1, date2)
-      if (mssv == "" || hoVaTenLot == "" || ten == "" || sdt == "") {
+      if (hoVaTenLot == "" || ten == "" || sdt == "") {
         setDialogThongtin(true);
       }
       else {
         navigation.navigate("form3EditStudent", {
-          username: username,
-          password: password,
-          role_id: role_id,
-
-          MSSV: mssv,
+          MSSV: MSSV,
           first_name: hoVaTenLot,
           last_name: ten,
           phone: sdt,
 
-          account_id:account_id ,
           email2:email ,
           address2:address ,
           class_id2:class_id ,
@@ -143,21 +133,6 @@ import {
                 borderRadius: 50,
               }}
             />
-            <View
-              style={{
-                width: 100,
-                height: 2,
-                backgroundColor: Color.colorDecorateStep,
-              }}
-            />
-            <View
-              style={{
-                width: 15,
-                height: 15,
-                backgroundColor: Color.colorDecorateStep,
-                borderRadius: 50,
-              }}
-            />
              <View
               style={{
                 width: 100,
@@ -187,25 +162,6 @@ import {
               marginBottom: showKeyBoard ? 1/2*screenHeight - 40: 0
             }}
           >
-            {/* MSSV */}
-            <View style={[styles.containerFormActive]}>
-              <View style={{ flexDirection: "row" }}>
-                <Text style={styles.headerFormActive}>Mã số sinh viên</Text>
-                <Text
-                  style={[
-                    styles.headerFormActive,
-                    { color: Color.colorRemove },
-                  ]}
-                >
-                  (*)
-                </Text>
-              </View>
-
-              <TextInput
-                style={styles.formActive}
-                value={mssv}
-              ></TextInput>
-            </View>
 
             {/* Họ và tên lót */}
             <View style={styles.containerFormActive}>

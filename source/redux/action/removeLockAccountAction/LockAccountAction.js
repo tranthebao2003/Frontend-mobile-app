@@ -26,9 +26,9 @@ export default LockAccountAction = (idStatusId) => {
       });
     } catch (error) {
 
-      console.error('Khóa tài khoản thất bại', error);
+      console.error('Thực hiện thất bại', error);
       
-      let errorForUser = 'khóa tài khoản thất bại vui lòng thử lại'
+      let errorForUser = 'Thực hiện thất bại vui lòng thử lại'
       dispatch({
         type: LOCK_ACCOUNT_FAILURE,
         payload: errorForUser,

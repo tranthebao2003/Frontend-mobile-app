@@ -29,27 +29,30 @@ import { useDispatch, useSelector } from "react-redux";
 
 
 export default function DetailAccountDT(props) {
-  const accountDT = {
+  const infoDT = {
     // account_id: dùng để xóa, khóa tk
     id,
-    account_id,
     first_name,
     last_name,
     phone,
-    email,
     address,
+    position,
+    email,
     account,
-    position
   } = props.route.params.detailAccountDT;
-  
+  console.log(id)
 
-  const {status_id, createdAt, updatedAt} = account;
-  const formatCreatedAt = IsoTime(createdAt)
-  const formatUpdatedAt = IsoTime(updatedAt)
+  // truyền đi
+  const acountDT = {id, status_id, username} = account
+
+  // hiển thị phía dưới
+  const {createdAt, updatedAt } = account;
+  const formatCreatedAt = IsoTime(createdAt);
+  const formatUpdatedAt = IsoTime(updatedAt);
 
   const { navigation } = props;
 
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
   const { loading, reponseSuccess, error } = useSelector(
     (state) => state.removeAccountReducer
   );
@@ -65,18 +68,18 @@ export default function DetailAccountDT(props) {
   const lockAccount = () => {
     const idStatusId = {
       id: account_id,
-      status_id: 2
-    }
+      status_id: 2,
+    };
     dispatch(LockAccountAction(idStatusId));
-  }
+  };
 
   const unlockAccount = () => {
     const idStatusId = {
       id: account_id,
-      status_id: 1
-    }
+      status_id: 1,
+    };
     dispatch(LockAccountAction(idStatusId));
-  }
+  };
 
   useEffect(() => {
     dispatch({ type: REMOVE_ACCOUNT_RESET });
@@ -97,7 +100,7 @@ export default function DetailAccountDT(props) {
       );
       dispatch({ type: REMOVE_ACCOUNT_RESET });
     }
-  }, [error, loading, reponseSuccess])
+  }, [error, loading, reponseSuccess]);
 
   useEffect(() => {
     if (errorLock != null && loadingLock == false) {
@@ -124,7 +127,6 @@ export default function DetailAccountDT(props) {
     }
   }, [status_id]);
 
-
   // btn remove
   const [dialogRemove, setDialogRemove] = useState(false);
   const showHideDialogRemove = () => {
@@ -135,7 +137,7 @@ export default function DetailAccountDT(props) {
   const yesBtnRemove = () => {
     // let save
     setDialogRemove(!dialogRemove);
-    deleteAcount()
+    deleteAcount();
   };
 
   // btn lock
@@ -147,24 +149,35 @@ export default function DetailAccountDT(props) {
   const [yesNotificationLock, setYesNotificationLock] = useState(false);
   const yesBtnLock = () => {
     setDialogLock(!dialogLock);
-    lockAccount()
+    lockAccount();
   };
 
   const yesBtnUnLock = () => {
     setDialogLock(!dialogLock);
-    unlockAccount()
+    unlockAccount();
   };
 
-    // btn edit
-    const [dialogEdit, setDialogEdit] = useState(false);
-    const showHideDialogEdit = () => {
-      setDialogEdit(!dialogEdit);
-    };
-  
-    const yesBtnEdit = () => {
-      setDialogEdit(!dialogEdit);
-      navigation.navigate('form1EditDoanTruong', {accountDT})
-    };
+  // btn edit thông tin
+  const [dialogEdit, setDialogEdit] = useState(false);
+  const showHideDialogEdit = () => {
+    setDialogEdit(!dialogEdit);
+  };
+
+  const yesBtnEdit = () => {
+    setDialogEdit(!dialogEdit);
+    navigation.navigate("form2EditDoanTruong",  infoDT);
+  };
+
+  // btn edit tài khoản, mật khẩu
+  const [dialogEditTaiKhoan, setDialogEditTaiKhoan] = useState(false);
+  const showHideDialogEditTaiKhoan = () => {
+    setDialogEditTaiKhoan(!dialogEditTaiKhoan);
+  };
+
+  const yesBtnEditTaiKhoan = () => {
+    setDialogEditTaiKhoan(!dialogEditTaiKhoan);
+    navigation.navigate("formEditAcountStudent", { accountStudent });
+  };
 
   return (
     <ScrollView style={styles.container}>
@@ -275,26 +288,25 @@ export default function DetailAccountDT(props) {
               borderColor: Color.colorTextMain,
               paddingTop: 26,
               paddingBottom: 13,
-             
             }}
           >
             <View
               style={{
-                width: 0.5 *screenWidth-15,
+                width: 0.5 * screenWidth - 15,
               }}
             >
-              <Text style={styles.contentText}>{first_name + ' ' + last_name}</Text>
+              <Text style={styles.contentText}>
+                {first_name + " " + last_name}
+              </Text>
             </View>
 
             <View
               style={{
-                width: 0.5 *screenWidth - 80,
-                alignItems: 'center',
+                width: 0.5 * screenWidth - 80,
+                alignItems: "center",
               }}
             >
-              <Text style={styles.contentText}>
-                {address}
-              </Text>
+              <Text style={styles.contentText}>{address}</Text>
             </View>
           </View>
         </View>
@@ -361,7 +373,6 @@ export default function DetailAccountDT(props) {
               {trangThaiTk}
             </Text>
           </View>
-
 
           {/* số điện thoại*/}
           <View style={{ width: "100%", marginBottom: 20 }}>
@@ -484,18 +495,18 @@ export default function DetailAccountDT(props) {
           </View>
         </View>
 
-        {/* buttons */}
-        <View
+      {/* buttons */}
+      <View
           style={{
             width: "100%",
             flexDirection: "row",
             justifyContent: "center",
           }}
         >
-          {/* remove sinh viên khỏi hđ */}
+          {/* remove tài khoản*/}
 
           <TouchableOpacity
-            style={styles.btnCancel}
+            style={[styles.btnCancel, {backgroundColor: Color.colorBtnRemove,}]}
             onPress={showHideDialogRemove}
           >
             <Text style={[styles.resigter, { color: Color.colorRemove }]}>
@@ -515,17 +526,7 @@ export default function DetailAccountDT(props) {
               <Dialog.Button
                 label="No"
                 onPress={showHideDialogRemove}
-                style={[
-                  styles.btnCancel,
-                  {
-                    width: 60,
-                    height: 40,
-                    marginRight: 30,
-                    fontWeight: 500,
-                    fontSize: 18,
-                    color: Color.colorRemove,
-                  },
-                ]}
+                style={styles.btnNo}
               />
               <Dialog.Button
                 label="Yes"
@@ -540,22 +541,6 @@ export default function DetailAccountDT(props) {
                   fontSize: 18,
                 }}
               />
-            </Dialog.Container>
-            <Dialog.Container visible={yesNotificationRemove}>
-              <Dialog.Title
-                style={{
-                  color: Color.colorTextMain,
-                  fontWeight: "700",
-                  fontSize: FontSize.sizeMain - 2,
-                }}
-              >
-                THÔNG BÁO
-              </Dialog.Title>
-              <Dialog.Description
-                style={{ color: "black", fontSize: FontSize.sizeMain - 2 }}
-              >
-                Bạn đã xóa sinh viên thành công !
-              </Dialog.Description>
             </Dialog.Container>
           </TouchableOpacity>
 
@@ -594,17 +579,7 @@ export default function DetailAccountDT(props) {
                 <Dialog.Button
                   label="No"
                   onPress={showHideDialogLock}
-                  style={[
-                    styles.btnCancel,
-                    {
-                      width: 60,
-                      height: 40,
-                      marginRight: 30,
-                      fontWeight: 500,
-                      fontSize: 18,
-                      color: Color.colorRemove,
-                    },
-                  ]}
+                  style={styles.btnNo}
                 />
                 <Dialog.Button
                   label="Yes"
@@ -621,38 +596,6 @@ export default function DetailAccountDT(props) {
                   }}
                 />
               </Dialog.Container>
-              <Dialog.Container visible={yesNotificationLock}>
-                <Dialog.Title
-                  style={{
-                    color: Color.colorTextMain,
-                    fontWeight: "700",
-                    fontSize: FontSize.sizeMain - 2,
-                  }}
-                >
-                  THÔNG BÁO
-                </Dialog.Title>
-                <Dialog.Description
-                  style={{ color: "black", fontSize: FontSize.sizeMain - 2 }}
-                >
-                  Bạn đã khóa tài khoản thành công!
-                </Dialog.Description>
-                <Dialog.Button
-                  label="Ok"
-                  onPress={() =>
-                    setYesNotificationLock(!yesNotificationLock)
-                  }
-                  style={[
-                    styles.btnCancel,
-                    {
-                      width: 60,
-                      height: 40,
-                      marginRight: 30,
-                      fontWeight: 500,
-                      fontSize: 18,
-                    },
-                  ]}
-                />
-              </Dialog.Container>
             </TouchableOpacity>
           ) : (
             // btn unlock
@@ -664,13 +607,12 @@ export default function DetailAccountDT(props) {
                 },
               ]}
               onPress={showHideDialogLock}
-              
             >
               <Text
                 style={[
                   styles.resigter,
                   {
-                    color:Color.colorTextMain,
+                    color: Color.colorTextUnLock,
                   },
                 ]}
               >
@@ -690,17 +632,7 @@ export default function DetailAccountDT(props) {
                 <Dialog.Button
                   label="No"
                   onPress={showHideDialogLock}
-                  style={[
-                    styles.btnCancel,
-                    {
-                      width: 60,
-                      height: 40,
-                      marginRight: 30,
-                      fontWeight: 500,
-                      fontSize: 18,
-                      color: Color.colorRemove,
-                    },
-                  ]}
+                  style={styles.btnNo}
                 />
                 <Dialog.Button
                   label="Yes"
@@ -717,61 +649,73 @@ export default function DetailAccountDT(props) {
                   }}
                 />
               </Dialog.Container>
-              <Dialog.Container visible={yesNotificationLock}>
-                <Dialog.Title
-                  style={{
-                    color: Color.colorTextMain,
-                    fontWeight: "700",
-                    fontSize: FontSize.sizeMain - 2,
-                  }}
-                >
-                  THÔNG BÁO
-                </Dialog.Title>
-                <Dialog.Description
-                  style={{ color: "black", fontSize: FontSize.sizeMain - 2 }}
-                >
-                  Bạn đã mở tài khoản thành công!
-                </Dialog.Description>
-                <Dialog.Button
-                  label="Ok"
-                  onPress={() =>
-                    setYesNotificationLock(!yesNotificationLock)
-                  }
-                  style={[
-                    styles.btnCancel,
-                    {
-                      width: 60,
-                      height: 40,
-                      marginRight: 30,
-                      fontWeight: 500,
-                      fontSize: 18,
-                    },
-                  ]}
-                />
-              </Dialog.Container>
             </TouchableOpacity>
           )}
         </View>
 
-                {/* edit account */}
-                <View
+        {/* edit account */}
+        <View
           style={{
             width: "100%",
             flexDirection: "row",
             justifyContent: "center",
           }}
         >
+          {/* Sửa thông tin */}
           <TouchableOpacity
             style={[
               styles.btnCancel,
-              { borderColor: Color.colorApproveAll, margin: 20, marginTop: 0 },
+              { backgroundColor: Color.colorBtnEditInfo, margin: 20, marginTop: 0 },
             ]}
             onPress={showHideDialogEdit}
+          >
+            <Text style={[styles.resigter, { color: Color.colorTextMain }]}>
+              Sửa thông tin
+            </Text>
+            <Dialog.Container visible={dialogEdit}>
+              <Dialog.Title
+                style={{ color: Color.colorTextMain, fontWeight: "700" }}
+              >
+                XÁC NHẬN
+              </Dialog.Title>
+              <Dialog.Description
+                style={{ color: "black", fontSize: FontSize.sizeMain - 2 }}
+              >
+                Bạn có muốn sửa thông tin này không ?
+              </Dialog.Description>
+              <Dialog.Button
+                label="No"
+                onPress={showHideDialogEdit}
+                style={styles.btnNo}
+              />
+              <Dialog.Button
+                label="Yes"
+                onPress={yesBtnEdit}
+                style={{
+                  width: 60,
+                  height: 40,
+                  marginRight: 50,
+                  borderRadius: 5,
+                  backgroundColor: "#d9ebfe",
+                  fontWeight: 500,
+                  fontSize: 18,
+                }}
+              />
+            </Dialog.Container>
+          </TouchableOpacity>
+
+          {/* Sửa tài khoản, mật khẩu */}
+          <TouchableOpacity
+            style={[
+              styles.btnCancel,
+              { backgroundColor: Color.colorBtnEditAccount, margin: 20, marginTop: 0 },
+            ]}
+            onPress={showHideDialogEditTaiKhoan}
           >
             <Text style={[styles.resigter, { color: Color.colorApproveAll }]}>
               Sửa tài khoản
             </Text>
-            <Dialog.Container visible={dialogEdit}>
+            <Dialog.Container visible={dialogEditTaiKhoan}>
               <Dialog.Title
                 style={{ color: Color.colorTextMain, fontWeight: "700" }}
               >
@@ -784,22 +728,12 @@ export default function DetailAccountDT(props) {
               </Dialog.Description>
               <Dialog.Button
                 label="No"
-                onPress={showHideDialogEdit}
-                style={[
-                  styles.btnCancel,
-                  {
-                    width: 60,
-                    height: 40,
-                    marginRight: 30,
-                    fontWeight: 500,
-                    fontSize: 18,
-                    color: Color.colorRemove,
-                  },
-                ]}
+                onPress={showHideDialogEditTaiKhoan}
+                style={styles.btnNo}
               />
               <Dialog.Button
                 label="Yes"
-                onPress={yesBtnEdit}
+                onPress={yesBtnEditTaiKhoan}
                 style={{
                   width: 60,
                   height: 40,
@@ -848,9 +782,9 @@ const styles = StyleSheet.create({
     margin: 20,
     justifyContent: "center",
     alignItems: "center",
-    borderWidth: 1,
     borderRadius: 10,
-    borderColor: Color.colorRemove,
+    elevation: 2,
+    shadowColor: Color.colorTextMain
   },
 
   btnResigter: {
@@ -870,4 +804,19 @@ const styles = StyleSheet.create({
     fontSize: FontSize.sizeSmall + 6,
     fontWeight: "700",
   },
+
+  btnNo: {
+    width: 60,
+    height: 40,
+    marginRight: 30,
+    fontWeight: 500,
+    fontSize: 18,
+    color: Color.colorRemove,
+    borderWidth: 1,
+    borderColor: Color.colorRemove,
+    margin: 20,
+    justifyContent: "center",
+    alignItems: "center",
+    borderRadius: 6
+  }
 });

@@ -37,9 +37,6 @@ export default function Form3EditStudent(props) {
   );
 
   const {
-    username,
-    password,
-    role_id,
     MSSV,
     first_name,
     last_name,
@@ -80,8 +77,6 @@ export default function Form3EditStudent(props) {
   const [maSoLop, setMaSoLop] = useState(class_id2);
   const [email, setEmail] = useState(email2);
 
-  // parseInt(role_id,10): chuyển qua kiểu số cơ số 10
-  const roleIdConvertNumber = parseInt(role_id, 10);
  
 
   const navigateFormContinue = () => {
@@ -94,18 +89,12 @@ export default function Form3EditStudent(props) {
     ) {
       setDialogThongtin(true);
     } else {
-      const [day, month, year] = dateOfBirth.split('/');
-      const formattedDate = `${year}/${month}/${day}`;
+      const formatBirthDate = formatTime(dateOfBirth)
 
       const editAccountStudent = {
-        account_id: account_id,
-        username: username,
-        password: password,
-        role_id: roleIdConvertNumber,
-
+        MSSV:MSSV,
         status_id: status_id,
 
-        MSSV: MSSV,
         first_name: first_name,
         last_name: last_name,
         phone: phone,
@@ -113,7 +102,7 @@ export default function Form3EditStudent(props) {
         class_id: maSoLop,
         email: email,
         gender_id: value,
-        birth_date: formattedDate,
+        birth_date: formatBirthDate,
       };
 
       dispatch(EditStudentAction(editAccountStudent));

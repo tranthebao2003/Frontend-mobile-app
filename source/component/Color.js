@@ -3,13 +3,18 @@ export default{
     colorBorder: '#3669A4',
     colorBtn: 'white',
     colorLight: 'rgb(234,235,238)',
-    colorBgUiTap: '#caeff1',
+    colorBgUiTap: '#dbfcfe',
     inactive: 'rgb(129,129,129)',
     colorRemove: '#ff7a7a',
     colorDecorateStep: '#55a6ff',
     colorBtnCreateActive: '#1fafb0',
     colorBgIconHome: '#eaeaea',
     colorApproveAll: '#41B06E',
-    colorBtnLock: '#fff0db',
-    colorTextLock: '#FFA62F'
+    colorTextLock: '#FFA62F',
+    colorTextUnLock: '#399590',
+    colorBtnLock: '#fff5e7',
+    colorBtnRemove: '#ffecec',
+    colorBtnEditAccount: '#e6fff0',
+    colorBtnEditInfo: '#dbebff',
+    
 }

@@ -23,20 +23,14 @@ import {
     const {navigation} = props
     const {
       id,
-      username,
-      password,
-      role_id,
-      position,
-
-      account_id,
       first_name,
       last_name,
       phone,
-      email,
       address,
+      position,
+      email,
       account,
     } = props.route.params;
-
 
     const [dialogThongtin, setDialogThongtin] = useState(false);
 
@@ -53,16 +47,12 @@ import {
       else {
         navigation.navigate("form3EditDoanTruong", {
           id: id,
-          username: username,
-          password: password,
-          role_id: role_id,
  
           first_name: hoVaTenLot,
           last_name: ten,
           phone: sdt,
           position: position,
 
-          account_id: account_id,
           email: email,
           address: address,
           account: account,

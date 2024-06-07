@@ -91,7 +91,7 @@ import  Form1CreateStudent  from '../screen/admin/manageAccount/createAccount/cr
 import  Form2CreateStudent  from '../screen/admin/manageAccount/createAccount/createStudent/Form2CreateStudent'
 import  Form3CreateStudent  from '../screen/admin/manageAccount/createAccount/createStudent/Form3CreateStudent'
 
-import  Form1EditStudent  from '../screen/admin/manageAccount/editAccount/editStudent/Form1EditStudent'
+import  FormEditAcountStudent  from '../screen/admin/manageAccount/editAccount/editStudent/FormEditAcountStudent'
 import  Form2EditStudent  from '../screen/admin/manageAccount/editAccount/editStudent/Form2EditStudent'
 import  Form3EditStudent  from '../screen/admin/manageAccount/editAccount/editStudent/Form3EditStudent'
 
@@ -99,7 +99,7 @@ import  Form1CreateDoanTruong  from '../screen/admin/manageAccount/createAccount
 import  Form2CreateDoanTruong  from '../screen/admin/manageAccount/createAccount/createDoanTruong/Form2CreateDoanTruong'
 import  Form3CreateDoanTruong  from '../screen/admin/manageAccount/createAccount/createDoanTruong/Form3CreateDoanTruong'
 
-import  Form1EditDoanTruong  from '../screen/admin/manageAccount/editAccount/editDT/Form1EditDoanTruong'
+import  FormEditAcountDT  from '../screen/admin/manageAccount/editAccount/editDT/FormEditAcountDT'
 import  Form2EditDoanTruong  from '../screen/admin/manageAccount/editAccount/editDT/Form2EditDoanTruong'
 import  Form3EditDoanTruong  from '../screen/admin/manageAccount/editAccount/editDT/Form3EditDoanTruong'
 
@@ -221,7 +221,7 @@ const Admin = () => {
       <Stack.Screen name="form2CreateStudent" component={Form2CreateStudent} />
       <Stack.Screen name="form3CreateStudent" component={Form3CreateStudent} />
 
-      <Stack.Screen name="form1EditStudent" component={Form1EditStudent} />
+      <Stack.Screen name="formEditAcountStudent" component={FormEditAcountStudent} />
       <Stack.Screen name="form2EditStudent" component={Form2EditStudent} />
       <Stack.Screen name="form3EditStudent" component={Form3EditStudent} />
 
@@ -229,7 +229,7 @@ const Admin = () => {
       <Stack.Screen name="form2CreateDoanTruong" component={Form2CreateDoanTruong} />
       <Stack.Screen name="form3CreateDoanTruong" component={Form3CreateDoanTruong} />
 
-      <Stack.Screen name="form1EditDoanTruong" component={Form1EditDoanTruong} />
+      <Stack.Screen name="formEditAcountDT" component={FormEditAcountDT} />
       <Stack.Screen name="form2EditDoanTruong" component={Form2EditDoanTruong} />
       <Stack.Screen name="form3EditDoanTruong" component={Form3EditDoanTruong} />
 

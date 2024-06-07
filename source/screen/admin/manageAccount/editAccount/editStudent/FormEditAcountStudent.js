@@ -8,33 +8,31 @@ import {
     TextInput,
     TouchableOpacity,
     ScrollView,
-    Keyboard
+    Keyboard,
+    Alert
   } from "react-native";
   import React, { useState, useEffect} from "react";
   import FontSize from "../../../../../component/FontSize";
   import Color from "../../../../../component/Color";
   import { screenWidth, screenHeight } from "../../../../../component/DimensionsScreen";
   // import { DarkTheme } from "@react-navigation/native";
+  import DropDownPicker from 'react-native-dropdown-picker';
   import Dialog from 'react-native-dialog'
   import {useDispatch, useSelector} from "react-redux";
   import {showKeyBoardAction, hideKeyBoardAction} from '../../../../../redux/action/KeyBoardAction'
-  
-  export default function Form1EditDoanTruong(props) {
+  import LockAccountAction from "../../../../../redux/action/removeLockAccountAction/LockAccountAction";
+  import Spinner from "react-native-loading-spinner-overlay";
+
+  export default function FormEditAcountStudent(props) {
     const {navigation} = props
-    const accountDT = {
-      id,
-      // account_id: dùng để xóa, khóa tk
-      account_id,
-      first_name,
-      last_name,
-      phone,
-      email,
-      address,
-      account,
-    } = props.route.params.accountDT
-    
-    const {username} = account;
-    const positionOld = props.route.params.accountDT.position
+    const { id, status_id, username } = props.route.params.accountStudent;
+
+
+    const { loadingLock, reponseSuccessLock, errorLock } = useSelector(
+      (state) => state.lockAccountReducer
+    );
+
+    const [userName, setUserName] = useState(username);
 
     const [visiblePassword, setVisiblePassword] = useState(true);
     const changeIconPassword = () => setVisiblePassword(!visiblePassword);
@@ -54,18 +52,44 @@ import {
       return false;
     };
 
+    const [openDropPicker, setOpenDropPicker] = useState(false);
+    const [value, setValue] = useState('2');
+    const [items, setItems] = useState([
+      { label: 'Sinh viên', value: '2' },
+      { label: 'Trưởng CLB', value: '5' },
+      { label: 'Bí thư', value: '6' }
+    ]);
+
+    // role id này để chuyển value từ 5, 6 thành 3 (vì trưởng clb, bí thư)
+    // cùng cấp và role_id của sv là 2
+    const [role_id, setRole_Id] = useState('2')
+
     const [dialogThongtin, setDialogThongtin] = useState(false);
 
     const [dialogPassword, setDialogPassword] = useState(false);
 
-    const [userName, setUserName] = useState(username);
-    const [position, setPosition] = useState(positionOld);
+
+    useEffect(() => {
+      if (errorLock != null && loadingLock == false) {
+        Alert.alert("Thông báo", errorLock);
+        dispatch({ type: LOCK_ACCOUNT_RESET });
+      } else if (reponseSuccessLock == true && loadingLock == false) {
+        Alert.alert("Bạn đã thực hiện thành công");
+        navigation.dispatch(
+          CommonActions.reset({
+            index: 0,
+            routes: [{ name: "uiTapAdmin" }],
+          })
+        );
+        dispatch({ type: LOCK_ACCOUNT_RESET });
+      }
+    }, [errorLock, loadingLock, reponseSuccessLock]);
 
     const navigateFormContinue = () => {
   
       // console.log(date1, date2)
       if (
-        userName == '' || password == '' || position == ''
+        userName == '' || password == '' || value == null
       ) {
         setDialogThongtin(true)
       }
@@ -74,27 +98,23 @@ import {
         setDialogPassword (true)
       }
       else {
-        navigation.navigate("form2EditDoanTruong", {
+        const newAccount = {
           id: id,
           username: userName,
           password: password,
-          role_id: 4,
-          position: position,
-
-          account_id: account_id,
-          first_name: first_name,
-          last_name: last_name,
-          phone: phone,
-          email: email,
-          address: address,
-          account: account,
-        });
+          role_id: role_id,
+          status_id: status_id,
+        }
+        
+        // dùng cái lock này vì bản chất api này có thể khóa, mở
+        // account bằng status id hoặc thay đổi tk, mk
+        dispatch(LockAccountAction(newAccount));
       }
+
+      
     };
 
     const dispatch = useDispatch()
-  
-    const {showKeyBoard} = useSelector(state => state.keyboardShow)
     useEffect(() => {
       const showSubscription = Keyboard.addListener('keyboardDidShow', () => {
         dispatch(showKeyBoardAction())
@@ -103,6 +123,10 @@ import {
         dispatch(hideKeyBoardAction())
       });
   
+      // showSubscription.remove() và hideSubscription.remove() là các phương thức được 
+      // sử dụng để gỡ bỏ các hàm xử lý sự kiện đã được đăng ký trước đó thông qua addListener.
+      // Khi component bị unmount hoặc useEffect được gọi lại, các hàm xử lý sự kiện này 
+      // không còn cần thiết nữa, vì vậy chúng ta gọi remove() để loại bỏ chúng
       return () => {
         showSubscription.remove();
         hideSubscription.remove();
@@ -112,6 +136,11 @@ import {
     return (
       <View style={styles.container}>
         <StatusBar style="auto" />
+        <Spinner
+        visible={loadingLock}
+        textContent={"Loading..."}
+        textStyle={{ color: "white", fontSize: FontSize.sizeHeader }}
+      />
         <ImageBackground
           source={require("../../../../../resource/iconLogin/bg.png")}
           resizeMode="cover"
@@ -210,7 +239,7 @@ import {
             />
           </View>
           <View style={styles.containerHeader}>
-            <Text style={styles.header}>Tạo tài khoản đoàn trường</Text>
+            <Text style={styles.header}>Sửa tài khoản sinh viên</Text>
           </View>
 
           <ScrollView
@@ -218,7 +247,6 @@ import {
               flex: 1,
               marginTop: 20,
               paddingHorizontal: 20,
-              marginBottom: showKeyBoard ? 1/2*screenHeight - 40: 0
             }}
           >
             {/* Name active */}
@@ -245,7 +273,6 @@ import {
               ></TextInput>
             </View>
 
-            {/* password */}
             <View style={styles.containerFormActive}>
               <View style={{ flexDirection: "row" }}>
                 <Text style={styles.headerFormActive}>Mật khẩu</Text>
@@ -321,8 +348,7 @@ import {
               </View>
             </View>
 
-            {/* Position */}
-            <View style={styles.containerFormActive}>
+            <View style={[styles.containerFormActive, { marginBottom: 50 }]}>
               <View style={{ flexDirection: "row" }}>
                 <Text style={styles.headerFormActive}>Chức vụ</Text>
                 <Text
@@ -334,14 +360,6 @@ import {
                   (*)
                 </Text>
               </View>
-
-              <TextInput
-                style={styles.formActive}
-                onChangeText={(positionInput) => {
-                  setPosition(positionInput);
-                }}
-                value={position}
-              ></TextInput>
             </View>
 
             <View
@@ -349,7 +367,6 @@ import {
                 flexDirection: "row",
                 alignItems: "center",
                 justifyContent: "space-between",
-                marginBottom: showKeyBoard ? 30: 0
               }}
             >
               <Text
@@ -446,6 +463,35 @@ import {
               </TouchableOpacity>
             </View>
           </ScrollView>
+          <View style={styles.containerDropPicker}>
+            <DropDownPicker
+              open={openDropPicker}
+              value={value}
+              items={items}
+              setOpen={setOpenDropPicker}
+              setValue={setValue}
+              setItems={setItems}
+              onSelectItem={(item) => {
+                if (item.value == 5 || item.value == 6) {
+                  setRole_Id(3);
+                } else if (item.value == 2) {
+                  setRole_Id(2);
+                }
+              }}
+              placeholder="Chức vụ"
+              dropDownContainerStyle={{
+                borderWidth: 0,
+                elevation: 5,
+                shadowColor: Color.colorTextMain,
+              }}
+              style={styles.dropdown}
+              textStyle={{
+                fontSize: 17,
+                color: Color.colorTextMain,
+                fontWeight: "600",
+              }}
+            />
+          </View>
         </ImageBackground>
       </View>
     );
@@ -486,7 +532,7 @@ import {
   
     containerFormActive: {
       width: "100%",
-      height: 120,
+      height: 100,
       marginBottom: 20,
       // borderWidth: 1,
       justifyContent: "center",
