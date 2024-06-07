@@ -1,11 +1,13 @@
 import { Text, View, StyleSheet, TouchableOpacity } from "react-native";
 import Color from "../../../component/Color";
 import FontSize from "../../../component/FontSize";
+import formatTime from '../../../component/formatTime/DDMMYYYY'
 
 const OrganizedActiveItemDT = (props) => {
 
-    const {stt, nameActive, timeOrganize} = props.activeOrganized; // destructuring an object
+    const {act_name, act_time} = props.activeOrganized; // destructuring an object
     const { onPressItem } = props;
+    const formatActTime = formatTime(act_time)
     return (
       <TouchableOpacity
         onPress={onPressItem}
@@ -20,14 +22,6 @@ const OrganizedActiveItemDT = (props) => {
           paddingBottom: 13,
         }}
       >
-        <View
-          style={{
-            flex: 1,
-            marginLeft: 12,
-          }}
-        >
-          <Text style={styles.contentText}>{stt}</Text>
-        </View>
 
         <View
           style={{
@@ -36,7 +30,7 @@ const OrganizedActiveItemDT = (props) => {
             paddingRight: 5,
           }}
         >
-          <Text style={styles.contentText}>{nameActive}</Text>
+          <Text style={styles.contentText}>{act_name}</Text>
         </View>
 
         <View
@@ -46,7 +40,7 @@ const OrganizedActiveItemDT = (props) => {
             alignItems: "center",
           }}
         >
-          <Text style={styles.contentText}>{timeOrganize}</Text>
+          <Text style={styles.contentText}>{formatActTime}</Text>
         </View>
       </TouchableOpacity>
     );

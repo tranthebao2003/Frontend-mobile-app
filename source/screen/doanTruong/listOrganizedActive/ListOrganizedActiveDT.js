@@ -8,6 +8,8 @@ import {
   TouchableOpacity,
   FlatList,
   Modal,
+  TextInput,
+  Keyboard,
 } from "react-native";
 import React, { useState, useEffect } from "react";
 import FontSize from "../../../component/FontSize";
@@ -16,146 +18,86 @@ import { screenWidth, screenHeight } from "../../../component/DimensionsScreen";
 import OrganizedActiveItemDT from "./OrganizedActiveItemDT";
 import { useSelector, useDispatch } from "react-redux";
 import DatePicker from "react-native-modern-datepicker";
+import moment from "moment";
+import ThongKeAdminDTAction from "../../../redux/action/thongKeAction/ThongKeAdminDTAction";
+import Spinner from "react-native-loading-spinner-overlay";
 
 export default function ListOrganizedActiveDT({ navigation }) {
-  // ở đây chỉ bao gồm những hoạt động do đoàn trường tạo
-  // do api trả về lun
-  // chỉ thống kê những hoạt động đã được phê duyệt và xảy ra rồi, tổ chức rồi
-  const [active, setActive] = useState([
-    {
-      id: 1,
-      stt: 1,
-      nameActive: "Trăng cho em",
-      timeOrganize: "03/02/2005",
-      // deadline này là thuộc tính tính toán được
-      deadline: "20/01/2005",
-      location: "Học viện cơ sở quận 9 hội trường A",
-      quantityActived: 30,
-      organizer: "Đoàn trường",
-      timeCreateActive: "10/01/2005",
-      cost: 20000,
-      personApprove: "không có",
-      timeApprove: "không có",
-      minNumber: 50,
+  const today = new Date();
+  const dispatch = useDispatch();
+  const { loading, reponseSuccess, error, data } = useSelector(
+    (state) => state.thongKeAdminDTReducer
+  );
 
-      description:
-        "Là hoạt động thiện nguyên cho trẻ em vùng cao có hoàn cảnh khó khăn",
-      status: "register",
-    },
+  // ngày tổ chức cách ngày hiện tại ít nhất 7 ngày
+  const convertDateOrganize = moment(today.setDate(today.getDate())).format(
+    "MM-YYYY"
+  );
 
-    {
-      id: 2,
-      stt: 2,
-      nameActive: "Mùa hè xanh",
-      timeOrganize: "10/02/2005",
-      deadline: "10/10/2005",
-      location: "Học viện cơ sở quận 9 hội trường B",
-      quantityActived: 10,
-      organizer: "Đoàn trường",
-      timeCreateActive: "10/01/2005",
-      cost: 60000,
-      personApprove: "không có",
-      timeApprove: "không có",
-      minNumber: 20,
-      description: "Là hoạt động để sinh viên có 1 mùa hè ý nghĩa",
-      status: "registered",
-    },
+  const [activeOrganize, setActiveOrganize] = useState();
 
-    {
-      id: 3,
-      stt: 3,
-      nameActive: "Lập trình cho bé từ 10 đến 12 tuổi",
-      timeOrganize: "03/08/2005",
-      deadline: "01/09/2005",
-      location: "Học viện cơ sở quận 1",
-      quantityActived: 50,
-      organizer: "Đoàn trường",
-      timeCreateActive: "10/01/2005",
-      cost: 200000,
-      personApprove: "không có",
-      timeApprove: "không có",
-      minNumber: 80,
-      description: "Là hoạt động giới thiệu lập trình đến các em nh3o",
-      status: "no register",
-    },
-
-    {
-      id: 4,
-      stt: 4,
-      nameActive: "Lập trình cho bé từ 10 đến 12 tuổi",
-      timeOrganize: "04/10/2005",
-      deadline: "12/12/2005",
-      location: "Học viện cơ sở quận 9 phòng 2A11",
-      quantityActived: 60,
-      organizer: "Đoàn trường",
-      timeCreateActive: "10/01/2005",
-      cost: 0,
-      personApprove: "không có",
-      timeApprove: "không có",
-      minNumber: 220,
-      description: "giới thiệu lập trình đến các em nhỏ",
-      status: "registered",
-    },
-
-    {
-      id: 5,
-      stt: 5,
-      nameActive: "Lập trình cho bé từ 10 đến 12 tuổi",
-      timeOrganize: "04/10/2005",
-      deadline: "12/12/2005",
-      location: "Học viện cơ sở quận 9 phòng 2A11",
-      quantityActived: 60,
-      organizer: "Đoàn trường",
-      timeCreateActive: "10/01/2005",
-      cost: 0,
-      personApprove: "không có",
-      timeApprove: "không có",
-      minNumber: 220,
-      description: "giới thiệu lập trình đến các em nhỏ",
-      status: "registered",
-    },
-
-    {
-      id: 6,
-      stt: 6,
-      nameActive: "Lập trình cho bé từ 10 đến 12 tuổi",
-      timeOrganize: "04/10/2005",
-      deadline: "12/12/2005",
-      location: "Học viện cơ sở quận 9 phòng 2A11",
-      quantityActived: 60,
-      organizer: "Đoàn trường",
-      timeCreateActive: "10/01/2005",
-      cost: 0,
-      personApprove: "không có",
-      timeApprove: "không có",
-      minNumber: 220,
-      description: "giới thiệu lập trình đến các em nhỏ",
-      status: "registered",
-    },
-  ]);
-
-  const [dateOrganize, setdateOrganize] = useState("MM/YYYY");
+  const [limitActive, setLimitActive] = useState("10");
+  const [dateOrganize, setdateOrganize] = useState(convertDateOrganize);
   const [openOrganize, setOpenOrganize] = useState(false); // open and close the modal
   const handleOnPressOrganize = () => {
     setOpenOrganize(!openOrganize);
   };
 
   const handleChangeOrganize = (propDate) => {
-    const reversedStrOrganize = propDate.split(" ").reverse().join("/");
+    const reversedStrOrganize = propDate.split(" ").reverse().join("-");
     setdateOrganize(reversedStrOrganize);
   };
 
-  const filterForMonthYear = () => {
-    return active.filter((eachActive) =>
-        eachActive.timeOrganize.includes(dateOrganize)
-    );
+  const filterActiveThongKe = () => {
+    const [month, year] = dateOrganize.split("-");
+
+    const monthYearLimit = {
+      year: parseInt(year, 10),
+      month: parseInt(month, 10),
+      limit: parseInt(limitActive, 10),
+    };
+    dispatch(ThongKeAdminDTAction(monthYearLimit));
   };
 
-  console.log(filterForMonthYear())
+  useEffect(() => {
+    const [month, year] = dateOrganize.split("-");
+
+    const monthYearLimit = {
+      year: parseInt(year, 10),
+      month: parseInt(month, 10),
+      limit: parseInt(limitActive, 10),
+    };
+    dispatch(ThongKeAdminDTAction(monthYearLimit));
+  }, [dispatch]);
+
+  // Cập nhật state active khi dữ liệu từ Redux store thay đổi
+
+  useEffect(() => {
+    if ((data != null && loading == false, reponseSuccess == true)) {
+      const dateOrganizeConvert = dateOrganize.split("-").reverse().join("-");
+      const filterForMonthYear = data.filter((eachActive) => {
+        return eachActive.act_time.includes(dateOrganizeConvert);
+      });
+
+      // console.log(filterForMonthYear.slice(0, limit))
+      setActiveOrganize(filterForMonthYear.slice(0, limitActive));
+    } else {
+      if ((error != null && loading == false, reponseSuccess == false)) {
+        alert("Bạn vui lòng thoát app để vào lại");
+      }
+    }
+  }, [data, error, loading, reponseSuccess, dateOrganize, limitActive]);
+
+  // console.log(filterForMonthYear())
 
   return (
     <View style={styles.container}>
       <StatusBar style="auto" />
+      <Spinner
+        visible={loading}
+        textContent={"Loading..."}
+        textStyle={{ color: "white", fontSize: FontSize.sizeHeader }}
+      />
       <Image
         source={require("../../../resource/iconListActive/decorTop.png")}
         style={{
@@ -174,7 +116,26 @@ export default function ListOrganizedActiveDT({ navigation }) {
         style={{ width: "100%", height: "120%", alignItems: "center" }}
       >
         <View style={styles.containerHeader}>
-          <Text style={styles.header}>Thống kê hoạt động</Text>
+          <View style={styles.containerUserName}>
+            <View style={{ flexDirection: "row" }}>
+              <Text style={styles.headerFormActive}>Số hoạt động</Text>
+              <Text
+                style={[styles.headerFormActive, { color: Color.colorRemove }]}
+              >
+                (*)
+              </Text>
+            </View>
+            <TextInput
+              style={styles.username}
+              autoFocus={true}
+              keyboardType="numeric"
+              onChangeText={(limitInput) => {
+                setLimitActive(limitInput);
+              }}
+              value={limitActive}
+            ></TextInput>
+          </View>
+
           <View style={styles.containerFormActive}>
             <View style={{ flexDirection: "row" }}>
               <Text style={styles.headerFormActive}>Thời gian tổ chức</Text>
@@ -268,6 +229,7 @@ export default function ListOrganizedActiveDT({ navigation }) {
               width: "100%",
               flexDirection: "row",
               alignItems: "center",
+              justifyContent: "space-between",
             }}
           >
             <Text
@@ -275,10 +237,9 @@ export default function ListOrganizedActiveDT({ navigation }) {
                 color: Color.colorTextMain,
                 fontSize: FontSize.sizeMain,
                 fontWeight: 500,
-                marginRight: 28,
               }}
             >
-              STT
+              Tên hoạt động
             </Text>
 
             <Text
@@ -286,84 +247,61 @@ export default function ListOrganizedActiveDT({ navigation }) {
                 color: Color.colorTextMain,
                 fontSize: FontSize.sizeMain,
                 fontWeight: 500,
-                marginRight: 58,
               }}
             >
-              Tên hoạt động
+              Ngày tổ chức
             </Text>
-
-            <View style={{ flex: 1 }}>
-              <Text
-                style={{
-                  color: Color.colorTextMain,
-                  fontSize: FontSize.sizeMain,
-                  fontWeight: 500,
-                }}
-              >
-                Ngày tổ chức
-              </Text>
-            </View>
           </View>
 
-          {filterForMonthYear().length > 0 ? (
-            <FlatList
-              style={{ flex: 1 }}
-              data={filterForMonthYear()}
-              renderItem={({ item }) => (
-                <OrganizedActiveItemDT
-                  activeOrganized={item}
-                  onPressItem={() => {
-                    navigation.navigate("detailOrganizedActiveDT", {
-                      detailOrganizedActiveDT: item,
-                    });
-                  }}
-                />
-              )}
-              keyExtractor={(item) => item.id}
-            />
-          ) : (
-            <View
-              style={{
-                flex: 1,
-                justifyContent: "center",
-                alignItems: "center",
-              }}
-            >
-              <Text
-                style={{
-                  fontSize: FontSize.sizeMain,
-                  color: Color.colorTextMain,
+          <FlatList
+            style={{ flex: 1 }}
+            data={activeOrganize}
+            renderItem={({ item }) => (
+              <OrganizedActiveItemDT
+                activeOrganized={item}
+                onPressItem={() => {
+                  navigation.navigate("detailOrganizedActive", {
+                    detailOrganizedActive: item,
+                  });
                 }}
-              >
-                Not Found
-              </Text>
-            </View>)}
+              />
+            )}
+            keyExtractor={(item) => item.id}
+          />
         </View>
 
-        {/* btn approve all */}
-        <TouchableOpacity
-          style={[
-            styles.btnCancel,
-            {
-              borderWidth: dateOrganize == "MM/YYYY" ? 0 : 1,
-              borderColor: Color.colorApproveAll,
-            },
-          ]}
-          onPress={() => alert("lọc hoạt động theo tháng, năm")}
-          disabled={dateOrganize == "MM/YYYY" ? true : false}
+        {/* btn lọc hoạt động, limit active */}
+        <View
+          style={{
+            flexDirection: "row",
+            justifyContent: "space-between",
+            alignItems: "center",
+          }}
         >
-          <Text
+          <TouchableOpacity
             style={[
-              styles.resigter,
+              styles.btnCancel,
               {
-                color:
-                  dateOrganize == "MM/YYYY" ? "gray" : Color.colorApproveAll,
+                borderWidth: dateOrganize == "MM/YYYY" ? 0 : 1,
+                borderColor: Color.colorApproveAll,
               },
             ]}
+            onPress={filterActiveThongKe}
+            disabled={dateOrganize == "MM/YYYY" ? true : false}
           >
-            Lọc hoạt động
-          </Text>
-        </TouchableOpacity>
+            <Text
+              style={[
+                styles.resigter,
+                {
+                  color:
+                    dateOrganize == "MM/YYYY" ? "gray" : Color.colorApproveAll,
+                },
+              ]}
+            >
+              Lọc hoạt động
+            </Text>
+          </TouchableOpacity>
+        </View>
       </ImageBackground>
     </View>
   );
@@ -376,19 +314,18 @@ const styles = StyleSheet.create({
   },
   containerHeader: {
     height: (1 / 6) * screenHeight,
-    padding: 30,
-    paddingRight: 25,
+    paddingHorizontal: 20,
     zIndex: 2,
     width: screenWidth,
-    flexDirection: 'row',
-    justifyContent: 'center',
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
   },
   header: {
     fontSize: FontSize.sizeHeader - 3,
     fontWeight: "600",
     color: Color.colorTextMain,
     width: (2 / 5) * screenWidth,
-    marginRight: 18
   },
 
   btnCancel: {
@@ -414,7 +351,6 @@ const styles = StyleSheet.create({
     fontSize: FontSize.sizeMain,
     fontWeight: "700",
     color: Color.colorTextMain,
-    marginRight: 5,
   },
 
   formActive: {
@@ -460,5 +396,20 @@ const styles = StyleSheet.create({
     shadowOffset: { width: 500, height: 500 },
     shadowOpacity: 0.8,
     elevation: 0.8,
+  },
+
+  containerUserName: {
+    width: "37%",
+    height: 66,
+    borderBottomWidth: 1,
+    borderColor: Color.colorBorder,
+    marginRight: 60,
+  },
+
+  username: {
+    width: "100%",
+    fontSize: 22,
+    color: Color.colorTextMain,
+    marginTop: 5,
   },
 });

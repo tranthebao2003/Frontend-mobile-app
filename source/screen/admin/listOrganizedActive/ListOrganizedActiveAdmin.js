@@ -19,18 +19,19 @@ import OrganizedActiveItemAdmin from "./OrganizedActiveItemAdmin";
 import { useSelector, useDispatch } from "react-redux";
 import DatePicker from "react-native-modern-datepicker";
 import moment from "moment";
-import ThongKeAdminDTAction from '../../../redux/action/thongKeAction/ThongKeAdminDTAction'
-import Spinner from 'react-native-loading-spinner-overlay';
-
+import ThongKeAdminDTAction from "../../../redux/action/thongKeAction/ThongKeAdminDTAction";
+import Spinner from "react-native-loading-spinner-overlay";
 
 export default function ListOrganizedActiveAdmin({ navigation }) {
   const today = new Date();
   const dispatch = useDispatch();
-  const { loading, reponseSuccess, error, data} = useSelector(state => state.thongKeAdminDTReducer)
+  const { loading, reponseSuccess, error, data } = useSelector(
+    (state) => state.thongKeAdminDTReducer
+  );
 
   // ngày tổ chức cách ngày hiện tại ít nhất 7 ngày
   const convertDateOrganize = moment(today.setDate(today.getDate())).format(
-    "MM/YYYY"
+    "MM-YYYY"
   );
 
   const [activeOrganize, setActiveOrganize] = useState();
@@ -43,42 +44,51 @@ export default function ListOrganizedActiveAdmin({ navigation }) {
   };
 
   const handleChangeOrganize = (propDate) => {
-    const reversedStrOrganize = propDate.split(" ").reverse().join("/");
+    const reversedStrOrganize = propDate.split(" ").reverse().join("-");
     setdateOrganize(reversedStrOrganize);
   };
 
   const filterActiveThongKe = () => {
-    const [month, year] = dateOrganize.split("/")
-       
+    const [month, year] = dateOrganize.split("-");
+
     const monthYearLimit = {
       year: parseInt(year, 10),
       month: parseInt(month, 10),
-      limit: parseInt(limitActive, 10)
-    }
+      limit: parseInt(limitActive, 10),
+    };
     dispatch(ThongKeAdminDTAction(monthYearLimit));
-  }
+  };
 
-    useEffect(() => {
-     const [month, year] = dateOrganize.split("/")
-       
-      const monthYearLimit = {
-        year: parseInt(year, 10),
-        month: parseInt(month, 10),
-        limit: parseInt(limitActive, 10)
+  useEffect(() => {
+    const [month, year] = dateOrganize.split("-");
+
+    const monthYearLimit = {
+      year: parseInt(year, 10),
+      month: parseInt(month, 10),
+      limit: parseInt(limitActive, 10),
+    };
+    dispatch(ThongKeAdminDTAction(monthYearLimit));
+  }, [dispatch]);
+
+  // Cập nhật state active khi dữ liệu từ Redux store thay đổi
+
+  useEffect(() => {
+    if ((data != null && loading == false, reponseSuccess == true)) {
+      const dateOrganizeConvert = dateOrganize.split("-").reverse().join("-");
+      const filterForMonthYear = data.filter((eachActive) => {
+        return eachActive.act_time.includes(dateOrganizeConvert);
+      });
+
+      // console.log(filterForMonthYear.slice(0, limit))
+      setActiveOrganize(filterForMonthYear.slice(0, limitActive));
+    } else {
+      if ((error != null && loading == false, reponseSuccess == false)) {
+        alert("Bạn vui lòng thoát app để vào lại");
       }
-      dispatch(ThongKeAdminDTAction(monthYearLimit));
-    }, [dispatch]);
-  
-    // Cập nhật state active khi dữ liệu từ Redux store thay đổi
-    useEffect(() => {
-      if (data!= null && loading == false, reponseSuccess == true) {
-        setActiveOrganize(data);
-      } else {
-        if (error != null && loading == false, reponseSuccess == false) {
-          alert("Bạn vui lòng thoát app để vào lại");
-        }
-      }
-    }, [data, error, loading, reponseSuccess]);
+    }
+  }, [data, error, loading, reponseSuccess, dateOrganize, limitActive]);
+
+  // console.log(filterForMonthYear())
 
   return (
     <View style={styles.container}>
@@ -219,10 +229,9 @@ export default function ListOrganizedActiveAdmin({ navigation }) {
               width: "100%",
               flexDirection: "row",
               alignItems: "center",
-             justifyContent:'space-between',
+              justifyContent: "space-between",
             }}
           >
-
             <Text
               style={{
                 color: Color.colorTextMain,
@@ -233,15 +242,15 @@ export default function ListOrganizedActiveAdmin({ navigation }) {
               Tên hoạt động
             </Text>
 
-              <Text
-                style={{
-                  color: Color.colorTextMain,
-                  fontSize: FontSize.sizeMain,
-                  fontWeight: 500,
-                }}
-              >
-                Ngày tổ chức
-              </Text>
+            <Text
+              style={{
+                color: Color.colorTextMain,
+                fontSize: FontSize.sizeMain,
+                fontWeight: 500,
+              }}
+            >
+              Ngày tổ chức
+            </Text>
           </View>
 
           <FlatList
@@ -310,7 +319,7 @@ const styles = StyleSheet.create({
     width: screenWidth,
     flexDirection: "row",
     justifyContent: "space-between",
-    alignItems: 'center'
+    alignItems: "center",
   },
   header: {
     fontSize: FontSize.sizeHeader - 3,
@@ -390,17 +399,17 @@ const styles = StyleSheet.create({
   },
 
   containerUserName: {
-    width: '37%',
+    width: "37%",
     height: 66,
     borderBottomWidth: 1,
     borderColor: Color.colorBorder,
-    marginRight: 60
+    marginRight: 60,
   },
 
   username: {
     width: "100%",
     fontSize: 22,
     color: Color.colorTextMain,
-    marginTop: 5
+    marginTop: 5,
   },
 });
