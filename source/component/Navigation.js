@@ -38,6 +38,8 @@ import  DetailThongKeHoatDong  from '../screen/truongCLB/detailThongKeHoatDong/D
 import  From1EditActiveTruongCLB  from '../screen/truongCLB/editActiveTruongCLB/From1EditActiveTruongCLB';
 import  From2EditActiveTruongCLB  from '../screen/truongCLB/editActiveTruongCLB/From2EditActiveTruongCLB';
 
+import  DetailActivedTruongCLB  from '../screen/truongCLB/detailActivedTruongCLB/DetailActivedTruongCLB';
+
 // Đoàn trường
 import { UITapDoanTruong } from '../screen/doanTruong/UITapDoanTruong';
 import Form2CreateActiveDT from '../screen/doanTruong/formCreateActive/Form2CreateActiveDT'
@@ -152,6 +154,8 @@ const TruongCLB = () => {
 
       <Stack.Screen name="from1EditActiveTruongCLB" component={From1EditActiveTruongCLB} />
       <Stack.Screen name="from2EditActiveTruongCLB" component={From2EditActiveTruongCLB} />
+
+      <Stack.Screen name="detailActivedTruongCLB" component={DetailActivedTruongCLB} />
     </Stack.Navigator>
   )
 

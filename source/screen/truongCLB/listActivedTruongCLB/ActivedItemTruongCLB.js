@@ -3,7 +3,7 @@ import Color from "../../../component/Color";
 import FontSize from "../../../component/FontSize";
 import moment from 'moment';
 
-const ActivedItem = (props) => {
+export default ActivedItemTruongCLB = (props) => {
 
   const { act_name, act_time } = props.active;
   const formatUpdateAt = moment(act_time).format('DD/MM/YYYY');
@@ -55,5 +55,3 @@ const ActivedItem = (props) => {
       fontWeight: '400',
     }
   })
-  
-  export default ActivedItem;

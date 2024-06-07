@@ -5,31 +5,94 @@ import {
   StatusBar,
   Image,
   ImageBackground,
+  TouchableOpacity,
   ScrollView,
+  Alert
 } from "react-native";
+import Dialog from "react-native-dialog";
+import { useState, useEffect } from "react";
 import FontSize from "../../../component/FontSize";
 import Color from "../../../component/Color";
 import { screenWidth, screenHeight } from "../../../component/DimensionsScreen";
+import moment from 'moment'
+import CancelActiveAction from '../../../redux/action/registerCancelActiveAction/CancelActiveAction'
+import Spinner from 'react-native-loading-spinner-overlay'
+import {CANCEL_ACTIVE_RESET}from '../../../redux/types/typesRegisterCancelActive/TypesCancelActive'
+import { CommonActions } from "@react-navigation/native";
+import { useDispatch, useSelector } from "react-redux";
 
-// 2 cách:
-// - ListView from a map of objects
-// - FlatList
 export default function DetailActived(props) {
+  const{navigation} = props
+  const dispatch = useDispatch()
 
+  const { loadingCancel, reponseSuccessCancel, errorCancel } = useSelector(
+    (state) => state.cancelActiveReducer
+  );
+  
   const {
-    nameActive,
-    timeOrganize,
-    deadline,
-    location,
-    quantityActived,
-    organizer,
-    description,
-    status,
+    act_name,
+    act_description,
+    act_address,
+    act_price,
+    act_status,
+    act_time,
+    amount,
+    organization,
+    register
   } = props.route.params.detailActived;
+   
+
+  const idResigter = register[0].id
+
+  const cancelActive = () => {
+    dispatch(CancelActiveAction(idResigter))
+  };
+
+  // cancel
+  useEffect(() => {
+    dispatch({ type: CANCEL_ACTIVE_RESET });
+  }, [dispatch]);
+
+  console.log(errorCancel, loadingCancel, errorCancel)
+  useEffect(() => {
+    if (errorCancel != null && loadingCancel == false) {
+      Alert.alert("Thông báo", errorCancel);
+      dispatch({ type: CANCEL_ACTIVE_RESET });
+    } else if(reponseSuccessCancel == true && loadingCancel == false){
+      Alert.alert("Bạn đã hủy đăng kí thực hiện thành công");
+      navigation.dispatch(
+        CommonActions.reset({
+          index: 0,
+          routes: [{ name: "uiTapSv" }],
+        })
+      );
+      dispatch({ type: CANCEL_ACTIVE_RESET });
+    }
+  }, [errorCancel, loadingCancel, reponseSuccessCancel]);
+
+  // btn cancel
+  const [dialogCancel, setDialogCancel] = useState(false);
+  const showHideDialogCancel = () => {
+    setDialogCancel(!dialogCancel);
+  };
+
+  const yesBtnCancel = () => {
+    setDialogCancel(!dialogCancel);
+    cancelActive()
+  };
+
+
+  const isoDate = act_time;
+  const formatAct_time = moment(isoDate).format('DD/MM/YYYY');
 
   return (
     <ScrollView style={styles.container}>
       <StatusBar style="auto" />
+      <Spinner
+        visible={loadingCancel}
+        textContent={"Loading..."}
+        textStyle={{ color: "white", fontSize: FontSize.sizeHeader }}
+      />
       <Image
         source={require("../../../resource/iconListActive/decorTop.png")}
         style={{
@@ -70,6 +133,8 @@ export default function DetailActived(props) {
             style={{
               width: "100%",
               flexDirection: "row",
+              justifyContent: 'space-between',
+              
             }}
           >
             <Text
@@ -88,20 +153,10 @@ export default function DetailActived(props) {
                 color: Color.colorTextMain,
                 fontSize: FontSize.sizeMain,
                 fontWeight: 500,
-                marginRight: 15,
+                marginRight: 30,
               }}
             >
               Thời gian
-            </Text>
-
-            <Text
-              style={{
-                color: Color.colorTextMain,
-                fontSize: FontSize.sizeMain,
-                fontWeight: 500,
-              }}
-            >
-              Trạng thái
             </Text>
           </View>
 
@@ -109,41 +164,31 @@ export default function DetailActived(props) {
           <View
             style={{
               width: "100%",
-              alignItems: "center",
-              marginTop: 20,
+              // alignItems: "center",
               flexDirection: "row",
               borderTopWidth: 0.5,
               borderColor: Color.colorTextMain,
               paddingTop: 26,
               paddingBottom: 13,
+              justifyContent: 'space-between',
             }}
           >
             <View
               style={{
-                flex: 2.4,
-                marginRight: 10,
+                width: '50%'
               }}
             >
-              <Text style={styles.contentText}>{nameActive}</Text>
+              <Text style={styles.contentText}>{act_name}</Text>
             </View>
 
             <View
               style={{
-                flex: 2,
+                width: '35%',        
+                alignSelf: 'flex-end',
                 backgroundColor: Color.colorBtn,
               }}
             >
-              <Text style={styles.contentText}>{timeOrganize}</Text>
-            </View>
-
-            <View
-              style={{
-                flex: 2,
-                backgroundColor: Color.colorBtn,
-                alignItems: "flex-end",
-              }}
-            >
-              <Text style={styles.contentText}>{status}</Text>
+              <Text style={styles.contentText}>{formatAct_time}</Text>
             </View>
           </View>
         </View>
@@ -163,28 +208,6 @@ export default function DetailActived(props) {
           }}
         >
           {/* header column */}
-          <View style={{ width: "100%", marginBottom: 20 }}>
-            <Text
-              style={{
-                color: Color.colorTextMain,
-                fontSize: FontSize.sizeMain,
-                fontWeight: 500,
-                marginRight: 20,
-              }}
-            >
-              Hạn chót
-            </Text>
-
-            <Text
-              style={{
-                color: Color.colorTextMain,
-                fontSize: FontSize.sizeMain,
-                fontWeight: 400,
-              }}
-            >
-              {deadline}
-            </Text>
-          </View>
 
           <View style={{ width: "100%", marginBottom: 20 }}>
             <Text
@@ -205,7 +228,7 @@ export default function DetailActived(props) {
                 fontWeight: 400,
               }}
             >
-              {location}
+              {act_address}
             </Text>
           </View>
 
@@ -228,7 +251,7 @@ export default function DetailActived(props) {
                 fontWeight: 400,
               }}
             >
-              {quantityActived}
+              {amount}
             </Text>
           </View>
 
@@ -251,7 +274,30 @@ export default function DetailActived(props) {
                 fontWeight: 400,
               }}
             >
-              {organizer}
+              {organization}
+            </Text>
+          </View>
+
+          <View style={{ width: "100%", marginBottom: 20 }}>
+            <Text
+              style={{
+                color: Color.colorTextMain,
+                fontSize: FontSize.sizeMain,
+                fontWeight: 500,
+                marginRight: 20,
+              }}
+            >
+              Lệ phí
+            </Text>
+
+            <Text
+              style={{
+                color: Color.colorTextMain,
+                fontSize: FontSize.sizeMain,
+                fontWeight: 400,
+              }}
+            >
+              {act_price == null ? 0 : act_price}
             </Text>
           </View>
 
@@ -274,7 +320,7 @@ export default function DetailActived(props) {
                 fontWeight: 400,
               }}
             >
-              {description}
+              {act_description}
             </Text>
           </View>
         </View>
@@ -286,6 +332,50 @@ export default function DetailActived(props) {
             justifyContent: "center",
           }}
         >
+          {/* btn cancel */}
+          <TouchableOpacity
+            style={styles.btnCancel}
+            onPress={showHideDialogCancel}
+          >
+            <Text style={styles.resigter}>Hủy</Text>
+            <Dialog.Container visible={dialogCancel}>
+              <Dialog.Title
+                style={{ color: Color.colorTextMain, fontWeight: "700" }}
+              >
+                XÁC NHẬN
+              </Dialog.Title>
+              <Dialog.Description style={{ color: "black" }}>
+                Bạn có chắc muốn hủy tham gia?
+              </Dialog.Description>
+              <Dialog.Button
+                label="No"
+                onPress={showHideDialogCancel}
+                style={[
+                  styles.btnCancel,
+                  {
+                    width: 60,
+                    height: 40,
+                    marginRight: 30,
+                    fontWeight: 500,
+                    fontSize: 18,
+                  },
+                ]}
+              />
+              <Dialog.Button
+                label="Yes"
+                onPress={yesBtnCancel}
+                style={{
+                  width: 60,
+                  height: 40,
+                  marginRight: 50,
+                  borderRadius: 5,
+                  backgroundColor: "#d9ebfe",
+                  fontWeight: 500,
+                  fontSize: 18,
+                }}
+              />
+            </Dialog.Container>
+          </TouchableOpacity>
         </View>
       </ImageBackground>
     </ScrollView>

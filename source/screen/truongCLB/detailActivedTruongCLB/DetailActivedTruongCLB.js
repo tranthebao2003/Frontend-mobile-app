@@ -15,34 +15,21 @@ import FontSize from "../../../component/FontSize";
 import Color from "../../../component/Color";
 import { screenWidth, screenHeight } from "../../../component/DimensionsScreen";
 import moment from 'moment'
-import RegisterActiveAction from '../../../redux/action/registerCancelActiveAction/RegisterActiveAction'
 import CancelActiveAction from '../../../redux/action/registerCancelActiveAction/CancelActiveAction'
 import Spinner from 'react-native-loading-spinner-overlay'
-import {REGISTER_ACTIVE_RESET}from '../../../redux/types/typesRegisterCancelActive/TypesRegisterActive'
 import {CANCEL_ACTIVE_RESET}from '../../../redux/types/typesRegisterCancelActive/TypesCancelActive'
 import { CommonActions } from "@react-navigation/native";
 import { useDispatch, useSelector } from "react-redux";
 
-// 2 cách:
-// - ListView from a map of objects
-// - FlatList
-export default function DetailActiveTruongCLB(props) {
+export default function DetailActivedTruongCLB(props) {
   const{navigation} = props
   const dispatch = useDispatch()
-  const { loading, reponseSuccess, error } = useSelector(
-    (state) => state.registerActiveReducer
-  );
 
   const { loadingCancel, reponseSuccessCancel, errorCancel } = useSelector(
     (state) => state.cancelActiveReducer
   );
   
-  // mình cần id của user để hủy đăng kí hoạt động
-  const {infoUser} = useSelector((state) => state.infoUser);
-  const {account_id} = infoUser
-  
   const {
-    id,
     act_name,
     act_description,
     act_address,
@@ -50,51 +37,23 @@ export default function DetailActiveTruongCLB(props) {
     act_status,
     act_time,
     amount,
-    creater_id,
-    audit_id,
-    createdAt,
-    updatedAt,
-    organization
-  } = props.route.params.detailActiveTruongCLB;
+    organization,
+    register
+  } = props.route.params.detailActivedTruongCLB;
+   
 
-  const registerActive = () => {
-    const activeId = {
-      act_id: id
-    }
-    dispatch(RegisterActiveAction(activeId))
-  };
+  const idResigter = register[0].id
 
   const cancelActive = () => {
-    // chỉ cần truyền thẳng account_id vì nó là delete params
-    dispatch(CancelActiveAction(account_id))
+    dispatch(CancelActiveAction(idResigter))
   };
-
-  // resigter
-  useEffect(() => {
-    dispatch({ type: REGISTER_ACTIVE_RESET });
-  }, [dispatch]);
-
-  useEffect(() => {
-    if (error != null && loading == false) {
-      Alert.alert("Thông báo", error);
-      dispatch({ type: REGISTER_ACTIVE_RESET });
-    } else if(reponseSuccess == true && loading == false){
-      Alert.alert("Bạn đã đăng kí thực hiện thành công");
-      navigation.dispatch(
-        CommonActions.reset({
-          index: 0,
-          routes: [{ name: "uiTapTruongCLB" }],
-        })
-      );
-      dispatch({ type: REGISTER_ACTIVE_RESET });
-    }
-  }, [error, loading, reponseSuccess]);
 
   // cancel
   useEffect(() => {
     dispatch({ type: CANCEL_ACTIVE_RESET });
   }, [dispatch]);
 
+  console.log(reponseSuccessCancel, loadingCancel, errorCancel, 'DetailActivedTruongCLB')
   useEffect(() => {
     if (errorCancel != null && loadingCancel == false) {
       Alert.alert("Thông báo", errorCancel);
@@ -122,18 +81,7 @@ export default function DetailActiveTruongCLB(props) {
     cancelActive()
   };
 
-  // btn resigter
-  const [dialogResigter, setDialogRegister] = useState(false);
-  const showHideDialogRegister = () => {
-    setDialogRegister(!dialogResigter);
-  };
 
-  const yesBtnResigter = () => {
-    setDialogRegister(!dialogResigter);
-    registerActive()
-  };
-  
- console.log(loadingCancel, 'loadingcancel màn DetailActiveTruongCLB')
   const isoDate = act_time;
   const formatAct_time = moment(isoDate).format('DD/MM/YYYY');
 
@@ -141,7 +89,7 @@ export default function DetailActiveTruongCLB(props) {
     <ScrollView style={styles.container}>
       <StatusBar style="auto" />
       <Spinner
-        visible={loading || loadingCancel}
+        visible={loadingCancel}
         textContent={"Loading..."}
         textStyle={{ color: "white", fontSize: FontSize.sizeHeader }}
       />
@@ -185,7 +133,8 @@ export default function DetailActiveTruongCLB(props) {
             style={{
               width: "100%",
               flexDirection: "row",
-              justifyContent: 'space-between'
+              justifyContent: 'space-between',
+              
             }}
           >
             <Text
@@ -215,13 +164,13 @@ export default function DetailActiveTruongCLB(props) {
           <View
             style={{
               width: "100%",
-              alignItems: "center",
+              // alignItems: "center",
               flexDirection: "row",
               borderTopWidth: 0.5,
               borderColor: Color.colorTextMain,
               paddingTop: 26,
               paddingBottom: 13,
-              justifyContent: 'space-between'
+              justifyContent: 'space-between',
             }}
           >
             <View
@@ -415,51 +364,6 @@ export default function DetailActiveTruongCLB(props) {
               <Dialog.Button
                 label="Yes"
                 onPress={yesBtnCancel}
-                style={{
-                  width: 60,
-                  height: 40,
-                  marginRight: 50,
-                  borderRadius: 5,
-                  backgroundColor: "#d9ebfe",
-                  fontWeight: 500,
-                  fontSize: 18,
-                }}
-              />
-            </Dialog.Container>
-          </TouchableOpacity>
-
-          {/* btn resigter */}
-          <TouchableOpacity
-            style={styles.btnResigter}
-            onPress={showHideDialogRegister}
-          >
-            <Text style={styles.resigter}>Đăng kí</Text>
-            <Dialog.Container visible={dialogResigter}>
-              <Dialog.Title
-                style={{ color: Color.colorTextMain, fontWeight: "700" }}
-              >
-                XÁC NHẬN
-              </Dialog.Title>
-              <Dialog.Description style={{ color: "black" }}>
-                Bạn có chắc muốn tham gia?
-              </Dialog.Description>
-              <Dialog.Button
-                label="No"
-                onPress={showHideDialogRegister}
-                style={[
-                  styles.btnCancel,
-                  {
-                    width: 60,
-                    height: 40,
-                    marginRight: 30,
-                    fontWeight: 500,
-                    fontSize: 18,
-                  },
-                ]}
-              />
-              <Dialog.Button
-                label="Yes"
-                onPress={yesBtnResigter}
                 style={{
                   width: 60,
                   height: 40,

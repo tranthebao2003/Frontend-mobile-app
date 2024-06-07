@@ -13,120 +13,67 @@ import {
   import { screenWidth, screenHeight } from "../../../component/DimensionsScreen";
   import ItemThongKeHoatDong from "./ItemThongKeHoatDong";
   import { useSelector, useDispatch } from "react-redux";
-  
+  import ThongKeTruongCLBAction from '../../../redux/action/thongKeAction/ThongKeTruongCLBAction'
+  import Spinner from 'react-native-loading-spinner-overlay';
+  import { THONG_KE_ACTIVE_TRUONGCLB_RESET } from "../../../redux/types/typesThongKe/TypesThongKeTruongCLB";
   export default function ListThongKeHoatDong({ navigation }) {
     // ở đây chỉ thống kế hoạt động của từng sv theo lớp,
     // tùy vào bí thư (trưởng clb) lớp nào thì chỉ có thể xem
     // sv của lớp đó thôi
+
+    const [thongKe, setThongKe] = useState()
      
-    const [active, setActive] = useState([
-      {
-        id: 1,
-        mssv: 'N21DCPT008',
-        ho: 'Trần',
-        ten: 'Thế Bảo',
-        email: 'N21DCPT008@gmail.com',
-        gioiTinh: 'nam',
-        sdt: '0928628748',
-        ngaySinh: '22/03/2003',
-        diaChi: 'xã đồi 61, trảng bom đồng nai',
-        maLop: 'D21CQPT01-N',
-        chucVu: 'không',
-        nameActive: 'Trăng cho em',
-        hdDaThamGia: 5
-      },
-  
-      {
-        id: 2,
-        mssv: 'N21DCPT009',
-        ho: 'Nguyễn',
-        ten: 'Văn An',
-        email: 'N21DCPT009@gmail.com',
-        gioiTinh: 'nam',
-        sdt: '0938567392',
-        ngaySinh: '15/04/2003',
-        diaChi: 'phường Hòa Khánh, quận Liên Chiểu, Đà Nẵng',
-        maLop: 'D21CQPT01-N',
-        chucVu: 'không',
-        nameActive: 'Trăng cho em',
-        hdDaThamGia: 8
-    },
-    {
-        id: 3,
-        mssv: 'N21DCPT010',
-        ho: 'Lê',
-        ten: 'Thị Bích',
-        email: 'N21DCPT010@gmail.com',
-        gioiTinh: 'nữ',
-        sdt: '0912784932',
-        ngaySinh: '03/05/2003',
-        diaChi: 'phường Bình Hòa, thành phố Thuận An, Bình Dương',
-        maLop: 'D21CQPT01-N',
-        chucVu: 'không',
-        nameActive: 'Mùa hè xanh',
-        hdDaThamGia: 8
-    },
-    {
-        id: 4,
-        mssv: 'N21DCPT011',
-        ho: 'Phạm',
-        ten: 'Hoàng Nam',
-        email: 'N21DCPT011@gmail.com',
-        gioiTinh: 'nam',
-        sdt: '0909876543',
-        ngaySinh: '18/06/2003',
-        diaChi: 'phường An Phú, quận 2, TP Hồ Chí Minh',
-        maLop: 'D21CQPT01-N',
-        chucVu: 'không',
-        nameActive: 'Đoán hình',
-        hdDaThamGia: 10
-    },
-    {
-        id: 5,
-        mssv: 'N21DCPT012',
-        ho: 'Trịnh',
-        ten: 'Ngọc Lan',
-        email: 'N21DCPT012@gmail.com',
-        gioiTinh: 'nữ',
-        sdt: '0987654321',
-        ngaySinh: '29/07/2003',
-        diaChi: 'phường 9, quận Phú Nhuận, TP Hồ Chí Minh',
-        maLop: 'D21CQPT01-N',
-        chucVu: 'không',
-        nameActive: 'Trăng cho em',
-        hdDaThamGia: 10
-    },
-    {
-        id: 6,
-        mssv: 'N21DCPT013',
-        ho: 'Đặng',
-        ten: 'Quốc Huy',
-        email: 'N21DCPT013@gmail.com',
-        gioiTinh: 'nam',
-        sdt: '0976543210',
-        ngaySinh: '10/08/2003',
-        diaChi: 'xã Xuân Hưng, huyện Xuân Lộc, Đồng Nai',
-        maLop: 'D21CQPT01-N',
-        chucVu: 'không',
-        nameActive: 'Tiếp sức mùa thì',
-        hdDaThamGia: 22
-    }
-    ]);
-  
-    const [dialogCancel, setDialogCancel] = useState(false);
-    const showHideDialogCancel = () => {
-      setDialogCancel(!dialogCancel);
-    };
-  
-    const [yesNotificationCancel, setYesNotificationCancel] = useState(false);
-    const yesBtnCancel = () => {
-      setDialogCancel(!dialogCancel);
-      setYesNotificationCancel(!yesNotificationCancel);
-    };
+    const dispatch = useDispatch();
+    const {
+      loadingTHONG_KE_TRUONGCLB,
+      reponseSuccessTHONG_KE_TRUONGCLB,
+      errorTHONG_KE_TRUONGCLB,
+      dataTHONG_KE_TRUONGCLB,
+    } = useSelector((state) => state.thongKeTruongCLBReducer);
+    const {  infoUser } = useSelector((state) => state.infoUser);
+    const {class_id} = infoUser
+    
+    useEffect(()=> {
+      dispatch({type: THONG_KE_ACTIVE_TRUONGCLB_RESET})
+    }, [dispatch])
+
+      useEffect(() => {
+        const classIdInput = {
+          classId: class_id
+        }
+        dispatch(ThongKeTruongCLBAction(classIdInput));
+      }, [dispatch]);
+    
+      useEffect(() => {
+        if (
+          (dataTHONG_KE_TRUONGCLB != null && loadingTHONG_KE_TRUONGCLB == false,
+          reponseSuccessTHONG_KE_TRUONGCLB == true)
+        ) {
+          setThongKe(dataTHONG_KE_TRUONGCLB);
+        } else {
+          if (
+            (errorTHONG_KE_TRUONGCLB != null &&
+              loadingTHONG_KE_TRUONGCLB == false,
+            reponseSuccessTHONG_KE_TRUONGCLB == false)
+          ) {
+            alert("Bạn vui lòng thoát app để vào lại");
+          }
+        }
+      }, [
+        dataTHONG_KE_TRUONGCLB,
+        errorTHONG_KE_TRUONGCLB,
+        loadingTHONG_KE_TRUONGCLB,
+        reponseSuccessTHONG_KE_TRUONGCLB,
+      ]);
   
     return (
       <View style={styles.container}>
         <StatusBar style="auto" />
+        <Spinner
+        visible={loadingTHONG_KE_TRUONGCLB}
+        textContent={"Loading..."}
+        textStyle={{ color: "white", fontSize: FontSize.sizeHeader }}
+      />
         <Image
           source={require("../../../resource/iconListActive/decorTop.png")}
           style={{
@@ -224,15 +171,15 @@ import {
 
             <FlatList
               style={{ flex: 1 }}
-              data={active}
+              data={thongKe}
               renderItem={({ item }) => (
                 <ItemThongKeHoatDong
                   profileSinhVien={item}
-                    onPressItem={() => {
-                      navigation.navigate("detailThongKeHoatDong", {
-                        detailThongKeHoatDong: item,
-                      });
-                    }}
+                    // onPressItem={() => {
+                    //   navigation.navigate("detailThongKeHoatDong", {
+                    //     detailThongKeHoatDong: item,
+                    //   });
+                    // }}
                 />
               )}
               keyExtractor={(item) => item.id}
@@ -253,7 +200,7 @@ import {
               }}
               resizeMode="contain"
             ></Image>
-            <Text style={styles.headerTruongCLB}>D21CQPT01</Text>
+            <Text style={styles.headerTruongCLB}>{class_id}</Text>
           </View>
         </ImageBackground>
       </View>

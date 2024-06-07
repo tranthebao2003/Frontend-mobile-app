@@ -7,28 +7,29 @@ import {
     ImageBackground,
     TextInput,
     FlatList,
-    Keyboard,
+    TouchableOpacity
   } from 'react-native';
-import React, { useState, useEffect, createContext} from 'react';
+import React, { useState, useEffect} from 'react';
 import FontSize from '../../../component/FontSize';
 import Color from '../../../component/Color';
 import {screenWidth, screenHeight} from '../../../component/DimensionsScreen'
-import ActiveItem from './ActiveItem'
-import { useDispatch, useSelector } from 'react-redux';
-import {showKeyBoardAction, hideKeyBoardAction} from '../../../redux/action/KeyBoardAction'
-import {ListActiveAction} from '../../../redux/action/ListActiveAction'
+import ActivedItemTruongCLB from './ActivedItemTruongCLB'
+import { useSelector, useDispatch} from 'react-redux';
+import ActiveParticipatedAction from '../../../redux/action/ActiveParticipatedAction';
 import Spinner from 'react-native-loading-spinner-overlay';
 
-export function ScreenList(props) {
-  const {navigation} = props
-
+export default function ScreenListActivedTruongCLB({navigation}) {
+  // đây cũng gọi api trả về từ server những họa động mà
+  // sv đã đăng kí tham gia
+  
   const dispatch = useDispatch()
 
-  const { loading, listActive, error} = useSelector(state => state.listActiveReducer)
+  const { loading, activeParticipated, error } = useSelector(
+    (state) => state.activeParticipatedReducer
+  );
   // console.log(infoUser, 'infoUser màn profileSv')
   
   
-  const urlListActiveAccept = 'activities/activities_accept'
   // Khởi tạo useState để lưu trữ dữ liệu
   const [active, setActive] = useState([]);
   const [filterActive, setFilterActive] = useState([]);
@@ -36,19 +37,19 @@ export function ScreenList(props) {
 
   // Gọi action để lấy dữ liệu khi component được mount
   useEffect(() => {
-    dispatch(ListActiveAction(urlListActiveAccept));
+    dispatch(ActiveParticipatedAction());
   }, [dispatch]);
 
   // Cập nhật state active khi dữ liệu từ Redux store thay đổi
   useEffect(() => {
-    if (listActive) {
-      setActive(listActive);
+    if (activeParticipated) {
+      setActive(activeParticipated);
     } else {
       if(error !== ''){
         alert('Bạn vui lòng thoát app để vào lại')
       }
     }
-  }, [listActive]);
+  }, [activeParticipated]);
 
   // Lọc danh sách dựa trên searchText
   useEffect(() => {
@@ -63,34 +64,18 @@ export function ScreenList(props) {
     setFilterActive(filteredActives());
   }, [searchText, active]);
 
-  console.log(active, 'active màn screenList');
-  console.log(filterActive, 'filtered active màn screenList');
- 
-  // console.log (active.length, 'active màn screenList')
+  console.log(active, 'active màn ScreenListActived');
+  console.log(filterActive, 'filtered active màn ScreenListActived');
 
   const {showKeyBoard} = useSelector(state => state.keyboardShow)
-
-  useEffect(() => {
-    const showSubscription = Keyboard.addListener('keyboardDidShow', () => {
-      dispatch(showKeyBoardAction())
-    });
-    const hideSubscription = Keyboard.addListener('keyboardDidHide', () => {
-      dispatch(hideKeyBoardAction())
-    });
-
-    // showSubscription.remove() và hideSubscription.remove() là các phương thức được 
-    // sử dụng để gỡ bỏ các hàm xử lý sự kiện đã được đăng ký trước đó thông qua addListener.
-    // Khi component bị unmount hoặc useEffect được gọi lại, các hàm xử lý sự kiện này 
-    // không còn cần thiết nữa, vì vậy chúng ta gọi remove() để loại bỏ chúng
-    return () => {
-      showSubscription.remove();
-      hideSubscription.remove();
-    };
-  }, []);
-
   return (
     <View style={styles.container}>
       <StatusBar style="auto" />
+      <Spinner
+          visible={loading}
+          textContent={"Loading..."}
+          textStyle={{ color: "white", fontSize: FontSize.sizeHeader }}
+        />
       <Image
         source={require("../../../resource/iconListActive/decorTop.png")}
         style={{
@@ -103,17 +88,11 @@ export function ScreenList(props) {
         }}
         resizeMode="contain"
       ></Image>
-
       <ImageBackground
         source={require("../../../resource/iconLogin/bg.png")}
         resizeMode="cover"
         style={{ width: "100%", height: "120%" }}
       >
-        <Spinner
-          visible={loading}
-          textContent={"Loading..."}
-          textStyle={{ color: "white", fontSize: FontSize.sizeHeader }}
-        />
         <View
           style={{
             height: (1 / 10) * screenHeight,
@@ -155,7 +134,7 @@ export function ScreenList(props) {
         </View>
 
         <View style={styles.containerHeader}>
-          <Text style={styles.header}>Danh sách hoạt động</Text>
+          <Text style={styles.header}>Hoạt động đã tham gia</Text>
         </View>
 
         <View
@@ -165,13 +144,13 @@ export function ScreenList(props) {
             marginHorizontal: 10,
             padding: 20,
             borderRadius: 10,
-            shadowColor: "black",
+            shadowColor: 'black',
             shadowOffset: { width: 500, height: 500 },
             shadowOpacity: 1,
             elevation: 0.8,
             zIndex: 2,
             borderWidth: 0.8,
-            borderColor: Color.colorBorder,
+            borderColor: Color.colorBorder
           }}
         >
           <View
@@ -203,22 +182,20 @@ export function ScreenList(props) {
               Thời gian
             </Text>
           </View>
-
-           
             <FlatList
-              style={{ flex: 1, marginBottom: showKeyBoard ? 95 : 200 }}
+              style={{flex: 1,  marginBottom: showKeyBoard ? 95 : 200}}
               data={filterActive}
               renderItem={({ item }) => (
-                <ActiveItem
+                <ActivedItemTruongCLB
                   active={item}
-                  onPressItem={() =>
-                    navigation.navigate("detailActive", { detailActive: item })
-                  }
+                  onPressItem={() => {
+                    navigation.navigate('detailActivedTruongCLB', {detailActivedTruongCLB : item});
+                  }}
                 />
               )}
               keyExtractor={(item) => item.id}
             />
-          
+    
         </View>
       </ImageBackground>
     </View>
@@ -229,7 +206,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#fff',
-    // cần xử lí sự kiện bàn phím xuất hiện và biến mất
   },
   containerHeader: {
     height: 1/10* screenHeight,

@@ -25,9 +25,9 @@ export default RegisterActiveAction = (act_id) => {
         type: REGISTER_ACTIVE_SUCCESS,
       });
     } catch (error) {
-      console.error('Đăng kí thất bại', error);
+      console.error('Đăng kí hoạt động thất bại', error);
       
-      let errorForUser = 'Đăng kí thất bại vui lòng thử lại'
+      let errorForUser = 'Đăng kí hoạt động thất bại vui lòng thử lại'
       dispatch({
         type: REGISTER_ACTIVE_FAILURE,
         payload: errorForUser,

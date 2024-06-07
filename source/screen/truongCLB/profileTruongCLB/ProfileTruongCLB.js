@@ -268,7 +268,7 @@ function ProfileTruongCLB() {
                 <Text
                   style={[styles.textMain, { fontWeight: 400, color: "black" }]}
                 >
-                  {gender_id}
+                  {gender_id == 1 ? 'Nam' : 'Nữ'}
                 </Text>
               </View>
             </View>

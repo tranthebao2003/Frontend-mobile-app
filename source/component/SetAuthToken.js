@@ -9,14 +9,16 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 const SetAuthToken = async () => {
   try {
     const tokenReceive = await AsyncStorage.getItem("token");
+    
     if (tokenReceive) {
       axios.defaults.headers.common['Authorization'] = `${tokenReceive}`;
+      console.log('Headers sau khi thiết lập token:', axios.defaults.headers.common);
     } else {
-      console.log('xóa header token màn hình SetAuthToken')
+      console.log('Không tìm thấy token, xóa header token');
       delete axios.defaults.headers.common["Authorization"];
     }
 
-    console.log('Headers trước khi gọi API:', axios.defaults.headers.common)
+    
   } catch (error) {
     console.error("Không thể load token lên từ local storage", error);
   }

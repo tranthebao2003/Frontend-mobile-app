@@ -5,49 +5,33 @@ import {
   StatusBar,
   Image,
   ImageBackground,
-  TextInput,
-  FlatList,
   TouchableOpacity,
   ScrollView,
+  Alert
 } from "react-native";
 import Dialog from "react-native-dialog";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import FontSize from "../../../component/FontSize";
 import Color from "../../../component/Color";
 import { screenWidth, screenHeight } from "../../../component/DimensionsScreen";
 import moment from 'moment'
+import RegisterActiveAction from '../../../redux/action/registerCancelActiveAction/RegisterActiveAction'
+import CancelActiveAction from '../../../redux/action/registerCancelActiveAction/CancelActiveAction'
+import Spinner from 'react-native-loading-spinner-overlay'
+import {REGISTER_ACTIVE_RESET}from '../../../redux/types/typesRegisterCancelActive/TypesRegisterActive'
+import {CANCEL_ACTIVE_RESET}from '../../../redux/types/typesRegisterCancelActive/TypesCancelActive'
+import { CommonActions } from "@react-navigation/native";
+import { useDispatch, useSelector } from "react-redux";
 
-// 2 cách:
-// - ListView from a map of objects
-// - FlatList
 export default function DetailActive(props) {
-  // btn cancel
-  const [dialogCancel, setDialogCancel] = useState(false);
-  const showHideDialogCancel = () => {
-    setDialogCancel(!dialogCancel);
-  };
-
-  const [yesNotificationCancel, setYesNotificationCancel] = useState(false);
-  const yesBtnCancel = () => {
-    setDialogCancel(!dialogCancel);
-    setYesNotificationCancel(!yesNotificationCancel);
-  };
-
-  // btn resigter
-  const [dialogResigter, setDialogRegister] = useState(false);
-  const showHideDialogRegister = () => {
-    setDialogRegister(!dialogResigter);
-  };
-
-  const [yesNotificationResigter, setYesNotificationResigter] = useState(false);
-  const yesBtnResigter = () => {
-    setDialogRegister(!dialogResigter);
-    setYesNotificationResigter(!yesNotificationResigter);
-  };
-
-
+  const{navigation} = props
+  const dispatch = useDispatch()
+  const { loading, reponseSuccess, error } = useSelector(
+    (state) => state.registerActiveReducer
+  );
   
   const {
+    id,
     act_name,
     act_description,
     act_address,
@@ -58,8 +42,60 @@ export default function DetailActive(props) {
     creater_id,
     audit_id,
     createdAt,
-    updatedAt
+    updatedAt,
+    organization
   } = props.route.params.detailActive;
+
+  const registerActive = () => {
+    const activeId = {
+      act_id: id
+    }
+    dispatch(RegisterActiveAction(activeId))
+  };
+
+
+  // resigter
+  useEffect(() => {
+    dispatch({ type: REGISTER_ACTIVE_RESET });
+  }, [dispatch]);
+
+  useEffect(() => {
+    if (error != null && loading == false) {
+      Alert.alert("Thông báo", error);
+      dispatch({ type: REGISTER_ACTIVE_RESET });
+    } else if(reponseSuccess == true && loading == false){
+      Alert.alert("Bạn đã đăng kí thực hiện thành công");
+      navigation.dispatch(
+        CommonActions.reset({
+          index: 0,
+          routes: [{ name: "uiTapSv" }],
+        })
+      );
+      dispatch({ type: REGISTER_ACTIVE_RESET });
+    }
+  }, [error, loading, reponseSuccess]);
+
+  // btn cancel
+  const [dialogCancel, setDialogCancel] = useState(false);
+  const showHideDialogCancel = () => {
+    setDialogCancel(!dialogCancel);
+  };
+
+  const yesBtnCancel = () => {
+    setDialogCancel(!dialogCancel);
+    cancelActive()
+  };
+
+  // btn resigter
+  const [dialogResigter, setDialogRegister] = useState(false);
+  const showHideDialogRegister = () => {
+    setDialogRegister(!dialogResigter);
+  };
+
+  const yesBtnResigter = () => {
+    setDialogRegister(!dialogResigter);
+    registerActive()
+  };
 
   const isoDate = act_time;
   const formatAct_time = moment(isoDate).format('DD/MM/YYYY');
@@ -67,6 +103,11 @@ export default function DetailActive(props) {
   return (
     <ScrollView style={styles.container}>
       <StatusBar style="auto" />
+      <Spinner
+        visible={loading}
+        textContent={"Loading..."}
+        textStyle={{ color: "white", fontSize: FontSize.sizeHeader }}
+      />
       <Image
         source={require("../../../resource/iconListActive/decorTop.png")}
         style={{
@@ -238,6 +279,29 @@ export default function DetailActive(props) {
                 marginRight: 20,
               }}
             >
+              Đơn vị tổ chức
+            </Text>
+
+            <Text
+              style={{
+                color: Color.colorTextMain,
+                fontSize: FontSize.sizeMain,
+                fontWeight: 400,
+              }}
+            >
+              {organization}
+            </Text>
+          </View>
+
+          <View style={{ width: "100%", marginBottom: 20 }}>
+            <Text
+              style={{
+                color: Color.colorTextMain,
+                fontSize: FontSize.sizeMain,
+                fontWeight: 500,
+                marginRight: 20,
+              }}
+            >
               Lệ phí
             </Text>
 
@@ -283,74 +347,6 @@ export default function DetailActive(props) {
             justifyContent: "center",
           }}
         >
-          {/* btn cancel */}
-          <TouchableOpacity
-            style={styles.btnCancel}
-            onPress={showHideDialogCancel}
-          >
-            <Text style={styles.resigter}>Hủy</Text>
-            <Dialog.Container visible={dialogCancel}>
-              <Dialog.Title
-                style={{ color: Color.colorTextMain, fontWeight: "700" }}
-              >
-                XÁC NHẬN
-              </Dialog.Title>
-              <Dialog.Description style={{ color: "black" }}>
-                Bạn có chắc muốn hủy tham gia?
-              </Dialog.Description>
-              <Dialog.Button
-                label="No"
-                onPress={showHideDialogCancel}
-                style={[
-                  styles.btnCancel,
-                  {
-                    width: 60,
-                    height: 40,
-                    marginRight: 30,
-                    fontWeight: 500,
-                    fontSize: 18,
-                  },
-                ]}
-              />
-              <Dialog.Button
-                label="Yes"
-                onPress={yesBtnCancel}
-                style={{
-                  width: 60,
-                  height: 40,
-                  marginRight: 50,
-                  borderRadius: 5,
-                  backgroundColor: "#d9ebfe",
-                  fontWeight: 500,
-                  fontSize: 18,
-                }}
-              />
-            </Dialog.Container>
-            <Dialog.Container visible={yesNotificationCancel}>
-              <Dialog.Title
-                style={{ color: Color.colorTextMain, fontWeight: "700" }}
-              >
-                THÔNG BÁO
-              </Dialog.Title>
-              <Dialog.Description style={{ color: "black" }}>
-                Bạn đã hủy tham gia thành công!
-              </Dialog.Description>
-              <Dialog.Button
-                label="Ok"
-                onPress={() => setYesNotificationCancel(!yesNotificationCancel)}
-                style={[
-                  styles.btnCancel,
-                  {
-                    width: 60,
-                    height: 40,
-                    marginRight: 30,
-                    fontWeight: 500,
-                    fontSize: 18,
-                  },
-                ]}
-              />
-            </Dialog.Container>
-          </TouchableOpacity>
 
           {/* btn resigter */}
           <TouchableOpacity
@@ -395,30 +391,6 @@ export default function DetailActive(props) {
                 }}
               />
             </Dialog.Container>
-            <Dialog.Container visible={yesNotificationResigter}>
-                <Dialog.Title
-                  style={{ color: Color.colorTextMain, fontWeight: "700" }}
-                >
-                  THÔNG BÁO
-                </Dialog.Title>
-                <Dialog.Description style={{ color: "black" }}>
-                  Bạn đã tham gia thành công!
-                </Dialog.Description>
-                <Dialog.Button
-                  label="Ok"
-                  onPress={() => setYesNotificationResigter(!yesNotificationResigter)}
-                  style={[
-                    styles.btnCancel,
-                    {
-                      width: 60,
-                      height: 40,
-                      marginRight: 30,
-                      fontWeight: 500,
-                      fontSize: 18,
-                    },
-                  ]}
-                />
-              </Dialog.Container>
           </TouchableOpacity>
         </View>
       </ImageBackground>

@@ -18,7 +18,7 @@ import { useSelector, useDispatch} from 'react-redux';
 import ActiveParticipatedAction from '../../../redux/action/ActiveParticipatedAction';
 import Spinner from 'react-native-loading-spinner-overlay';
 
-export default function ListActive({navigation}) {
+export default function ScreenListActived({navigation}) {
   // đây cũng gọi api trả về từ server những họa động mà
   // sv đã đăng kí tham gia
   
@@ -157,18 +157,9 @@ export default function ListActive({navigation}) {
             style={{
               width: "100%",
               flexDirection: "row",
+              justifyContent: 'space-between'
             }}
           >
-            <Text
-              style={{
-                color: Color.colorTextMain,
-                fontSize: FontSize.sizeMain,
-                fontWeight: 500,
-                marginRight: 28,
-              }}
-            >
-              STT
-            </Text>
 
             <Text
               style={{

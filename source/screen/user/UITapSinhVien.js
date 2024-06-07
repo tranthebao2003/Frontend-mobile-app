@@ -1,4 +1,3 @@
-import {createContext} from "react";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { Image, Text } from "react-native";
 import Color from "../../component/Color";

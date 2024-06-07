@@ -4,7 +4,7 @@ import FontSize from "../../../component/FontSize";
 
 const ItemThongKeHoatDong = (props) => {
 
-    const {mssv, hdDaThamGia} = props.profileSinhVien; // destructuring an object
+    const {MSSV, count_register} = props.profileSinhVien; // destructuring an object
     const { onPressItem } = props;
     return (
       <TouchableOpacity
@@ -26,7 +26,7 @@ const ItemThongKeHoatDong = (props) => {
             marginRight: 15
           }}
         >
-          <Text style={styles.contentText}>{mssv}</Text>
+          <Text style={styles.contentText}>{MSSV}</Text>
         </View>
 
 
@@ -37,7 +37,7 @@ const ItemThongKeHoatDong = (props) => {
             width: '40%',
           }}
         >
-          <Text style={styles.contentText}>{hdDaThamGia}</Text>
+          <Text style={styles.contentText}>{count_register}</Text>
         </View>
       </TouchableOpacity>
     );
