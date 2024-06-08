@@ -1,12 +1,12 @@
 import { Text, View, StyleSheet, TouchableOpacity } from "react-native";
-import Color from "../../../component/Color";
-import FontSize from "../../../component/FontSize";
+import Color from "../../../../component/Color";
+import FontSize from "../../../../component/FontSize";
 import moment from 'moment'
 
-const ApproveSvItemAdmin = (props) => {
+const StudentRegisterItem = (props) => {
 
-    const { act_name, act_time } = props.activeStatus2; // destructuring an object
-    const formatAct_time = moment(act_time).format('DD/MM/YYYY');
+    const { act_account,  account} = props.studentRegister; // destructuring an object
+    const {username} = account
 
     const { onPressItem } = props;
     return (
@@ -30,7 +30,7 @@ const ApproveSvItemAdmin = (props) => {
             paddingRight: 5,
           }}
         >
-          <Text style={styles.contentText}>{act_name}</Text>
+          <Text style={styles.contentText}>{act_account}</Text>
         </View>
 
         <View
@@ -40,7 +40,7 @@ const ApproveSvItemAdmin = (props) => {
             alignItems: "flex-end",
           }}
         >
-          <Text style={styles.contentText}>{formatAct_time}</Text>
+          <Text style={styles.contentText}>{username}</Text>
         </View>
       </TouchableOpacity>
     );
@@ -55,4 +55,4 @@ const ApproveSvItemAdmin = (props) => {
     }
   })
   
-  export default ApproveSvItemAdmin;
+  export default StudentRegisterItem;

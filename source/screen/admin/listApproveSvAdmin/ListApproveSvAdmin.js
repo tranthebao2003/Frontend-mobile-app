@@ -15,112 +15,62 @@ import {
   import { screenWidth, screenHeight } from "../../../component/DimensionsScreen";
   import ApproveSvItemAdmin from "./ApproveSvItemAdmin";
   import { useSelector, useDispatch } from "react-redux";
+  import {ListActiveAction} from '../../../redux/action/ListActiveAction'
+  import Spinner from 'react-native-loading-spinner-overlay';
   
-  export default function ListApproveSvAdmin({ navigation }) {
-    // ở đây chỉ bao gồm những hoạt động do đoàn trường tạo
-    // do api trả về lun
-    const [active, setActive] = useState([
-      {
-        id: 1,
-        mssv: 'N21DCPT008',
-        ho: 'Trần',
-        ten: 'Thế Bảo',
-        email: 'N21DCPT008@gmail.com',
-        gioiTinh: 'nam',
-        sdt: '0928628748',
-        ngaySinh: '22/03/2003',
-        diaChi: 'xã đồi 61, trảng bom đồng nai',
-        maLop: 'D21CQPT01-N',
-        chucVu: 'không',
-        nameActive: 'Trăng cho em'
-      },
+  export default function ListApproveSvAdmin(props) {
+    const {navigation} = props
+  const dispatch = useDispatch()
+
+  const { loading, listActive, error} = useSelector(state => state.listActiveReducer)
+  // console.log(infoUser, 'infoUser màn profileSv')
   
-      {
-        id: 2,
-        mssv: 'N21DCPT009',
-        ho: 'Nguyễn',
-        ten: 'Văn An',
-        email: 'N21DCPT009@gmail.com',
-        gioiTinh: 'nam',
-        sdt: '0938567392',
-        ngaySinh: '15/04/2003',
-        diaChi: 'phường Hòa Khánh, quận Liên Chiểu, Đà Nẵng',
-        maLop: 'D21CQPT01-N',
-        chucVu: 'không',
-        nameActive: 'Trăng cho em'
-    },
-    {
-        id: 3,
-        mssv: 'N21DCPT010',
-        ho: 'Lê',
-        ten: 'Thị Bích',
-        email: 'N21DCPT010@gmail.com',
-        gioiTinh: 'nữ',
-        sdt: '0912784932',
-        ngaySinh: '03/05/2003',
-        diaChi: 'phường Bình Hòa, thành phố Thuận An, Bình Dương',
-        maLop: 'D21CQPT01-N',
-        chucVu: 'không',
-        nameActive: 'Mùa hè xanh'
-    },
-    {
-        id: 4,
-        mssv: 'N21DCPT011',
-        ho: 'Phạm',
-        ten: 'Hoàng Nam',
-        email: 'N21DCPT011@gmail.com',
-        gioiTinh: 'nam',
-        sdt: '0909876543',
-        ngaySinh: '18/06/2003',
-        diaChi: 'phường An Phú, quận 2, TP Hồ Chí Minh',
-        maLop: 'D21CQPT01-N',
-        chucVu: 'không',
-        nameActive: 'Đoán hình'
-    },
-    {
-        id: 5,
-        mssv: 'N21DCPT012',
-        ho: 'Trịnh',
-        ten: 'Ngọc Lan',
-        email: 'N21DCPT012@gmail.com',
-        gioiTinh: 'nữ',
-        sdt: '0987654321',
-        ngaySinh: '29/07/2003',
-        diaChi: 'phường 9, quận Phú Nhuận, TP Hồ Chí Minh',
-        maLop: 'D21CQPT01-N',
-        chucVu: 'không',
-        nameActive: 'Trăng cho em'
-    },
-    {
-        id: 6,
-        mssv: 'N21DCPT013',
-        ho: 'Đặng',
-        ten: 'Quốc Huy',
-        email: 'N21DCPT013@gmail.com',
-        gioiTinh: 'nam',
-        sdt: '0976543210',
-        ngaySinh: '10/08/2003',
-        diaChi: 'xã Xuân Hưng, huyện Xuân Lộc, Đồng Nai',
-        maLop: 'D21CQPT01-N',
-        chucVu: 'không',
-        nameActive: 'Tiếp sức mùa thì'
+  
+  const urlAllActiveCreated = 'activities/activities_user_created'
+  // Khởi tạo useState để lưu trữ dữ liệu
+  const [activeCreated, setActiveCreated] = useState([]);
+  const [filterActiveCreated, setFilterActiveCreated] = useState([]);
+  
+  // Gọi action để lấy dữ liệu khi component được mount
+  useEffect(() => {
+    dispatch(ListActiveAction(urlAllActiveCreated));
+  }, [dispatch]);
+  
+  // Cập nhật state active khi dữ liệu từ Redux store thay đổi
+  useEffect(() => {
+    if (listActive) {
+      setActiveCreated(listActive);
+    } else {
+      if(error !== ''){
+        alert('Bạn vui lòng thoát app để vào lại')
+      }
     }
-    ]);
+  }, [listActive]);
   
-    const [dialogCancel, setDialogCancel] = useState(false);
-    const showHideDialogCancel = () => {
-      setDialogCancel(!dialogCancel);
+  // Lọc danh sách dựa trên act_status == 2
+  useEffect(() => {
+    const filteredActives = () => {
+      if (Array.isArray(activeCreated)) {
+        return activeCreated.filter((eachActiveCreated) => {
+          if(eachActiveCreated.act_status == 2){
+            return eachActiveCreated
+          }
+        });
+      }
     };
+    console.log(filteredActives())
+    setFilterActiveCreated(filteredActives());
+  }, [activeCreated]);
   
-    const [yesNotificationCancel, setYesNotificationCancel] = useState(false);
-    const yesBtnCancel = () => {
-      setDialogCancel(!dialogCancel);
-      setYesNotificationCancel(!yesNotificationCancel);
-    };
   
     return (
       <View style={styles.container}>
         <StatusBar style="auto" />
+        <Spinner
+        visible={loading}
+        textContent={"Loading..."}
+        textStyle={{ color: "white", fontSize: FontSize.sizeHeader }}
+      />
         <Image
           source={require("../../../resource/iconListActive/decorTop.png")}
           style={{
@@ -198,7 +148,7 @@ import {
                   fontWeight: 500,
                 }}
               >
-                Mã số sinh viên
+                Tên hoạt động
               </Text>
               
               <Text
@@ -208,7 +158,7 @@ import {
                   fontWeight: 500,
                 }}
               >
-                 Tên hoạt động
+                 Ngày tổ chức
               </Text>
               
               
@@ -216,13 +166,13 @@ import {
   
             <FlatList
               style={{ flex: 1 }}
-              data={active}
+              data={filterActiveCreated}
               renderItem={({ item }) => (
                 <ApproveSvItemAdmin
-                  approveSv={item}
+                  activeStatus2={item}
                   onPressItem={() => {
-                    navigation.navigate("detailApproveSvAdmin", {
-                      detailApproveSvAdmin: item,
+                    navigation.navigate("listStudentRegister", {
+                      listStudentRegister: item,
                     });
                   }}
                 />

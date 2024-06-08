@@ -24,6 +24,8 @@ import RegisterActiveReducer from"../reducers/registerCancelActiveReducer/Regist
 import CancelActiveReducer from"../reducers/registerCancelActiveReducer/CancelActiveReducer";
 import ThongKeTruongCLBReducer from"../reducers/thongKeReducer/ThongKeTruongCLBReducer";
 import NotificationStudentDTReducer from"../reducers/NotificationStudentDTReducer";
+import StudentRegisterActiveReducer from"../reducers/approveStudentReducer/StudentRegisterActiveReducer";
+import DetailStudentRegisterReducer from"../reducers/approveStudentReducer/DetailStudentRegisterReducer";
 
 
 import { thunk } from "redux-thunk";
@@ -54,6 +56,8 @@ const rootReducer = combineReducers({
     cancelActiveReducer: CancelActiveReducer,
     thongKeTruongCLBReducer: ThongKeTruongCLBReducer,
     notificationStudentDTReducer: NotificationStudentDTReducer,
+    studentRegisterActiveReducer: StudentRegisterActiveReducer,
+    detailStudentRegisterReducer: DetailStudentRegisterReducer,
 })
 
 export default Store = createStore(rootReducer, applyMiddleware(thunk))

@@ -106,6 +106,9 @@ import  Form3EditDoanTruong  from '../screen/admin/manageAccount/editAccount/edi
 import  DetailAccountStudent  from '../screen/admin/manageAccount/detailAccountStudent/DetailAccountStudent'
 import  DetailAccountDT  from '../screen/admin/manageAccount/detailAccountDT/DetailAccountDT'
 
+import  ListStudentRegister  from '../screen/admin/listApproveSvAdmin/listStudentRegister/ListStudentRegister'
+import  DetailStudentRegister  from '../screen/admin/listApproveSvAdmin/listStudentRegister/DetailStudentRegister'
+
 
 const Stack = createNativeStackNavigator();
 
@@ -235,6 +238,9 @@ const Admin = () => {
 
       <Stack.Screen name="detailAccountStudent" component={DetailAccountStudent} />
       <Stack.Screen name="detailAccountDT" component={DetailAccountDT} />
+
+      <Stack.Screen name="listStudentRegister" component={ListStudentRegister} />
+      <Stack.Screen name="detailStudentRegister" component={DetailStudentRegister} />
     </Stack.Navigator>
   )
  

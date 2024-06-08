@@ -5,9 +5,8 @@ import moment from 'moment';
 
 const ActiveItemTruongCLB = (props) => {
 
-  const { act_name, updateAt } = props.active;
-  const isoDate = updateAt;
-  const formatUpdateAt = moment(isoDate).format('DD/MM/YYYY');
+  const { act_name, act_time } = props.active;
+  const formatUpdateAt = moment(act_time).format('DD/MM/YYYY');
 
   const { onPressItem } = props;
   return (

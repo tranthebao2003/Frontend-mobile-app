@@ -47,12 +47,6 @@ function ProfileTruongCLB() {
     setDialogCancel(!dialogCancel);
   };
 
-  const [yesNotificationCancel, setYesNotificationCancel] = useState(false);
-  const yesBtnCancel = () => {
-    setDialogCancel(!dialogCancel);
-    setYesNotificationCancel(!yesNotificationCancel);
-  };
-
   return (
     <SafeAreaView style={{ flex: 1, zIndex: 0 }}>
       <StatusBar barStyle="auto"></StatusBar>

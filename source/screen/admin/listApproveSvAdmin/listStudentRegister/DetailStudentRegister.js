@@ -6,27 +6,43 @@ import {
   Image,
   ScrollView,
   ImageBackground,
-  TouchableOpacity
+  TouchableOpacity,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import FontSize from "../../../component/FontSize";
-import Color from "../../../component/Color";
-import { screenWidth, screenHeight } from "../../../component/DimensionsScreen";
-import {useEffect, useState } from "react";
+import FontSize from "../../../../component/FontSize";
+import Color from "../../../../component/Color";
+import {
+  screenWidth,
+  screenHeight,
+} from "../../../../component/DimensionsScreen";
+import { useEffect, useState } from "react";
 import Dialog from "react-native-dialog";
 import { useDispatch, useSelector } from "react-redux";
-import {LogoutAction} from '../../../redux/action/LoginAction'
-import {getProfileUser} from '../../../redux/action/InfoUserAction'
-import Spinner from 'react-native-loading-spinner-overlay';
-import IsoTime from "../../../component/formatTime/IsoTime";
+import { LogoutAction } from "../../../../redux/action/LoginAction";
+import DetailStudentRegisterAction from "../../../../redux/action/approveStudentAction/DetailStudentRegisterAction";
+import Spinner from "react-native-loading-spinner-overlay";
+import IsoTime from "../../../../component/formatTime/IsoTime";
+import ApproveStudentRegisterAction from "../../../../redux/action/ApproveStudentRegisterAction";
+import { APPROVE_STUDENT_REGISTER_RESET } from "../../../../redux/types/TypesApproveStudentRegister";
 
+export default function DetailStudentRegister(props) {
+  const dispatch = useDispatch();
+  const {
+    // id này là id register để chấp nhận sv đăng kí tham gia hoạt động
+    id,
+    status_id,
+    act_account,
+  } = props.route.params.detailStudentRegister;
 
-function Profile() {
-  const dispatch = useDispatch()
+  const { loading, infoUserStudent, error } = useSelector(
+    (state) => state.detailStudentRegisterReducer
+  );
 
-  const { loading, infoUser, error} = useSelector(state => state.infoUser)
-  // console.log(infoUser, 'infoUser màn profileSv')
+  const { loadingStudent, reponseSuccessStudent, errorStudent } = useSelector(
+    (state) => state.detailStudentRegisterReducer
+  );
 
+  const [info, setInfo] = useState("");
   const {
     last_name,
     first_name,
@@ -36,32 +52,80 @@ function Profile() {
     birthday,
     gender_id,
     class_id,
-    address
-  } = infoUser;
+    address,
+  } = info;
 
-  const formattedDate = IsoTime(birthday)
+  const formattedDate = IsoTime(birthday);
 
   useEffect(() => {
-    dispatch(getProfileUser())
-  }
-  , [dispatch])
+    dispatch(DetailStudentRegisterAction(act_account));
+  }, [dispatch]);
 
+  useEffect(() => {
+    if (infoUserStudent) {
+      setInfo(infoUserStudent);
+    }
+  }, [infoUserStudent]);
+
+  // btn approve
+  const [dialogApprove, setDialogApprove] = useState(false);
+  const approveStudent = () => {
+    const statusIdAndId = {
+      id: id,
+      status: status_id,
+    };
+    dispatch(ApproveStudentRegisterAction(statusIdAndId));
+  };
+
+  const showHideDialogApprove = () => {
+    setDialogApprove(!dialogApprove);
+  };
+
+  const yesBtnApprove = () => {
+    setDialogApprove(!dialogApprove);
+    approveStudent();
+  };
+
+  useEffect(() => {
+    dispatch({ type: APPROVE_STUDENT_REGISTER_RESET });
+  }, [dispatch]);
+
+  useEffect(() => {
+    if (errorStudent != null && loadingStudent == false) {
+      Alert.alert("Thông báo", errorStudent);
+      dispatch({ type: APPROVE_STUDENT_REGISTER_RESET });
+    } else if (reponseSuccessStudent == true && loadingStudent == false) {
+      Alert.alert("Bạn đã thực hiện thành công");
+      navigation.dispatch(
+        CommonActions.reset({
+          index: 0,
+          routes: [{ name: "uiTapAdmin" }],
+        })
+      );
+      dispatch({ type: APPROVE_STUDENT_REGISTER_RESET });
+    }
+  }, [errorStudent, loadingStudent, reponseSuccessStudent]);
+
+  // btn cancel
   const [dialogCancel, setDialogCancel] = useState(false);
   const showHideDialogCancel = () => {
     setDialogCancel(!dialogCancel);
   };
 
-  
+  const yesBtnCancel = () => {
+    setDialogCancel(!dialogCancel);
+  };
+
   return (
     <SafeAreaView style={{ flex: 1, zIndex: 0 }}>
       <StatusBar barStyle="auto"></StatusBar>
       <ImageBackground
-        source={require("../../../resource/iconLogin/bg.png")}
+        source={require("../../../../resource/iconLogin/bg.png")}
         resizeMode="cover"
         style={{ width: "100%", height: "120%" }}
       >
         <Spinner
-          visible={loading}
+          visible={loading || loadingStudent}
           textContent={"Loading..."}
           textStyle={{ color: "white", fontSize: FontSize.sizeHeader }}
         />
@@ -91,13 +155,13 @@ function Profile() {
                 tintColor: Color.colorTextMain,
               }}
               resizeMode="cover"
-              source={require("../../../resource/iconProfile/user.png")}
+              source={require("../../../../resource/iconProfile/user.png")}
             />
           </View>
 
           <View style={styles.containerNamePhone}>
             <Text style={[styles.textLarge, { marginTop: 95 }]}>
-              {last_name + ' ' +  first_name}
+              {last_name + " " + first_name}
             </Text>
             <Text style={styles.textMain}>{phone}</Text>
 
@@ -128,7 +192,7 @@ function Profile() {
                     tintColor: Color.colorTextMain,
                   }}
                   resizeMode="cover"
-                  source={require("../../../resource/iconProfile/mssv.png")}
+                  source={require("../../../../resource/iconProfile/mssv.png")}
                 />
                 <Text style={[styles.textMain, { fontWeight: "500" }]}>
                   {MSSV}
@@ -153,10 +217,10 @@ function Profile() {
                     tintColor: Color.colorTextMain,
                   }}
                   resizeMode="contain"
-                  source={require("../../../resource/iconProfile/gender.png")}
+                  source={require("../../../../resource/iconProfile/gender.png")}
                 />
                 <Text style={[styles.textMain, { fontWeight: "500" }]}>
-                  {gender_id == 1 ? 'Nam' : 'Nữ'}
+                  {gender_id == 1 ? "Nam" : "Nữ"}
                 </Text>
               </View>
             </View>
@@ -191,7 +255,7 @@ function Profile() {
                   tintColor: Color.colorTextMain,
                 }}
                 resizeMode="cover"
-                source={require("../../../resource/iconProfile/email.png")}
+                source={require("../../../../resource/iconProfile/email.png")}
               />
               <View style={{ width: "100%" }}>
                 <Text style={[styles.textLarge, { fontSize: 18 }]}>Email</Text>
@@ -225,7 +289,7 @@ function Profile() {
                   tintColor: Color.colorTextMain,
                 }}
                 resizeMode="cover"
-                source={require("../../../resource/iconProfile/dateOfBirth.png")}
+                source={require("../../../../resource/iconProfile/dateOfBirth.png")}
               />
               <View style={{ flex: 1 }}>
                 <Text style={[styles.textLarge, { fontSize: 18 }]}>
@@ -258,12 +322,10 @@ function Profile() {
                   tintColor: Color.colorTextMain,
                 }}
                 resizeMode="cover"
-                source={require("../../../resource/iconProfile/class.png")}
+                source={require("../../../../resource/iconProfile/class.png")}
               />
               <View style={{ flex: 1, flexWrap: "wrap" }}>
-                <Text style={[styles.textLarge, { fontSize: 18 }]}>
-                  Lớp
-                </Text>
+                <Text style={[styles.textLarge, { fontSize: 18 }]}>Lớp</Text>
                 <Text
                   style={[styles.textMain, { fontWeight: 400, color: "black" }]}
                 >
@@ -291,10 +353,12 @@ function Profile() {
                   tintColor: Color.colorTextMain,
                 }}
                 resizeMode="cover"
-                source={require("../../../resource/iconProfile/address.png")}
+                source={require("../../../../resource/iconProfile/address.png")}
               />
               <View style={{ flex: 1, flexWrap: "wrap" }}>
-                <Text style={[styles.textLarge, { fontSize: 18 }]}>Địa chỉ</Text>
+                <Text style={[styles.textLarge, { fontSize: 18 }]}>
+                  Địa chỉ
+                </Text>
                 <Text
                   style={[styles.textMain, { fontWeight: 400, color: "black" }]}
                 >
@@ -304,61 +368,106 @@ function Profile() {
             </View>
           </View>
 
-          {/* btn logout*/}
-          <TouchableOpacity
-            style={styles.btnCancel}
-            onPress={showHideDialogCancel}
+          <View
+            style={{
+              width: "100%",
+              flexDirection: "row",
+              justifyContent: "space-between",
+              alignItems: "center",
+            }}
           >
-            <Text style={[styles.resigter, { color: Color.colorRemove }]}>
-              Đăng xuất
-            </Text>
-            <Dialog.Container
-              visible={dialogCancel}
-              contentStyle={{
-                width: (3 / 4) * screenWidth,
-                height: (1 / 5) * screenHeight,
-              }}
+            {/* btn resigter */}
+            <TouchableOpacity
+              style={styles.btnResigter}
+              onPress={showHideDialogApprove}
             >
-              <Dialog.Title
-                style={{ color: Color.colorTextMain, fontWeight: "700" }}
-              >
-                XÁC NHẬN
-              </Dialog.Title>
-              <Dialog.Description style={{ color: "black" }}>
-                Bạn có chắc muốn đăng xuất?
-              </Dialog.Description>
-              <Dialog.Button
-                label="No"
-                onPress={showHideDialogCancel}
-                style={{
-                  width: 60,
-                  height: 40,
-                  marginRight: 30,
-                  marginTop: 10,
-                  borderRadius: 5,
-                  fontWeight: 500,
-                  fontSize: 18,
-                  borderWidth: 1,
-                  borderColor: Color.colorRemove,
-                  color: Color.colorRemove,
-                }}
-              />
-              <Dialog.Button
-                label="Yes"
-                onPress={() => dispatch(LogoutAction())}
-                style={{
-                  width: 60,
-                  height: 40,
-                  marginTop: 10,
-                  marginRight: 50,
-                  borderRadius: 5,
-                  backgroundColor: "#d9ebfe",
-                  fontWeight: 500,
-                  fontSize: 18,
-                }}
-              />
-            </Dialog.Container>
-          </TouchableOpacity>
+              <Text style={styles.resigter}>Duyệt</Text>
+              <Dialog.Container visible={dialogResigter}>
+                <Dialog.Title
+                  style={{ color: Color.colorTextMain, fontWeight: "700" }}
+                >
+                  XÁC NHẬN
+                </Dialog.Title>
+                <Dialog.Description style={{ color: "black" }}>
+                  Bạn có chắc duyệt sinh viên này này ?
+                </Dialog.Description>
+                <Dialog.Button
+                  label="No"
+                  onPress={showHideDialogApprove}
+                  style={[
+                    styles.btnCancel,
+                    {
+                      width: 60,
+                      height: 40,
+                      marginRight: 30,
+                      fontWeight: 500,
+                      fontSize: 18,
+                    },
+                  ]}
+                />
+                <Dialog.Button
+                  label="Yes"
+                  onPress={yesBtnApprove}
+                  style={{
+                    width: 60,
+                    height: 40,
+                    marginRight: 50,
+                    borderRadius: 5,
+                    backgroundColor: "#d9ebfe",
+                    fontWeight: 500,
+                    fontSize: 18,
+                  }}
+                />
+              </Dialog.Container>
+            </TouchableOpacity>
+
+            {/* btn cancel */}
+            <TouchableOpacity
+              style={[styles.btnCancel, { borderColor: Color.colorRemove }]}
+              onPress={showHideDialogCancel}
+            >
+              <Text style={[styles.resigter, { color: Color.colorRemove }]}>
+                Không duyệt
+              </Text>
+              <Dialog.Container visible={dialogCancel}>
+                <Dialog.Title
+                  style={{ color: Color.colorTextMain, fontWeight: "700" }}
+                >
+                  XÁC NHẬN
+                </Dialog.Title>
+                <Dialog.Description style={{ color: "black" }}>
+                  Bạn có chắc không duyệt hoạt động này ?
+                </Dialog.Description>
+                <Dialog.Button
+                  label="No"
+                  onPress={showHideDialogCancel}
+                  style={[
+                    styles.btnCancel,
+                    {
+                      width: 60,
+                      height: 40,
+                      marginRight: 30,
+                      fontWeight: 500,
+                      fontSize: 18,
+                    },
+                  ]}
+                />
+                <Dialog.Button
+                  label="Yes"
+                  onPress={yesBtnCancel}
+                  style={{
+                    width: 60,
+                    height: 40,
+                    marginRight: 50,
+                    borderRadius: 5,
+                    backgroundColor: "#d9ebfe",
+                    fontWeight: 500,
+                    fontSize: 18,
+                  }}
+                />
+              </Dialog.Container>
+            </TouchableOpacity>
+          </View>
         </ScrollView>
       </ImageBackground>
     </SafeAreaView>
@@ -394,29 +503,24 @@ const styles = StyleSheet.create({
   },
 
   btnCancel: {
-    width: 85 * 2,
+    width: 150,
     height: 30 * 1.6,
-    marginBottom: 60,
     justifyContent: "center",
     alignItems: "center",
-    alignSelf: 'flex-end',
     borderWidth: 1,
     borderRadius: 10,
     borderColor: Color.colorRemove,
   },
 
   btnResigter: {
-    width: 85 * 2,
+    width: 150,
     height: 30 * 1.6,
     borderRadius: 10,
-    margin: 20,
-    backgroundColor: Color.colorBgUiTap,
+    borderWidth: 1,
+    borderColor: Color.colorTextMain,
     justifyContent: "center",
     alignItems: "center",
-    shadowColor: Color.colorTextMain,
-    shadowOffset: { width: 500, height: 500 },
-    shadowOpacity: 0.8,
-    elevation: 0.8,
+    shadowColor: "black",
   },
 
   resigter: {
@@ -425,5 +529,3 @@ const styles = StyleSheet.create({
     color: Color.colorTextMain,
   },
 });
-
-export default Profile;
