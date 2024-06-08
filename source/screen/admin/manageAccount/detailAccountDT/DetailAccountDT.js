@@ -30,7 +30,8 @@ import { useDispatch, useSelector } from "react-redux";
 
 export default function DetailAccountDT(props) {
   const infoDT = {
-    // account_id: dùng để xóa, khóa tk
+    // dùng để xóa, khóa tk
+    account_id,
     id,
     first_name,
     last_name,
@@ -40,10 +41,10 @@ export default function DetailAccountDT(props) {
     email,
     account,
   } = props.route.params.detailAccountDT;
-  console.log(id)
+
 
   // truyền đi
-  const acountDT = {id, status_id, username} = account
+  const accountDT = {id, status_id, username} = account
 
   // hiển thị phía dưới
   const {createdAt, updatedAt } = account;
@@ -176,7 +177,7 @@ export default function DetailAccountDT(props) {
 
   const yesBtnEditTaiKhoan = () => {
     setDialogEditTaiKhoan(!dialogEditTaiKhoan);
-    navigation.navigate("formEditAcountStudent", { accountStudent });
+    navigation.navigate("formEditAcountDT", { accountDT });
   };
 
   return (
@@ -603,7 +604,7 @@ export default function DetailAccountDT(props) {
               style={[
                 styles.btnResigter,
                 {
-                  backgroundColor: Color.colorBgUiTap,
+                  backgroundColor: Color.colorBtnUnLock,
                 },
               ]}
               onPress={showHideDialogLock}

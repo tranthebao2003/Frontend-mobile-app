@@ -43,7 +43,7 @@ export default function DetailAccountStudent(props) {
   } = props.route.params.detailAccountStudent;
 
   const accountStudent = {
-    // id: làm key để đổi thông tin
+    // id: làm key để đổi thông tin,
     id,
     status_id,
     username,
@@ -646,7 +646,7 @@ export default function DetailAccountStudent(props) {
               style={[
                 styles.btnResigter,
                 {
-                  backgroundColor: Color.colorBgUiTap,
+                  backgroundColor: Color.colorBtnUnLock,
                 },
               ]}
               onPress={showHideDialogLock}

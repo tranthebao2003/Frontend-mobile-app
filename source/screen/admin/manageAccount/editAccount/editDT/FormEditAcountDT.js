@@ -8,7 +8,8 @@ import {
     TextInput,
     TouchableOpacity,
     ScrollView,
-    Keyboard
+    Keyboard,
+    Alert
   } from "react-native";
   import React, { useState, useEffect} from "react";
   import FontSize from "../../../../../component/FontSize";
@@ -18,23 +19,22 @@ import {
   import Dialog from 'react-native-dialog'
   import {useDispatch, useSelector} from "react-redux";
   import {showKeyBoardAction, hideKeyBoardAction} from '../../../../../redux/action/KeyBoardAction'
-  
+  import LockAccountAction from "../../../../../redux/action/removeLockAccountAction/LockAccountAction";
+  import Spinner from "react-native-loading-spinner-overlay";
+
   export default function FormEditAcountDT(props) {
     const {navigation} = props
-    const accountDT = {
+    const dispatch = useDispatch()
+    const{
+      // id này là key để sửa username password đoàn trường
       id,
-      // account_id: dùng để xóa, khóa tk
-      account_id,
-      first_name,
-      last_name,
-      phone,
-      email,
-      address,
-      account,
-    } = props.route.params.accountDT
+      status_id,
+      username,
+    } = props.route.params.accountDT;
     
-    const {username} = account;
-    const positionOld = props.route.params.accountDT.position
+    const { loadingLock, reponseSuccessLock, errorLock } = useSelector(
+      (state) => state.lockAccountReducer
+    );
 
     const [visiblePassword, setVisiblePassword] = useState(true);
     const changeIconPassword = () => setVisiblePassword(!visiblePassword);
@@ -59,13 +59,13 @@ import {
     const [dialogPassword, setDialogPassword] = useState(false);
 
     const [userName, setUserName] = useState(username);
-    const [position, setPosition] = useState(positionOld);
+  
 
     const navigateFormContinue = () => {
   
       // console.log(date1, date2)
       if (
-        userName == '' || password == '' || position == ''
+        userName == '' || password == ''
       ) {
         setDialogThongtin(true)
       }
@@ -74,25 +74,32 @@ import {
         setDialogPassword (true)
       }
       else {
-        navigation.navigate("form2EditDoanTruong", {
-          id: id,
-          username: userName,
-          password: password,
-          role_id: 4,
-          position: position,
-
-          account_id: account_id,
-          first_name: first_name,
-          last_name: last_name,
-          phone: phone,
-          email: email,
-          address: address,
-          account: account,
-        });
+        const newAccountDT = {
+          id:id ,
+          status_id:status_id ,
+          username:username ,
+          password:password 
+        }
+        dispatch(LockAccountAction(newAccountDT))
       }
     };
 
-    const dispatch = useDispatch()
+
+    useEffect(() => {
+      if (errorLock != null && loadingLock == false) {
+        Alert.alert("Thông báo", errorLock);
+        dispatch({ type: LOCK_ACCOUNT_RESET });
+      } else if (reponseSuccessLock == true && loadingLock == false) {
+        Alert.alert("Bạn đã thực hiện thành công");
+        navigation.dispatch(
+          CommonActions.reset({
+            index: 0,
+            routes: [{ name: "uiTapAdmin" }],
+          })
+        );
+        dispatch({ type: LOCK_ACCOUNT_RESET });
+      }
+    }, [errorLock, loadingLock, reponseSuccessLock]);
   
     const {showKeyBoard} = useSelector(state => state.keyboardShow)
     useEffect(() => {
@@ -112,6 +119,11 @@ import {
     return (
       <View style={styles.container}>
         <StatusBar style="auto" />
+        <Spinner
+          visible={loadingLock}
+          textContent={"Loading..."}
+          textStyle={{ color: "white", fontSize: FontSize.sizeHeader }}
+        />
         <ImageBackground
           source={require("../../../../../resource/iconLogin/bg.png")}
           resizeMode="cover"
@@ -159,66 +171,17 @@ import {
             </View>
           </View>
 
-          {/* decorate steps */}
-          <View
-            style={{
-              width: screenWidth,
-              justifyContent: "center",
-              alignItems: "center",
-              flexDirection: "row",
-            }}
-          >
-            <View
-              style={{
-                width: 15,
-                height: 15,
-                backgroundColor: Color.colorDecorateStep,
-                borderRadius: 50,
-              }}
-            />
-            <View
-              style={{
-                width: 100,
-                height: 2,
-                backgroundColor: "#b1ceef",
-                // borderRadius: 50,
-              }}
-            />
-            <View
-              style={{
-                width: 15,
-                height: 15,
-                backgroundColor: "#b1ceef",
-                borderRadius: 50,
-              }}
-            />
-             <View
-              style={{
-                width: 100,
-                height: 2,
-                backgroundColor: "#b1ceef",
-                // borderRadius: 50,
-              }}
-            />
-            <View
-              style={{
-                width: 15,
-                height: 15,
-                backgroundColor: "#b1ceef",
-                borderRadius: 50,
-              }}
-            />
-          </View>
           <View style={styles.containerHeader}>
-            <Text style={styles.header}>Tạo tài khoản đoàn trường</Text>
+            <Text style={styles.header}>Sửa tài khoản đoàn trường</Text>
           </View>
 
           <ScrollView
             style={{
-              flex: 1,
+              height: screenHeight,
+              width: screenWidth,
               marginTop: 20,
               paddingHorizontal: 20,
-              marginBottom: showKeyBoard ? 1/2*screenHeight - 40: 0
+              marginBottom: showKeyBoard ? (1 / 2) * screenHeight - 40 : 0,
             }}
           >
             {/* Name active */}
@@ -275,11 +238,13 @@ import {
                 ></TextInput>
 
                 {isValidPassword === false ? (
-                  <View style={{
-                    top: 26,
-                    position: "absolute",
-                    marginTop: 8,
-                  }}>
+                  <View
+                    style={{
+                      top: 26,
+                      position: "absolute",
+                      marginTop: 8,
+                    }}
+                  >
                     <Text
                       style={{
                         fontSize: 16,
@@ -287,7 +252,7 @@ import {
                         fontWeight: "500",
                       }}
                     >
-                      Password phải đủ 8 kí tự trong đó ít nhất 1 chữ số, 
+                      Password phải đủ 8 kí tự trong đó ít nhất 1 chữ số,
                     </Text>
                     <Text
                       style={{
@@ -296,7 +261,7 @@ import {
                         fontWeight: "500",
                       }}
                     >
-                     1 chữ hoa và 1 chữ thường
+                      1 chữ hoa và 1 chữ thường
                     </Text>
                   </View>
                 ) : (
@@ -321,35 +286,12 @@ import {
               </View>
             </View>
 
-            {/* Position */}
-            <View style={styles.containerFormActive}>
-              <View style={{ flexDirection: "row" }}>
-                <Text style={styles.headerFormActive}>Chức vụ</Text>
-                <Text
-                  style={[
-                    styles.headerFormActive,
-                    { color: Color.colorRemove },
-                  ]}
-                >
-                  (*)
-                </Text>
-              </View>
-
-              <TextInput
-                style={styles.formActive}
-                onChangeText={(positionInput) => {
-                  setPosition(positionInput);
-                }}
-                value={position}
-              ></TextInput>
-            </View>
-
             <View
               style={{
                 flexDirection: "row",
                 alignItems: "center",
                 justifyContent: "space-between",
-                marginBottom: showKeyBoard ? 30: 0
+                marginVertical: 30,
               }}
             >
               <Text
@@ -445,7 +387,54 @@ import {
                 </Dialog.Container>
               </TouchableOpacity>
             </View>
+
+            {/* posision, logo */}
           </ScrollView>
+
+          <View style={styles.containerPositionLogo}>
+            <Image
+              source={require("../../../../../resource/iconHomeAdmin/iconAdmin.png")}
+              style={{
+                height: 42,
+                width: 42,
+                position: "absolute",
+                left: 12,
+                top: 13,
+                zIndex: 5,
+              }}
+              resizeMode="contain"
+            ></Image>
+            <Text style={styles.headerAdmin}>Admin</Text>
+          </View>
+
+          <View style={{ width: "100%" }}>
+            <Image
+              source={require("../../../../../resource/iconLogin/lotLogo2.png")}
+              style={{
+                height: 68,
+                width: 68,
+                position: "absolute",
+                right: 42,
+                bottom: 150,
+                borderRadius: 8,
+                zIndex: 1,
+              }}
+              resizeMode="contain"
+            ></Image>
+            <Image
+              source={require("../../../../../resource/iconLogin/logo.png")}
+              style={{
+                height: 60,
+                width: 60,
+                position: "absolute",
+                right: 45,
+                bottom: 150,
+                borderRadius: 16,
+                zIndex: 2,
+              }}
+              resizeMode="contain"
+            ></Image>
+          </View>
         </ImageBackground>
       </View>
     );
@@ -595,9 +584,27 @@ import {
       width: "85%",
     },
   
-    
   eye: {
     height: 26,
     width: 26,
+  },
+
+  containerPositionLogo: {
+    position: "absolute",
+    bottom: 150,
+    width: 0.8 * screenWidth,
+    marginLeft: 40,
+    paddingVertical: 20,
+    backgroundColor: Color.colorBgUiTap,
+    borderRadius: 10,
+    elevation: 2,
+    shadowColor: "black",
+  },
+
+  headerAdmin: {
+    fontSize: FontSize.sizeMain,
+    fontWeight: "600",
+    color: Color.colorTextMain,
+    marginLeft: 70,
   },
   });

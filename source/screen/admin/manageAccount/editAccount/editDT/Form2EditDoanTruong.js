@@ -27,21 +27,23 @@ import {
       last_name,
       phone,
       address,
-      position,
       email,
       account,
     } = props.route.params;
+
+    const positionOld = props.route.params.position
 
     const [dialogThongtin, setDialogThongtin] = useState(false);
 
     const [hoVaTenLot, setHoVaTenLot] = useState(first_name);
     const [ten, setTen] = useState(last_name);
     const [sdt, setSdt] = useState(phone);
+    const [position, setPosition] = useState(positionOld);
 
     const navigateFormContinue = () => {
   
       // console.log(date1, date2)
-      if (hoVaTenLot == "" || ten == "" || sdt == "") {
+      if (hoVaTenLot == "" || ten == "" || sdt == "" || position == "") {
         setDialogThongtin(true);
       }
       else {
@@ -133,21 +135,6 @@ import {
               style={{
                 width: 100,
                 height: 2,
-                backgroundColor: Color.colorDecorateStep,
-              }}
-            />
-            <View
-              style={{
-                width: 15,
-                height: 15,
-                backgroundColor: Color.colorDecorateStep,
-                borderRadius: 50,
-              }}
-            />
-             <View
-              style={{
-                width: 100,
-                height: 2,
                 backgroundColor: "#b1ceef",
                 // borderRadius: 50,
               }}
@@ -162,7 +149,7 @@ import {
             />
           </View>
           <View style={styles.containerHeader}>
-            <Text style={styles.header}>Tạo tài khoản đoàn trường</Text>
+            <Text style={styles.header}>Sửa tài khoản đoàn trường</Text>
           </View>
 
           <ScrollView
@@ -170,10 +157,9 @@ import {
               flex: 1,
               marginTop: 10,
               paddingHorizontal: 20,
-              marginBottom: showKeyBoard ? 1/2*screenHeight - 40: 0
+              marginBottom: showKeyBoard ? (1 / 2) * screenHeight - 40 : 100,
             }}
           >
-
             {/* Họ và tên lót */}
             <View style={styles.containerFormActive}>
               <View style={{ flexDirection: "row" }}>
@@ -190,7 +176,7 @@ import {
 
               <TextInput
                 style={styles.formActive}
-                autoFocus = {true}
+                autoFocus={true}
                 onChangeText={(hoVaTenLotInput) => {
                   setHoVaTenLot(hoVaTenLotInput);
                 }}
@@ -222,7 +208,7 @@ import {
             </View>
 
             {/* Số diện thoại */}
-            <View style={[styles.containerFormActive, {marginBottom: 32,}]}>
+            <View style={[styles.containerFormActive, { marginBottom: 32 }]}>
               <View style={{ flexDirection: "row" }}>
                 <Text style={styles.headerFormActive}>Số điện thoại</Text>
                 <Text
@@ -236,12 +222,35 @@ import {
               </View>
 
               <TextInput
-                keyboardType='number-pad'
+                keyboardType="number-pad"
                 style={styles.formActive}
                 onChangeText={(sdtInput) => {
                   setSdt(sdtInput);
                 }}
                 value={sdt}
+              ></TextInput>
+            </View>
+
+            {/* Position */}
+            <View style={styles.containerFormActive}>
+              <View style={{ flexDirection: "row" }}>
+                <Text style={styles.headerFormActive}>Chức vụ</Text>
+                <Text
+                  style={[
+                    styles.headerFormActive,
+                    { color: Color.colorRemove },
+                  ]}
+                >
+                  (*)
+                </Text>
+              </View>
+
+              <TextInput
+                style={styles.formActive}
+                onChangeText={(positionInput) => {
+                  setPosition(positionInput);
+                }}
+                value={position}
               ></TextInput>
             </View>
 
@@ -251,7 +260,7 @@ import {
                 flexDirection: "row",
                 alignItems: "center",
                 justifyContent: "space-between",
-                marginBottom: showKeyBoard ? 30: 0
+                marginBottom: 30,
               }}
             >
               <Text
@@ -305,7 +314,6 @@ import {
                     ]}
                   />
                 </Dialog.Container>
-
               </TouchableOpacity>
             </View>
           </ScrollView>
