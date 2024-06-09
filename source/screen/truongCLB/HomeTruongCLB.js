@@ -82,14 +82,15 @@ function HomeTruongCLB(props) {
           {/* two item Top */}
           <View
             style={{
-              width: "97%",
+              width: screenWidth,
               justifyContent: "space-between",
               flexDirection: "row",
-              marginBottom: 50,
+              marginBottom: 30,
+              paddingHorizontal: 20
             }}
           >
-            {/* filter active by month and year*/}
-            <View style={{ alignItems: "center" }}>
+            {/* danh sach hd*/}
+            <View style={{ alignItems: "center", alignSelf: 'center'}}>
               <TouchableOpacity
                 style={styles.containerIcon}
                 onPress={() => navigation.navigate("listActiveTruongCLB")}
@@ -100,11 +101,12 @@ function HomeTruongCLB(props) {
                   source={require("../../resource/iconHomeDoanTruong/hoatDong.png")}
                 />
               </TouchableOpacity>
-              <Text style={styles.bottomText}>Danh sách hoạt động</Text>
+              <Text style={styles.bottomText}>Danh sách</Text>
+              <Text style={[styles.bottomText, {marginTop: 0}, ]}>hoạt động</Text>
             </View>
 
-            {/* approve student */}
-            <View style={{ alignItems: "center", marginRight: 10}}>
+            {/* hoat dong da tao */}
+            <View style={{ alignItems: "center",  alignSelf: 'center'}}>
               <TouchableOpacity
                 style={styles.containerIcon}
                 onPress={() => navigation.navigate("listActiveCreatedTruongCLB")}
@@ -115,14 +117,31 @@ function HomeTruongCLB(props) {
                   source={require("../../resource/iconHomeDoanTruong/taoHoatDong1.png")}
                 />
               </TouchableOpacity>
-              <Text style={styles.bottomText}>Hoạt động đã tạo</Text>
+              <Text style={styles.bottomText}>Hoạt động </Text>
+              <Text style={[styles.bottomText, {marginTop: 0}]}>đã tạo</Text>
+            </View>
+
+            {/* Hoạt động đã tham gia */}
+            <View style={{ alignItems: "center"}}>
+              <TouchableOpacity
+                style={styles.containerIcon}
+                onPress={() => navigation.navigate("screenListActivedTruongCLB")}
+              >
+                <Image
+                  style={styles.icon}
+                  resizeMode="cover"
+                  source={require("../../resource/iconHomeDoanTruong/participatated.png")}
+                />
+              </TouchableOpacity>
+              <Text style={styles.bottomText}>Hoạt động</Text>
+              <Text style={[styles.bottomText, {marginTop: 0}]}>đã tham gia</Text>
             </View>
           </View>
 
           {/* two item bottom */}
           <View
             style={{
-              width: "95%",
+              width: "92%",
               justifyContent: "space-between",
               flexDirection: "row",
               marginBottom: 60,

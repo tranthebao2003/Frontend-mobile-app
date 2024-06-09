@@ -9,6 +9,8 @@ import { useEffect } from 'react';
 import SetAuthToken from "./SetAuthToken";
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
+import ChangePassword from "./ChangePassword";
+
 // Xác minh
 import Login from '../component/welcome/Login';
 import ForgotPassword from '../component/welcome/ForgotPassword';
@@ -29,7 +31,7 @@ import  DetailActiveTruongCLB  from '../screen/truongCLB/detailActiveTruongCLB/D
 import  ListActiveCreatedTruongCLB  from '../screen/truongCLB/listActiveCreatedTruongCLB/ListActiveCreatedTruongCLB';
 import  DetailActiveCreated  from '../screen/truongCLB/detailActiveCreated/DetailActiveCreated';
 
-import  ListApproveSvTruongCLB  from '../screen/truongCLB/listApproveSvTruongCLB/ListApproveSvTruongCLB';
+import  ListApproveSvTruongCLB  from '../screen/truongCLB/listApproveTruongCLB//ListApproveSvTruongCLB';
 import  DetailApproveSvTruongCLB  from '../screen/truongCLB/detailApproveSvTruongCLB/DetailApproveSvTruongCLB';
 
 import  ListThongKeHoatDong  from '../screen/truongCLB/thongKeHoatDong/ListThongKeHoatDong';
@@ -39,10 +41,13 @@ import  From1EditActiveTruongCLB  from '../screen/truongCLB/editActiveTruongCLB/
 import  From2EditActiveTruongCLB  from '../screen/truongCLB/editActiveTruongCLB/From2EditActiveTruongCLB';
 
 import  DetailActivedTruongCLB  from '../screen/truongCLB/detailActivedTruongCLB/DetailActivedTruongCLB';
+import  DetailStudentRegisterTruongCLB  from '../screen/truongCLB/listApproveTruongCLB/listStudentRegisterTruongCLB/DetailStudentRegisterTruongCLB';
+import  ListStudentRegisterTruongCLB  from '../screen/truongCLB/listApproveTruongCLB/listStudentRegisterTruongCLB/ListStudentRegisterTruongCLB';
 
 // Đoàn trường
 import { UITapDoanTruong } from '../screen/doanTruong/UITapDoanTruong';
 import Form2CreateActiveDT from '../screen/doanTruong/formCreateActive/Form2CreateActiveDT'
+import ScreenListActivedTruongCLB from "../screen/truongCLB/listActivedTruongCLB/ScreenListActivedTruongCLB";
 
 
 import DetailActiveDoanTruong from '../screen/doanTruong/detailActive/DetailActiveDoanTruong'
@@ -53,13 +58,15 @@ import ListActiveApproveDT from "../screen/doanTruong/listActiveApprove/ListActi
 import DetailActiveApprove from "../screen/doanTruong/detailActiveApprove/DetailActiveApprove";
 import ListOrganizedActiveDT from "../screen/doanTruong/listOrganizedActive/ListOrganizedActiveDT";
 import DetailOrganizedActive from "../screen/doanTruong/detailOrganizedActive/DetailOrganizedActive";
-import ListApproveSv from "../screen/doanTruong/listApproveSv/ListApproveSv";
-import DetailApproveSv from "../screen/doanTruong/detailApproveSv/DetailApproveSv";
+import ListApproveSvDT  from '../screen/doanTruong/listApproveSvDT/ListApproveSvDT'
+import ListStudentRegisterDT  from '../screen/doanTruong/listApproveSvDT/listStudentRegisterDT/ListStudentRegisterDT'
 
 import From1EditActiveDoanTruong from "../screen/doanTruong/editActiveDoanTruong/From1EditActiveDoanTruong";
 import From2EditActiveDoanTruong from "../screen/doanTruong/editActiveDoanTruong/From2EditActiveDoanTruong";
 
 import DetailActiveCreatedDT from "../screen/doanTruong/detailActiveCreated/DetailActiveCreatedDT";
+import DetailStudentRegisterDT from "../screen/doanTruong/listApproveSvDT/listStudentRegisterDT/DetailStudentRegisterDT";
+
 
 
 // Admin
@@ -131,6 +138,7 @@ const SinhVien = () => {
       <Stack.Screen name="uiTapSv" component={UITapSinhVien} />
       <Stack.Screen name="detailActive" component={DetailActive} />
       <Stack.Screen name="detailActived" component={DetailActived} />
+      <Stack.Screen name="changePassword" component={ChangePassword} />
     </Stack.Navigator>
   )
 
@@ -141,6 +149,7 @@ const TruongCLB = () => {
     // Trưởng câu lạc bộ, bí thứ
     <Stack.Navigator initialRouteName='uiTapTruongCLB' screenOptions={{ headerShown: false }}>
       <Stack.Screen name="uiTapTruongCLB" component={UITapTruongCLB} />
+      <Stack.Screen name="screenListActivedTruongCLB" component={ScreenListActivedTruongCLB} />
       <Stack.Screen name="form2CreateActiveTruongCLB" component={Form2CreateActiveTruongCLB} />
 
       <Stack.Screen name="listActiveTruongCLB" component={ListActiveTruongCLB} />
@@ -159,6 +168,10 @@ const TruongCLB = () => {
       <Stack.Screen name="from2EditActiveTruongCLB" component={From2EditActiveTruongCLB} />
 
       <Stack.Screen name="detailActivedTruongCLB" component={DetailActivedTruongCLB} />
+      <Stack.Screen name="listStudentRegisterDT" component={ListStudentRegisterDT} />
+      <Stack.Screen name="listStudentRegisterTruongCLB" component={ListStudentRegisterTruongCLB} />
+      <Stack.Screen name="detailStudentRegisterTruongCLB" component={DetailStudentRegisterTruongCLB} />
+      <Stack.Screen name="changePassword" component={ChangePassword} />
     </Stack.Navigator>
   )
 
@@ -183,11 +196,13 @@ const DoanTruong = () => {
       <Stack.Screen name="listOrganizedActiveDT" component={ListOrganizedActiveDT} />
       <Stack.Screen name="detailOrganizedActive" component={DetailOrganizedActive} />
 
-      <Stack.Screen name="listApproveSv" component={ListApproveSv} />
-      <Stack.Screen name="detailApproveSv" component={DetailApproveSv} />
-
       <Stack.Screen name="from1EditActiveDoanTruong" component={From1EditActiveDoanTruong} />
       <Stack.Screen name="from2EditActiveDoanTruong" component={From2EditActiveDoanTruong} />
+
+      <Stack.Screen name="listApproveSvDT" component={ListApproveSvDT} />
+      <Stack.Screen name="detailStudentRegisterDT" component={DetailStudentRegisterDT} />
+
+      <Stack.Screen name="changePassword" component={ChangePassword} />
     </Stack.Navigator>
   );
 }
@@ -241,6 +256,7 @@ const Admin = () => {
 
       <Stack.Screen name="listStudentRegister" component={ListStudentRegister} />
       <Stack.Screen name="detailStudentRegister" component={DetailStudentRegister} />
+      <Stack.Screen name="changePassword" component={ChangePassword} />
     </Stack.Navigator>
   )
  

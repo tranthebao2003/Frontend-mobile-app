@@ -27,6 +27,7 @@ export default function DetailOrganizedActiveAdmin(props) {
     audit_id,
     createdAt,
     updatedAt,
+    organization
   } = props.route.params.detailOrganizedActiveAdmin;
 
   const [statusActive, setStatusActive] = useState();
@@ -250,6 +251,29 @@ export default function DetailOrganizedActiveAdmin(props) {
               }}
             >
               {act_price == null ? 0 : act_price}
+            </Text>
+          </View>
+
+          <View style={{ width: "100%", marginBottom: 20 }}>
+            <Text
+              style={{
+                color: Color.colorTextMain,
+                fontSize: FontSize.sizeMain,
+                fontWeight: 500,
+                marginRight: 20,
+              }}
+            >
+              Đơn vị tổ chức
+            </Text>
+
+            <Text
+              style={{
+                color: Color.colorTextMain,
+                fontSize: FontSize.sizeMain,
+                fontWeight: 400,
+              }}
+            >
+              {organization}
             </Text>
           </View>
 

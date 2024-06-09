@@ -28,6 +28,17 @@ import {
     const [hoVaTenLot, setHoVaTenLot] = useState('');
     const [ten, setTen] = useState('');
     const [sdt, setSdt] = useState('');
+    const [isValidPhone, setIsValidPhone] = useState()
+    const verifyPhone = (phone) => {
+      
+      let regexPassword = new RegExp(
+        /^(0[35789][0-9]{8}|02[0-9]{9})$/
+      );
+      if (regexPassword.test(phone)) {
+        return true;
+      }
+      return false;
+    };
 
     const navigateFormContinue = () => {
   
@@ -133,7 +144,7 @@ import {
                 borderRadius: 50,
               }}
             />
-             <View
+            <View
               style={{
                 width: 100,
                 height: 2,
@@ -159,10 +170,9 @@ import {
               flex: 1,
               marginTop: 10,
               paddingHorizontal: 20,
-              marginBottom: showKeyBoard ? 1/2*screenHeight - 40: 0
+              marginBottom: showKeyBoard ? (1 / 2) * screenHeight - 40 : 0,
             }}
           >
-
             {/* Họ và tên lót */}
             <View style={styles.containerFormActive}>
               <View style={{ flexDirection: "row" }}>
@@ -179,7 +189,7 @@ import {
 
               <TextInput
                 style={styles.formActive}
-                autoFocus = {true}
+                autoFocus={true}
                 onChangeText={(hoVaTenLotInput) => {
                   setHoVaTenLot(hoVaTenLotInput);
                 }}
@@ -211,7 +221,7 @@ import {
             </View>
 
             {/* Số diện thoại */}
-            <View style={[styles.containerFormActive, {marginBottom: 32,}]}>
+            <View style={[styles.containerFormActive, { marginBottom: 32 }]}>
               <View style={{ flexDirection: "row" }}>
                 <Text style={styles.headerFormActive}>Số điện thoại</Text>
                 <Text
@@ -225,13 +235,37 @@ import {
               </View>
 
               <TextInput
-                keyboardType='number-pad'
+                keyboardType="number-pad"
                 style={styles.formActive}
                 onChangeText={(sdtInput) => {
                   setSdt(sdtInput);
+                  const isValidPhone = verifyPhone(sdtInput);
+                  isValidPhone ? setIsValidPhone(true) : setIsValidPhone(false);
                 }}
                 value={sdt}
               ></TextInput>
+
+              {isValidPhone === false ? (
+                <View
+                  style={{
+                    // top: 0,
+                    // position: "absolute",
+                    marginTop: 8,
+                  }}
+                >
+                  <Text
+                    style={{
+                      fontSize: 16,
+                      color: "#ff5252",
+                      fontWeight: "500",
+                    }}
+                  >
+                    Số điện thoại chưa hợp lệ
+                  </Text>
+                </View>
+              ) : (
+                ""
+              )}
             </View>
 
             <View
@@ -240,7 +274,7 @@ import {
                 flexDirection: "row",
                 alignItems: "center",
                 justifyContent: "space-between",
-                marginBottom: showKeyBoard ? 30: 0
+                marginBottom: showKeyBoard ? 30 : 0,
               }}
             >
               <Text
@@ -294,7 +328,6 @@ import {
                     ]}
                   />
                 </Dialog.Container>
-
               </TouchableOpacity>
             </View>
           </ScrollView>

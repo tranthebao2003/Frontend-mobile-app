@@ -5,9 +5,7 @@ import {
   StatusBar,
   Image,
   ImageBackground,
-  TouchableOpacity,
   FlatList,
-  Keyboard,
 } from "react-native";
 import React, { useState, useEffect } from "react";
 import FontSize from "../../../../component/FontSize";

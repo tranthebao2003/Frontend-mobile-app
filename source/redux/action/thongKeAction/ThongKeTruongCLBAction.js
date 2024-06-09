@@ -10,7 +10,7 @@ import SetAuthToken from '../../../component/SetAuthToken'
 // hàm này là hàm không đồng bộ nó sẽ nhận dispatch như 1 tham số để nó sẽ chờ
 // api trả về token sau đó dispatch này sẽ gửi object chứ type và token đó lên store
 export default ThongKeTruongCLBAction = (classId) => {
-  const thongKeActive = "activities/activities_class";
+  const thongKeActive = `activities/activities_class/${classId}`;
   
   return async (dispatch) => {
     dispatch({ type: THONG_KE_ACTIVE_TRUONGCLB_REQUEST });
@@ -20,7 +20,7 @@ export default ThongKeTruongCLBAction = (classId) => {
      await SetAuthToken()
       console.log(classId, "classId màn ThongKeTruongCLBAction");
       
-      const res = await axios.get(`${UrlApi}${thongKeActive}`, classId);
+      const res = await axios.get(`${UrlApi}${thongKeActive}`);
       const activeThongKe = res.data;
       
       dispatch({

@@ -23,7 +23,7 @@ import {
   hideKeyBoardAction,
 } from "../../../../redux/action/KeyBoardAction";
 
-import GetAllAccountStudentAndDTAction from "../../../../redux/action/GetAllAccountStudentAndDTAction";
+import GetAllAccountDTAction from "../../../../redux/action/GetAllAccountDTAction";
 import Spinner from "react-native-loading-spinner-overlay";
 
 export default function ListAccountDT({ navigation }) {
@@ -32,7 +32,7 @@ export default function ListAccountDT({ navigation }) {
   const dispatch = useDispatch();
 
   const { loading, accountStudentOrDT, error } = useSelector(
-    (state) => state.getAllAccountStudentAndDTReducer
+    (state) => state.getAllAccountDTReducer
   );
 
   const [searchText, setSearchText] = useState("");
@@ -41,7 +41,7 @@ export default function ListAccountDT({ navigation }) {
   const urlAccountDT = "users/university_union";
   // Gọi action để lấy dữ liệu khi component được mount
   useEffect(() => {
-    dispatch(GetAllAccountStudentAndDTAction(urlAccountDT));
+    dispatch(GetAllAccountDTAction(urlAccountDT));
   }, [dispatch]);
 
   useEffect(() => {

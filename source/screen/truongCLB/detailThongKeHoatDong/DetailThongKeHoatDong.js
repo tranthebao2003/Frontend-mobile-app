@@ -11,26 +11,27 @@ import {
   import FontSize from "../../../component/FontSize";
   import Color from "../../../component/Color";
   import { screenWidth, screenHeight } from "../../../component/DimensionsScreen";
-  
+  import formatTime from "../../../component/formatTime/DDMMYYYY";
+
   // 2 cách:
   // - ListView from a map of objects
   // - FlatList
   export default function DetailThongKeHoatDong(props) {
     const {
-      id,
-      hdDaThamGia,
-      mssv,
-      ho,
-      ten,
+      MSSV,
+      first_name,
+      last_name,
       email,
-      gioiTinh,
-      sdt,
-      ngaySinh,
-      diaChi,
-      maLop,
-      chucVu,
+      phone,
+      class_id,
+      address,
+      birthday,
+      gender_id,
+      count_register,
+      position
     } = props.route.params.detailThongKeHoatDong;
 
+    const formatBirthday = formatTime(birthday)
   
     return (
       <ScrollView style={styles.container}>
@@ -143,7 +144,7 @@ import {
                   marginRight: 10,
                 }}
               >
-                <Text style={styles.contentText}>{mssv}</Text>
+                <Text style={styles.contentText}>{MSSV}</Text>
               </View>
   
               <View
@@ -151,7 +152,7 @@ import {
                   backgroundColor: Color.colorBtn,
                 }}
               >
-                <Text style={styles.contentText}>{ho + " " + ten}</Text>
+                <Text style={styles.contentText}>{first_name + " " + last_name}</Text>
               </View>
             </View>
           </View>
@@ -191,7 +192,7 @@ import {
                   fontWeight: 400,
                 }}
               >
-                {hdDaThamGia}
+                {count_register}
               </Text>
             </View>
 
@@ -239,7 +240,7 @@ import {
                   fontWeight: 400,
                 }}
               >
-                {gioiTinh}
+                {gender_id == 1 ? 'Nam' : 'Nữ'}
               </Text>
             </View>
   
@@ -263,7 +264,7 @@ import {
                   fontWeight: 400,
                 }}
               >
-                {sdt}
+                {phone}
               </Text>
             </View>
   
@@ -287,7 +288,7 @@ import {
                   fontWeight: 400,
                 }}
               >
-                {maLop}
+                {class_id}
               </Text>
             </View>
   
@@ -311,7 +312,7 @@ import {
                   fontWeight: 400,
                 }}
               >
-                {ngaySinh}
+                {formatBirthday}
               </Text>
             </View>
   
@@ -335,7 +336,7 @@ import {
                   fontWeight: 400,
                 }}
               >
-                {diaChi}
+                {address}
               </Text>
             </View>
   
@@ -359,7 +360,7 @@ import {
                   fontWeight: "400",
                 }}
               >
-                {chucVu}
+                {position == null ? 'Không chức vụ' : position}
               </Text>
             </View>
           </View>

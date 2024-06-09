@@ -47,6 +47,15 @@ export default function Form3CreateDoanTruong(props) {
   const [address, setAddress] = useState("");
   const [email, setEmail] = useState("");
 
+  const [isValidEmail, setValidEmail] = useState(false)
+  const verifyEmail = (email) => {
+    let regex = new RegExp(/([!#-'*+-9=?A-Z^-~-]+(\.[!#-'*+-9=?A-Z^-~-]+)*|"([]!#-[^-~ \t]|(\\[\t -~]))+")@([!#-'*+-9=?A-Z^-~-]+(\.[!#-'*+-9=?A-Z^-~-]+)*|\[[\t -Z^-~]*])/)
+    if(regex.test(email)){ //todo
+      return true
+    } 
+    return false
+  }
+
   const navigateFormContinue = () => {
     if (address == "" || email == "") {
       setDialogThongtin(true);
@@ -102,7 +111,7 @@ export default function Form3CreateDoanTruong(props) {
       <Spinner
         visible={loading}
         textContent={"Loading..."}
-        textStyle={{color: 'white', fontSize: FontSize.sizeHeader}}
+        textStyle={{ color: "white", fontSize: FontSize.sizeHeader }}
       />
       <ImageBackground
         source={require("../../../../../resource/iconLogin/bg.png")}
@@ -246,10 +255,27 @@ export default function Form3CreateDoanTruong(props) {
             <TextInput
               style={styles.formActive}
               onChangeText={(emailInput) => {
-                setEmail(emailInput);
+                setEmail(emailInput)
+                const isValid = verifyEmail(emailInput);
+                isValid ? setValidEmail(true) : setValidEmail(false);
               }}
               value={email}
             ></TextInput>
+            {isValidEmail === false ? (
+              <Text
+                style={{
+                  top: "92%",
+                  position: "absolute",
+                  fontSize: 16,
+                  color: "#ff5252",
+                  fontWeight: "500",
+                }}
+              >
+                Email is invalid
+              </Text>
+            ) : (
+              ""
+            )}
           </View>
 
           <View

@@ -5,61 +5,66 @@ import {
   StatusBar,
   Image,
   ImageBackground,
-  TouchableOpacity,
   FlatList,
-  Keyboard,
 } from "react-native";
 import React, { useState, useEffect } from "react";
-import FontSize from "../../../component/FontSize";
-import Color from "../../../component/Color";
-import { screenWidth, screenHeight } from "../../../component/DimensionsScreen";
-import ActiveApproveItemDT from "./ActiveApproveItemDT";
-import { useDispatch, useSelector } from 'react-redux';
-import {ListActiveAction} from '../../../redux/action/ListActiveAction'
-import Dialog from "react-native-dialog";
-import Spinner from 'react-native-loading-spinner-overlay';
+import FontSize from "../../../../component/FontSize";
+import Color from "../../../../component/Color";
+import {
+  screenWidth,
+  screenHeight,
+} from "../../../../component/DimensionsScreen";
+import StudentRegisterItemDT from "./StudentRegisterItemDT";
+import { useSelector, useDispatch } from "react-redux";
+import StudentRegisterActiveAction from "../../../../redux/action/approveStudentAction/StudentRegisterActiveAction";
+import Spinner from "react-native-loading-spinner-overlay";
 
-export default function ListApproveSvDT(props) {
-  const {navigation} = props
+export default function ListStudentRegisterDT(props) {
+  const{navigation} = props
+  const {
+    // này là id_act để lấy ra register
+    id,
+    act_name,
+  } = props.route.params.listStudentRegisterDT;
+  const dispatch = useDispatch();
 
-const dispatch = useDispatch()
+  const { loadingStudent, listStudent, errorStudent } = useSelector(
+    (state) => state.studentRegisterActiveReducer
+  );
+  // console.log(infoUser, 'infoUser màn profileSv')
 
-const { loading, listActive, error} = useSelector(state => state.listActiveReducer)
-// console.log(infoUser, 'infoUser màn profileSv')
+  // cái này nhận về là 1 những register ko phải student => thông qua act_account mới lấy ra đc
+  // student => trong đây phải call 2 api
 
+  const [resigter, setResigter] = useState([]);
+  console.log("resigter", resigter);
 
-const urlListActiveAccept = 'activities/activities_student_created'
-// Khởi tạo useState để lưu trữ dữ liệu
-const [active, setActive] = useState([]);
+  // Gọi action để lấy dữ liệu khi component được mount
+  useEffect(() => {
+    dispatch(StudentRegisterActiveAction(id));
+  }, [dispatch]);
 
-// Gọi action để lấy dữ liệu khi component được mount
-useEffect(() => {
-  dispatch(ListActiveAction(urlListActiveAccept));
-}, [dispatch]);
-
-// Cập nhật state active khi dữ liệu từ Redux store thay đổi
-useEffect(() => {
-  if (listActive) {
-    setActive(listActive);
-  } else {
-    if(error !== ''){
-      alert('Bạn vui lòng thoát app để vào lại')
+  // Cập nhật state active khi dữ liệu từ Redux store thay đổi
+  useEffect(() => {
+    if (listStudent && loadingStudent == false) {
+      setResigter(listStudent);
+    } else {
+      if (errorStudent != null && loadingStudent == false) {
+        alert("Bạn vui lòng thoát app để vào lại");
+      }
     }
-  }
-}, [listActive]);
-
-// console.log (active.length, 'active màn screenList')
+  }, [listStudent]);
 
   return (
     <View style={styles.container}>
       <StatusBar style="auto" />
       <Spinner
-        visible={loading}
+        visible={loadingStudent}
         textContent={"Loading..."}
         textStyle={{ color: "white", fontSize: FontSize.sizeHeader }}
       />
       <Image
-        source={require("../../../resource/iconListActive/decorTop.png")}
+        source={require("../../../../resource/iconListActive/decorTop.png")}
         style={{
           height: 900,
           width: 600,
@@ -71,14 +76,14 @@ useEffect(() => {
         resizeMode="contain"
       ></Image>
       <ImageBackground
-        source={require("../../../resource/iconLogin/bg.png")}
+        source={require("../../../../resource/iconLogin/bg.png")}
         resizeMode="cover"
         style={{ width: "100%", height: "120%", alignItems: "center" }}
       >
         <View style={styles.containerHeader}>
-          <Text style={styles.header}>Hoạt động chờ phê duyệt</Text>
+          <Text style={styles.header}>{act_name}</Text>
           <Image
-            source={require("../../../resource/iconLogin/lotLogo2.png")}
+            source={require("../../../../resource/iconLogin/lotLogo2.png")}
             style={{
               height: 80,
               width: 80,
@@ -90,7 +95,7 @@ useEffect(() => {
             resizeMode="contain"
           ></Image>
           <Image
-            source={require("../../../resource/iconLogin/logo.png")}
+            source={require("../../../../resource/iconLogin/logo.png")}
             style={{
               height: 80,
               width: 80,
@@ -124,47 +129,40 @@ useEffect(() => {
             style={{
               width: "100%",
               flexDirection: "row",
-              alignItems: 'center',
-              justifyContent: 'space-between'
+              alignItems: "center",
+              justifyContent: "space-between",
             }}
           >
+            <Text
+              style={{
+                color: Color.colorTextMain,
+                fontSize: FontSize.sizeMain,
+                fontWeight: 500,
+              }}
+            >
+              ID tài khoản
+            </Text>
 
             <Text
               style={{
                 color: Color.colorTextMain,
                 fontSize: FontSize.sizeMain,
                 fontWeight: 500,
-                marginRight: 50,
               }}
             >
-              Tên hoạt động
+              Mã số sinh viên
             </Text>
-            
-            <View style ={{flex: 1,}}>
-            <Text
-              style={{
-                color: Color.colorTextMain,
-                fontSize: FontSize.sizeMain,
-                fontWeight: 500,
-                textAlign: 'right',
-              }}
-            >
-              Thời gian tổ chức
-            </Text>
-            </View>
-            
-            
           </View>
 
           <FlatList
             style={{ flex: 1 }}
-            data={active}
+            data={resigter}
             renderItem={({ item }) => (
-              <ActiveApproveItemDT
-                activeApprove={item}
+              <StudentRegisterItemDT
+              studentRegisterItemDT={item}
                 onPressItem={() => {
-                  navigation.navigate("detailActiveApprove", {
-                    detailActiveApprove: item,
+                  navigation.navigate("detailStudentRegisterDT", {
+                    detailStudentRegisterDT: item,
                   });
                 }}
               />
@@ -189,9 +187,26 @@ const styles = StyleSheet.create({
     width: screenWidth,
   },
   header: {
-    fontSize: FontSize.sizeHeader - 3,
-    fontWeight: "600",
+    fontSize: FontSize.sizeHeader - 4,
+    fontWeight: "700",
     color: Color.colorTextMain,
     width: (2 / 4) * screenWidth,
+  },
+
+  btnCancel: {
+    width: 85 * 2,
+    height: 30 * 1.6,
+    margin: 20,
+    justifyContent: "center",
+    alignItems: "center",
+    borderWidth: 1,
+    borderRadius: 10,
+    borderColor: Color.colorApproveAll,
+  },
+
+  resigter: {
+    fontSize: FontSize.sizeSmall + 6,
+    fontWeight: "700",
+    color: Color.colorTextMain,
   },
 });

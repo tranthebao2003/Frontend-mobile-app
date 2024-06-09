@@ -150,7 +150,7 @@ function HomeDoanTruong(props) {
             <View style={{ alignItems: "center" }}>
               <TouchableOpacity
                 style={styles.containerIcon}
-                onPress={() => navigation.navigate("listApproveSv")}
+                onPress={() => navigation.navigate("listApproveSvDT")}
               >
                 <Image
                   style={styles.icon}

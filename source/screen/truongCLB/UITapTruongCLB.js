@@ -4,7 +4,7 @@ import Color from "../../component/Color";
 import ProfileTruongCLB from "./profileTruongCLB/ProfileTruongCLB";
 import FormCreateActiveTruongCLB from "./formCreateActive/FormCreateActiveTruongCLB";
 import HomeTruongCLB from "./HomeTruongCLB";
-import ScreenListActivedTruongCLB from "./listActivedTruongCLB/ScreenListActivedTruongCLB";
+import NotificationTruongCLB from "./notificationTruongCLB/NotificationTruongCLB";
 import { useSelector } from "react-redux";
 import { screenWidth } from "../../component/DimensionsScreen";
 
@@ -100,22 +100,21 @@ function UITapTruongCLB(props) {
           }}
         />
 
-            {/* active joined */}
+            {/* notification */}
       <Tab.Screen
-        name="screenActivedTruongCLB"
-        component={ScreenListActivedTruongCLB}
+        name="notificationTruongCLB"
+        component={NotificationTruongCLB}
         options={{
           tabBarIcon: ({ focused }) => {
             return (
               <Image
-                source={require("../../resource/iconUITap/actived.png")}
+                source={require("../../resource/iconUITap/bell.png")}
                 style={{
                   width: 28,
                   height: 28,
                   tintColor: focused ? Color.colorTextMain : Color.inactive,
                   marginBottom: 5,
-                  marginLeft: 2,
-                  marginLeft: 25,
+                  marginLeft: 10,
                 }}
                 resizeMode="cover"
               ></Image>
@@ -131,10 +130,10 @@ function UITapTruongCLB(props) {
                   fontWeight: 600,
                   width: (1 / 4) * screenWidth,
                   textAlign: "center",
-                  marginLeft: 25,
+                  marginLeft: 10,
                 }}
               >
-                HĐ đã tham gia
+                Thông báo
               </Text>
             );
           },

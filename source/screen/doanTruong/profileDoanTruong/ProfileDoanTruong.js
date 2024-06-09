@@ -20,9 +20,9 @@ import {getProfileUser} from '../../../redux/action/InfoUserAction'
 import Spinner from 'react-native-loading-spinner-overlay';
 import isoTime from '../../../component/formatTime/IsoTime'
 
-function ProfileDoanTruong() {
+function ProfileDoanTruong(props) {
   const dispatch = useDispatch()
-
+  const {navigation} = props
 
   const { loading, infoUser, error} = useSelector(state => state.infoUser)
   // console.log(infoUser, 'infoUser màn profileSv')
@@ -51,14 +51,19 @@ function ProfileDoanTruong() {
     setDialogCancel(!dialogCancel);
   };
 
+  const [dialogChangePassword, setDialogChangePassword] = useState(false);
+  const showHideDialogChangePassword = () => {
+    setDialogChangePassword(!dialogChangePassword);
+  };
+
   return (
     <SafeAreaView style={{ flex: 1, zIndex: 0 }}>
       <StatusBar barStyle="auto"></StatusBar>
       <Spinner
-          visible={loading}
-          textContent={"Loading..."}
-          textStyle={{ color: "white", fontSize: FontSize.sizeHeader }}
-        />
+        visible={loading}
+        textContent={"Loading..."}
+        textStyle={{ color: "white", fontSize: FontSize.sizeHeader }}
+      />
       <ImageBackground
         source={require("../../../resource/iconLogin/bg.png")}
         resizeMode="cover"
@@ -96,7 +101,7 @@ function ProfileDoanTruong() {
 
           <View style={styles.containerNamePhone}>
             <Text style={[styles.textLarge, { marginTop: 95 }]}>
-              {first_name + ' ' + last_name}
+              {first_name + " " + last_name}
             </Text>
             <Text style={styles.textMain}>{phone}</Text>
 
@@ -273,61 +278,125 @@ function ProfileDoanTruong() {
             </View>
           </View>
 
-          {/* btn logout*/}
-          <TouchableOpacity
-            style={styles.btnCancel}
-            onPress={showHideDialogCancel}
+          <View
+            style={{
+              flexDirection: "row",
+              width: '100%',
+              justifyContent: "space-between",
+            }}
           >
-            <Text style={[styles.resigter, { color: Color.colorRemove }]}>
-              Đăng xuất
-            </Text>
-            <Dialog.Container
-              visible={dialogCancel}
-              contentStyle={{
-                width: (3 / 4) * screenWidth,
-                height: (1 / 5) * screenHeight,
-              }}
+            {/* btn logout*/}
+            <TouchableOpacity
+              style={styles.btnCancel}
+              onPress={showHideDialogCancel}
             >
-              <Dialog.Title
-                style={{ color: Color.colorTextMain, fontWeight: "700" }}
+              <Text style={[styles.resigter, { color: Color.colorRemove }]}>
+                Đăng xuất
+              </Text>
+              <Dialog.Container
+                visible={dialogCancel}
+                contentStyle={{
+                  width: (3 / 4) * screenWidth,
+                  height: (1 / 5) * screenHeight,
+                }}
               >
-                XÁC NHẬN
-              </Dialog.Title>
-              <Dialog.Description style={{ color: "black" }}>
-                Bạn có chắc muốn đăng xuất?
-              </Dialog.Description>
-              <Dialog.Button
-                label="No"
-                onPress={showHideDialogCancel}
-                style={{
-                  width: 60,
-                  height: 40,
-                  marginRight: 30,
-                  marginTop: 10,
-                  borderRadius: 5,
-                  fontWeight: 500,
-                  fontSize: 18,
-                  borderWidth: 1,
-                  borderColor: Color.colorRemove,
-                  color: Color.colorRemove,
+                <Dialog.Title
+                  style={{ color: Color.colorTextMain, fontWeight: "700" }}
+                >
+                  XÁC NHẬN
+                </Dialog.Title>
+                <Dialog.Description style={{ color: "black" }}>
+                  Bạn có chắc muốn đăng xuất?
+                </Dialog.Description>
+                <Dialog.Button
+                  label="No"
+                  onPress={showHideDialogCancel}
+                  style={{
+                    width: 60,
+                    height: 40,
+                    marginRight: 30,
+                    marginTop: 10,
+                    borderRadius: 5,
+                    fontWeight: 500,
+                    fontSize: 18,
+                    borderWidth: 1,
+                    borderColor: Color.colorRemove,
+                    color: Color.colorRemove,
+                  }}
+                />
+                <Dialog.Button
+                  label="Yes"
+                  onPress={() => dispatch(LogoutAction())}
+                  style={{
+                    width: 60,
+                    height: 40,
+                    marginTop: 10,
+                    marginRight: 50,
+                    borderRadius: 5,
+                    backgroundColor: "#d9ebfe",
+                    fontWeight: 500,
+                    fontSize: 18,
+                  }}
+                />
+              </Dialog.Container>
+            </TouchableOpacity>
+
+            {/* btn change password*/}
+            <TouchableOpacity
+              style={[styles.btnCancel, {borderColor: Color.colorTextMain}]}
+              onPress={showHideDialogChangePassword}
+            >
+              <Text style={[styles.resigter, { color: Color.colorTextMain}]}>
+                Đổi mật khẩu
+              </Text>
+              <Dialog.Container
+                visible={dialogChangePassword}
+                contentStyle={{
+                  width: (3 / 4) * screenWidth,
+                  height: (1 / 5) * screenHeight,
                 }}
-              />
-              <Dialog.Button
-                label="Yes"
-                onPress={() => dispatch(LogoutAction())}
-                style={{
-                  width: 60,
-                  height: 40,
-                  marginTop: 10,
-                  marginRight: 50,
-                  borderRadius: 5,
-                  backgroundColor: "#d9ebfe",
-                  fontWeight: 500,
-                  fontSize: 18,
-                }}
-              />
-            </Dialog.Container>
-          </TouchableOpacity>
+              >
+                <Dialog.Title
+                  style={{ color: Color.colorTextMain, fontWeight: "700" }}
+                >
+                  XÁC NHẬN
+                </Dialog.Title>
+                <Dialog.Description style={{ color: "black" }}>
+                  Bạn có chắc muốn đổi mật khẩu ?
+                </Dialog.Description>
+                <Dialog.Button
+                  label="No"
+                  onPress={showHideDialogChangePassword}
+                  style={{
+                    width: 60,
+                    height: 40,
+                    marginRight: 30,
+                    marginTop: 10,
+                    borderRadius: 5,
+                    fontWeight: 500,
+                    fontSize: 18,
+                    borderWidth: 1,
+                    borderColor: Color.colorRemove,
+                    color: Color.colorRemove,
+                  }}
+                />
+                <Dialog.Button
+                  label="Yes"
+                  onPress={() => navigation.navigate('changePassword')}
+                  style={{
+                    width: 60,
+                    height: 40,
+                    marginTop: 10,
+                    marginRight: 50,
+                    borderRadius: 5,
+                    backgroundColor: "#d9ebfe",
+                    fontWeight: 500,
+                    fontSize: 18,
+                  }}
+                />
+              </Dialog.Container>
+            </TouchableOpacity>
+          </View>
         </ScrollView>
       </ImageBackground>
     </SafeAreaView>

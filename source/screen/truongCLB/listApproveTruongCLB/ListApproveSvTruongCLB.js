@@ -11,63 +11,61 @@ import {
   import FontSize from "../../../component/FontSize";
   import Color from "../../../component/Color";
   import { screenWidth, screenHeight } from "../../../component/DimensionsScreen";
-  import ItemThongKeHoatDong from "./ItemThongKeHoatDong";
+  import ApproveSvItemTruongCLB from "./ApproveSvItemTruongCLB";
   import { useSelector, useDispatch } from "react-redux";
-  import ThongKeTruongCLBAction from '../../../redux/action/thongKeAction/ThongKeTruongCLBAction'
+  import {ListActiveAction} from '../../../redux/action/ListActiveAction'
   import Spinner from 'react-native-loading-spinner-overlay';
-  import { THONG_KE_ACTIVE_TRUONGCLB_RESET } from "../../../redux/types/typesThongKe/TypesThongKeTruongCLB";
-  export default function ListThongKeHoatDong({ navigation }) {
-    // ở đây chỉ thống kế hoạt động của từng sv theo lớp,
-    // tùy vào bí thư (trưởng clb) lớp nào thì chỉ có thể xem
-    // sv của lớp đó thôi
+  
+  export default function ListApproveSvTruongCLB(props) {
+  const {navigation} = props
+  const dispatch = useDispatch()
 
-    const [thongKe, setThongKe] = useState()
-     
-    const dispatch = useDispatch();
-    const {
-      loadingTHONG_KE_TRUONGCLB,
-      reponseSuccessTHONG_KE_TRUONGCLB,
-      errorTHONG_KE_TRUONGCLB,
-      dataTHONG_KE_TRUONGCLB,
-    } = useSelector((state) => state.thongKeTruongCLBReducer);
-    const {  infoUser } = useSelector((state) => state.infoUser);
-    const {class_id} = infoUser
-    
-    useEffect(()=> {
-      dispatch({type: THONG_KE_ACTIVE_TRUONGCLB_RESET})
-    }, [dispatch])
-
-      useEffect(() => {
-        dispatch(ThongKeTruongCLBAction(class_id));
-      }, [dispatch]);
-    
-      useEffect(() => {
-        if (
-          (dataTHONG_KE_TRUONGCLB != null && loadingTHONG_KE_TRUONGCLB == false,
-          reponseSuccessTHONG_KE_TRUONGCLB == true)
-        ) {
-          setThongKe(dataTHONG_KE_TRUONGCLB);
-        } else {
-          if (
-            (errorTHONG_KE_TRUONGCLB != null &&
-              loadingTHONG_KE_TRUONGCLB == false,
-            reponseSuccessTHONG_KE_TRUONGCLB == false)
-          ) {
-            alert("Bạn vui lòng thoát app để vào lại");
+  const { loading, listActive, error} = useSelector(state => state.listActiveReducer)
+  // console.log(infoUser, 'infoUser màn profileSv')
+  
+  
+  const urlAllActiveCreated = 'activities/activities_user_created'
+  // Khởi tạo useState để lưu trữ dữ liệu
+  const [activeCreated, setActiveCreated] = useState([]);
+  const [filterActiveCreated, setFilterActiveCreated] = useState([]);
+  
+  // Gọi action để lấy dữ liệu khi component được mount
+  useEffect(() => {
+    dispatch(ListActiveAction(urlAllActiveCreated));
+  }, [dispatch]);
+  
+  // Cập nhật state active khi dữ liệu từ Redux store thay đổi
+  useEffect(() => {
+    if (listActive) {
+      setActiveCreated(listActive);
+    } else {
+      if(error !== ''){
+        alert('Bạn vui lòng thoát app để vào lại')
+      }
+    }
+  }, [listActive]);
+  
+  // Lọc danh sách dựa trên act_status == 2
+  useEffect(() => {
+    const filteredActives = () => {
+      if (Array.isArray(activeCreated)) {
+        return activeCreated.filter((eachActiveCreated) => {
+          if(eachActiveCreated.act_status == 2){
+            return eachActiveCreated
           }
-        }
-      }, [
-        dataTHONG_KE_TRUONGCLB,
-        errorTHONG_KE_TRUONGCLB,
-        loadingTHONG_KE_TRUONGCLB,
-        reponseSuccessTHONG_KE_TRUONGCLB,
-      ]);
+        });
+      }
+    };
+    console.log(filteredActives())
+    setFilterActiveCreated(filteredActives());
+  }, [activeCreated]);
+  
   
     return (
       <View style={styles.container}>
         <StatusBar style="auto" />
         <Spinner
-        visible={loadingTHONG_KE_TRUONGCLB}
+        visible={loading}
         textContent={"Loading..."}
         textStyle={{ color: "white", fontSize: FontSize.sizeHeader }}
       />
@@ -89,7 +87,7 @@ import {
           style={{ width: "100%", height: "120%", alignItems: "center" }}
         >
           <View style={styles.containerHeader}>
-            <Text style={styles.header}>Hoạt động của sinh viên</Text>
+            <Text style={styles.header}>Phê duyệt sinh viên tham gia</Text>
             <Image
               source={require("../../../resource/iconLogin/lotLogo2.png")}
               style={{
@@ -116,7 +114,7 @@ import {
               resizeMode="contain"
             ></Image>
           </View>
-
+  
           <View
             style={{
               width: 0.92 * screenWidth,
@@ -137,8 +135,8 @@ import {
               style={{
                 width: "100%",
                 flexDirection: "row",
-                alignItems: "center",
-                justifyContent: "space-between",
+                alignItems: 'center',
+                justifyContent: 'space-between'
               }}
             >
               <Text
@@ -146,58 +144,39 @@ import {
                   color: Color.colorTextMain,
                   fontSize: FontSize.sizeMain,
                   fontWeight: 500,
-                  marginRight: 40,
                 }}
               >
-                Mã số sinh viên
+                Tên hoạt động
               </Text>
-
+              
               <Text
                 style={{
                   color: Color.colorTextMain,
                   fontSize: FontSize.sizeMain,
                   fontWeight: 500,
-                  width: "40%",
-                  textAlign: "center",
-                  //   borderWidth: 1,
                 }}
               >
-                Hoạt động đã tham gia
+                 Ngày tổ chức
               </Text>
+              
+              
             </View>
-
+  
             <FlatList
               style={{ flex: 1 }}
-              data={thongKe}
+              data={filterActiveCreated}
               renderItem={({ item }) => (
-                <ItemThongKeHoatDong
-                  profileSinhVien={item}
-                    onPressItem={() => {
-                      navigation.navigate("detailThongKeHoatDong", {
-                        detailThongKeHoatDong: item,
-                      });
-                    }}
+                <ApproveSvItemTruongCLB
+                approveSvItemTruongCLB={item}
+                  onPressItem={() => {
+                    navigation.navigate("listStudentRegisterTruongCLB", {
+                      listStudentRegisterTruongCLB: item,
+                    });
+                  }}
                 />
               )}
-              keyExtractor={(item) => item.MSSV}
+              keyExtractor={(item) => item.id}
             />
-          </View>
-
-          <View style={styles.containerPositionLogo}>
-            <Image
-              source={require("../../../resource/ListThongKeHoatDong/class.png")}
-              style={{
-                height: 48,
-                width: 48,
-                position: "absolute",
-                left: 10,
-                top: 8,
-                borderRadius: 16,
-                zIndex: 2,
-              }}
-              resizeMode="contain"
-            ></Image>
-            <Text style={styles.headerTruongCLB}>{class_id}</Text>
           </View>
         </ImageBackground>
       </View>
@@ -238,23 +217,5 @@ import {
       fontWeight: "700",
       color: Color.colorTextMain,
     },
-
-    containerPositionLogo: {
-        width: 0.6*screenWidth,
-        marginTop: 15,
-        paddingVertical: 20,
-        paddingLeft: 20,
-        backgroundColor: Color.colorBgUiTap,
-        borderRadius: 10,
-        elevation: 2,
-        shadowColor: 'black',
-    },
-
-    headerTruongCLB: {
-        fontSize: FontSize.sizeMain,
-        fontWeight: "600",
-        color: Color.colorTextMain,
-        marginLeft: 65
-      },
   });
   

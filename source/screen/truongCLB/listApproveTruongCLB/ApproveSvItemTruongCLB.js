@@ -1,10 +1,13 @@
 import { Text, View, StyleSheet, TouchableOpacity } from "react-native";
 import Color from "../../../component/Color";
 import FontSize from "../../../component/FontSize";
+import moment from 'moment'
 
-const ApproveSvItem = (props) => {
+const ApproveSvItemTruongCLB = (props) => {
 
-    const {mssv, ho, ten, nameActive} = props.approveSv; // destructuring an object
+    const { act_name, act_time } = props.approveSvItemTruongCLB; // destructuring an object
+    const formatAct_time = moment(act_time).format('DD/MM/YYYY');
+
     const { onPressItem } = props;
     return (
       <TouchableOpacity
@@ -18,25 +21,26 @@ const ApproveSvItem = (props) => {
           borderColor: Color.colorTextMain,
           paddingTop: 26,
           paddingBottom: 13,
-          justifyContent: 'space-between'
         }}
       >
         <View
           style={{
-            marginRight: 15
+            flex: 3,
+            backgroundColor: Color.colorBtn,
+            paddingRight: 5,
           }}
         >
-          <Text style={styles.contentText}>{mssv}</Text>
+          <Text style={styles.contentText}>{act_name}</Text>
         </View>
-
 
         <View
           style={{
+            flex: 2,
             backgroundColor: Color.colorBtn,
-            alignItems: "center",
+            alignItems: "flex-end",
           }}
         >
-          <Text style={styles.contentText}>{nameActive}</Text>
+          <Text style={styles.contentText}>{formatAct_time}</Text>
         </View>
       </TouchableOpacity>
     );
@@ -51,4 +55,4 @@ const ApproveSvItem = (props) => {
     }
   })
   
-  export default ApproveSvItem;
+  export default ApproveSvItemTruongCLB;

@@ -27,7 +27,8 @@ import { CommonActions } from "@react-navigation/native";
 import CreateStudentAction from "../../../../../redux/action/actionCreateUser/CreateStudentAction";
 import Spinner from 'react-native-loading-spinner-overlay'
 import { CREATE_STUDENT_RESET } from "../../../../../redux/types/typesCreateUser/TypesCreateStudent";
-
+import moment from 'moment'
+import formatTime from "../../../../../component/formatTime/DDMMYYYY";
 
 export default function Form3CreateStudent(props) {
   const { navigation } = props;
@@ -46,7 +47,9 @@ export default function Form3CreateStudent(props) {
   };
 
   const handleChangeDateOfBirth = (propDate) => {
-    const reversedStrDateOfBirth = propDate.split("/").reverse().join("/");
+    console.log(propDate)
+    const [year, month, day] = propDate.split("/")
+    const reversedStrDateOfBirth = `${day}/${month}/${year}`
     setDateOfBirth(reversedStrDateOfBirth);
   };
 
@@ -65,7 +68,23 @@ export default function Form3CreateStudent(props) {
 
   // parseInt(role_id,10): chuyển qua kiểu số cơ số 10
   const roleIdConvertNumber = parseInt(role_id, 10);
- 
+
+  const [isValidEmail, setValidEmail] = useState(false)
+  const verifyEmail = (email) => {
+    let regex = new RegExp(/([!#-'*+-9=?A-Z^-~-]+(\.[!#-'*+-9=?A-Z^-~-]+)*|"([]!#-[^-~ \t]|(\\[\t -~]))+")@([!#-'*+-9=?A-Z^-~-]+(\.[!#-'*+-9=?A-Z^-~-]+)*|\[[\t -Z^-~]*])/)
+    if(regex.test(email)){ //todo
+      return true
+    } 
+    return false
+  }
+
+  // ràng buộc ngày tháng 
+  const currentDate = moment();
+  
+
+  // // Tạo đối tượng ngày với ngày tháng hiện tại nhưng năm cách đây 18 năm
+  const date18YearsAgo = currentDate.subtract(18, 'years').format('YYYY/MM/DD');
+  
 
   const navigateFormContinue = () => {
     if (
@@ -123,13 +142,14 @@ export default function Form3CreateStudent(props) {
 
   const { showKeyBoard } = useSelector((state) => state.keyboardShow);
 
+
   return (
     <View style={styles.container}>
       <StatusBar style="auto" />
       <Spinner
         visible={loading}
         textContent={"Loading..."}
-        textStyle={{color: 'white', fontSize: FontSize.sizeHeader}}
+        textStyle={{ color: "white", fontSize: FontSize.sizeHeader }}
       />
       <ImageBackground
         source={require("../../../../../resource/iconLogin/bg.png")}
@@ -280,9 +300,9 @@ export default function Form3CreateStudent(props) {
           </View>
 
           {/* Email*/}
-          <View style={styles.containerFormActive}>
+          <View style={[styles.containerFormActive]}>
             <View style={{ flexDirection: "row" }}>
-              <Text style={styles.headerFormActive}>Email</Text>
+              <Text style={[styles.headerFormActive]}>Email</Text>
               <Text
                 style={[styles.headerFormActive, { color: Color.colorRemove }]}
               >
@@ -293,10 +313,28 @@ export default function Form3CreateStudent(props) {
             <TextInput
               style={styles.formActive}
               onChangeText={(emailInput) => {
-                setEmail(emailInput);
+                setEmail(emailInput)
+                const isValid = verifyEmail(emailInput);
+                isValid ? setValidEmail(true) : setValidEmail(false);
               }}
               value={email}
             ></TextInput>
+
+            {isValidEmail === false ? (
+              <Text
+                style={{
+                  top: '114%',
+                  position: 'absolute',
+                  fontSize: 16,
+                  color: "#ff5252",
+                  fontWeight: "500",
+                }}
+              >
+                Email is invalid
+              </Text>
+            ) : (
+              ""
+            )}
           </View>
 
           {/* giới tính */}
@@ -401,8 +439,9 @@ export default function Form3CreateStudent(props) {
             <View style={styles.centeredView}>
               <View style={styles.modalView}>
                 <DatePicker
+                  maximumDate={date18YearsAgo}
                   mode="calendar"
-                  selected={dateOfBirth.split("/").reverse().join("/")}
+                  selected={dateOfBirth}
                   onDateChange={handleChangeDateOfBirth}
                 />
                 <TouchableOpacity
@@ -566,7 +605,6 @@ const styles = StyleSheet.create({
     width: "55%",
     height: 70,
     marginBottom: 26,
-    // borderWidth: 1,
     justifyContent: "center",
   },
 

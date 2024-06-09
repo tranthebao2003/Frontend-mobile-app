@@ -7,7 +7,7 @@ import {
   const initialState = {
     loading: false,
     listActiveCreated: {},
-    error: "",
+    error: null,
   };
   
   // reducer này để nhận những action trả về list active
@@ -23,7 +23,7 @@ import {
         return {
           loading: false,
           listActiveCreated: payload,
-          error: "",
+          error: null,
         };
       case LIST_ACTIVE_CREATED_FAILURE:
         return {

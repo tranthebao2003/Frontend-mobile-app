@@ -7,6 +7,7 @@ import {
   ScrollView,
   ImageBackground,
   TouchableOpacity,
+  Alert
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import FontSize from "../../../../component/FontSize";
@@ -24,8 +25,10 @@ import Spinner from "react-native-loading-spinner-overlay";
 import IsoTime from "../../../../component/formatTime/IsoTime";
 import ApproveStudentRegisterAction from "../../../../redux/action/ApproveStudentRegisterAction";
 import { APPROVE_STUDENT_REGISTER_RESET } from "../../../../redux/types/TypesApproveStudentRegister";
+import { CommonActions } from "@react-navigation/native";
 
 export default function DetailStudentRegister(props) {
+  const{navigation} = props
   const dispatch = useDispatch();
   const {
     // id này là id register để chấp nhận sv đăng kí tham gia hoạt động
@@ -39,7 +42,7 @@ export default function DetailStudentRegister(props) {
   );
 
   const { loadingStudent, reponseSuccessStudent, errorStudent } = useSelector(
-    (state) => state.detailStudentRegisterReducer
+    (state) => state.approveStudentRegisterReducer
   );
 
   const [info, setInfo] = useState("");
@@ -72,7 +75,19 @@ export default function DetailStudentRegister(props) {
   const approveStudent = () => {
     const statusIdAndId = {
       id: id,
-      status: status_id,
+      // giống như hoạt động thì khi mik duyệt thì truyền 2
+      status: 2,
+    };
+    dispatch(ApproveStudentRegisterAction(statusIdAndId));
+  };
+
+  // btn approve
+  
+  const refuseStudent = () => {
+    const statusIdAndId = {
+      id: id,
+      // giống như hoạt động thì khi mik ko duyệt thì truyền 4
+      status: 4,
     };
     dispatch(ApproveStudentRegisterAction(statusIdAndId));
   };
@@ -96,12 +111,9 @@ export default function DetailStudentRegister(props) {
       dispatch({ type: APPROVE_STUDENT_REGISTER_RESET });
     } else if (reponseSuccessStudent == true && loadingStudent == false) {
       Alert.alert("Bạn đã thực hiện thành công");
-      navigation.dispatch(
-        CommonActions.reset({
-          index: 0,
-          routes: [{ name: "uiTapAdmin" }],
-        })
-      );
+
+      navigation.dispatch(CommonActions.goBack());
+
       dispatch({ type: APPROVE_STUDENT_REGISTER_RESET });
     }
   }, [errorStudent, loadingStudent, reponseSuccessStudent]);
@@ -114,6 +126,7 @@ export default function DetailStudentRegister(props) {
 
   const yesBtnCancel = () => {
     setDialogCancel(!dialogCancel);
+    refuseStudent()
   };
 
   return (
@@ -382,7 +395,7 @@ export default function DetailStudentRegister(props) {
               onPress={showHideDialogApprove}
             >
               <Text style={styles.resigter}>Duyệt</Text>
-              <Dialog.Container visible={dialogResigter}>
+              <Dialog.Container visible={dialogApprove}>
                 <Dialog.Title
                   style={{ color: Color.colorTextMain, fontWeight: "700" }}
                 >

@@ -9,7 +9,8 @@ import CreateDoanTruongReducer from"../reducers/reducerCreateUser/CreateDoanTruo
 import CreateActiveReducer from"../reducers/CreateActiveReducer";
 import AcceptActiveByDTReducer from"../reducers/putReducer/putAcceptReducer/AcceptActiveByDTReducer";
 import AcceptActiveByStudentReducer from"../reducers/putReducer/putAcceptReducer/AcceptActiveByStudentReducer";
-import GetAllAccountStudentAndDTReducer from"../reducers/GetAllAccountStudentAndDTReducer";
+import GetAllAccountDTReducer from"../reducers/GetAllAccountDTReducer";
+import GetAllAccountStudenteducer from"../reducers/GetAllAccountStudenteducer";
 import SendEmailReducer from"../reducers/forgotPasswordReducer/SendEmailReducer";
 import ResetPasswordReducer from"../reducers/forgotPasswordReducer/ResetPasswordReducer";
 import RemoveActiveReducer from"../reducers/removeEditActiveReducer/RemoveActiveReducer";
@@ -26,6 +27,8 @@ import ThongKeTruongCLBReducer from"../reducers/thongKeReducer/ThongKeTruongCLBR
 import NotificationStudentDTReducer from"../reducers/NotificationStudentDTReducer";
 import StudentRegisterActiveReducer from"../reducers/approveStudentReducer/StudentRegisterActiveReducer";
 import DetailStudentRegisterReducer from"../reducers/approveStudentReducer/DetailStudentRegisterReducer";
+import ApproveStudentRegisterReducer from"../reducers/ApproveStudentRegisterReducer";
+import ChangePaswordReducer from"../reducers/ChangePaswordReducer";
 
 
 import { thunk } from "redux-thunk";
@@ -41,7 +44,8 @@ const rootReducer = combineReducers({
     createActiveReducer: CreateActiveReducer,
     acceptActiveByDTReducer: AcceptActiveByDTReducer,
     acceptActiveByStudentReducer: AcceptActiveByStudentReducer,
-    getAllAccountStudentAndDTReducer: GetAllAccountStudentAndDTReducer,
+    getAllAccountDTReducer: GetAllAccountDTReducer,
+    getAllAccountStudenteducer: GetAllAccountStudenteducer,
     sendEmailReducer: SendEmailReducer,
     resetPasswordReducer: ResetPasswordReducer,
     removeActiveReducer: RemoveActiveReducer,
@@ -58,6 +62,8 @@ const rootReducer = combineReducers({
     notificationStudentDTReducer: NotificationStudentDTReducer,
     studentRegisterActiveReducer: StudentRegisterActiveReducer,
     detailStudentRegisterReducer: DetailStudentRegisterReducer,
+    approveStudentRegisterReducer: ApproveStudentRegisterReducer,
+    changePaswordReducer: ChangePaswordReducer,
 })
 
 export default Store = createStore(rootReducer, applyMiddleware(thunk))
