@@ -178,7 +178,7 @@ const MainComponent = ({ navigation }) => {
         <View style={[styles.containerPassword, { marginBottom: 42 }]}>
           <TextInput
             style={styles.password}
-            placeholder="Mã OPT"
+            placeholder="Mã OTP"
             placeholderTextColor={Color.colorTextMain}
             onChangeText={(maOtpInput) => {
               onChangeMaOtp(maOtpInput);

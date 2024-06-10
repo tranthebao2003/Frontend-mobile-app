@@ -119,9 +119,11 @@ useEffect(() => {
   console.log(navigateContinue, loading, error, 'màn forgotpassword')
   if(error != null && loading == false){
     Alert.alert("Thông báo", error)
+    dispatch({type: SEND_EMAIL_RESET})
   }
   else if(navigateContinue == true && loading == false){
     navigateForgotPassword2.navigate("forgotPassword2")
+    dispatch({type: SEND_EMAIL_RESET})
   }
 }, [navigateContinue, loading, error])
 

@@ -108,11 +108,18 @@ const MainComponent = ({ navigation }) => {
   const dispatch = useDispatch();
 
   useEffect(() => {
+    dispatch({ type: CHANGE_PASSWORD_RESET });
+  }, [dispatch]);
+
+
+  useEffect(() => {
     if (error != null && loading == false) {
       Alert.alert("Thông báo", error);
+      dispatch({ type: CHANGE_PASSWORD_RESET });
     } else if (reponseSuccess == true && loading == false) {
       Alert.alert("Bạn đã đổi mật khẩu thành công");
       navigation.dispatch(CommonActions.goBack());
+      dispatch({ type: CHANGE_PASSWORD_RESET });
     }
   }, [reponseSuccess, loading, error]);
 
@@ -127,7 +134,7 @@ const MainComponent = ({ navigation }) => {
       const passwordOldNewConfirm = {
         oldpassword: passwordOld,
         newpassword: password,
-        passwordcheck: samePassword
+        passwordcheck: confirmPassword
       }
       dispatch(ChangePaswordAction(passwordOldNewConfirm));
     }

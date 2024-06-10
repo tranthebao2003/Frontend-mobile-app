@@ -23,9 +23,7 @@ export default ChangePaswordAction = (passwordOldNewConfirm) => {
         type: CHANGE_PASSWORD_SUCCESS,
       });
     } catch (error) {
-      // Sử dụng console.error thay vì console.log trong
-      // phần catch: Điều này giúp
-      // phân biệt lỗi trong log dễ dàng hơn
+
       console.error('Thay đổi mật khẩu thất bại', error);
       
       let errorForUser = 'Thay đổi mật khẩu thất bại'
