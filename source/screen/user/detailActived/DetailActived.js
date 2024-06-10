@@ -21,6 +21,7 @@ import {CANCEL_ACTIVE_RESET}from '../../../redux/types/typesRegisterCancelActive
 import { CommonActions } from "@react-navigation/native";
 import { useDispatch, useSelector } from "react-redux";
 
+
 export default function DetailActived(props) {
   const{navigation} = props
   const dispatch = useDispatch()
@@ -41,6 +42,39 @@ export default function DetailActived(props) {
     register
   } = props.route.params.detailActived;
    
+  const [statusActive, setStatusActive] = useState()
+
+  const showStatusActive = (act_status) => {
+    switch (act_status) {
+      case 1:
+        setStatusActive("Đợi duyệt");
+        break;
+
+      case 2:
+        setStatusActive("Đã duyệt");
+        break;
+
+      case 3:
+        setStatusActive("Đã kết thúc");
+        break;
+
+      case 4:
+        setStatusActive("Đã hủy");
+        break;
+
+      case 5:
+        setStatusActive("Đang diễn ra");
+        break;
+
+      default:
+        setStatusActive("Trạng thái đã lỗi");
+        break;
+    }
+  };
+  
+  useEffect(() => {
+    showStatusActive(act_status)
+  },[act_status])
 
   const idResigter = register[0].id
 
@@ -53,7 +87,6 @@ export default function DetailActived(props) {
     dispatch({ type: CANCEL_ACTIVE_RESET });
   }, [dispatch]);
 
-  console.log(errorCancel, loadingCancel, errorCancel)
   useEffect(() => {
     if (errorCancel != null && loadingCancel == false) {
       Alert.alert("Thông báo", errorCancel);
@@ -264,6 +297,29 @@ export default function DetailActived(props) {
                 marginRight: 20,
               }}
             >
+              Trạng thái hoạt động
+            </Text>
+
+            <Text
+              style={{
+                color: Color.colorTextMain,
+                fontSize: FontSize.sizeMain,
+                fontWeight: 400,
+              }}
+            >
+              {statusActive}
+            </Text>
+          </View>
+
+          <View style={{ width: "100%", marginBottom: 20 }}>
+            <Text
+              style={{
+                color: Color.colorTextMain,
+                fontSize: FontSize.sizeMain,
+                fontWeight: 500,
+                marginRight: 20,
+              }}
+            >
               Đơn vị tổ chức
             </Text>
 
@@ -332,8 +388,7 @@ export default function DetailActived(props) {
             justifyContent: "center",
           }}
         >
-          {/* btn cancel */}
-          <TouchableOpacity
+         {act_status == 2 ? ( <TouchableOpacity
             style={styles.btnCancel}
             onPress={showHideDialogCancel}
           >
@@ -375,7 +430,7 @@ export default function DetailActived(props) {
                 }}
               />
             </Dialog.Container>
-          </TouchableOpacity>
+          </TouchableOpacity>) : ('')}
         </View>
       </ImageBackground>
     </ScrollView>

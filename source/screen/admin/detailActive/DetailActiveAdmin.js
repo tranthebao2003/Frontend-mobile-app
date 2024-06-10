@@ -118,12 +118,6 @@ export default function DetailActiveAdmin(props) {
     
   };
 
-  useEffect(() => {
-    console.log(data)
-   
-  }, [data])
-
-
   const [statusActive, setStatusActive] = useState()
 
   const showStatusActive = (act_status) => {

@@ -18,7 +18,8 @@ const NotificationTruongCLBItem = (props) => {
           flexDirection: "row",
           marginBottom: 50,
           backgroundColor: Color.colorBgUiTap,
-          elevation: 2,
+          elevation: 3,
+          shadowColor: Color.colorTextMain,
           borderRadius: 20,
         }}
       >

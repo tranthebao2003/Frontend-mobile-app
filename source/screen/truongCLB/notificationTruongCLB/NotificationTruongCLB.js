@@ -124,7 +124,8 @@ function NotificationTruongCLB() {
 
         <FlatList
           style={{
-            marginTop: 30
+            marginTop: 30,
+            height: 2/3*screenHeight - 40
           }}
             data={getNotification}
             renderItem={({ item }) => (

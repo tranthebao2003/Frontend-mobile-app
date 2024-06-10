@@ -7,28 +7,28 @@ import {
   ImageBackground,
   TouchableOpacity,
   ScrollView,
-  Alert
+  Alert,
 } from "react-native";
 import Dialog from "react-native-dialog";
 import { useState, useEffect } from "react";
 import FontSize from "../../../component/FontSize";
 import Color from "../../../component/Color";
 import { screenWidth, screenHeight } from "../../../component/DimensionsScreen";
-import moment from 'moment'
-import CancelActiveAction from '../../../redux/action/registerCancelActiveAction/CancelActiveAction'
-import Spinner from 'react-native-loading-spinner-overlay'
-import {CANCEL_ACTIVE_RESET}from '../../../redux/types/typesRegisterCancelActive/TypesCancelActive'
+import moment from "moment";
+import CancelActiveAction from "../../../redux/action/registerCancelActiveAction/CancelActiveAction";
+import Spinner from "react-native-loading-spinner-overlay";
+import { CANCEL_ACTIVE_RESET } from "../../../redux/types/typesRegisterCancelActive/TypesCancelActive";
 import { CommonActions } from "@react-navigation/native";
 import { useDispatch, useSelector } from "react-redux";
 
 export default function DetailActivedTruongCLB(props) {
-  const{navigation} = props
-  const dispatch = useDispatch()
+  const { navigation } = props;
+  const dispatch = useDispatch();
 
   const { loadingCancel, reponseSuccessCancel, errorCancel } = useSelector(
     (state) => state.cancelActiveReducer
   );
-  
+
   const {
     act_name,
     act_description,
@@ -38,14 +38,47 @@ export default function DetailActivedTruongCLB(props) {
     act_time,
     amount,
     organization,
-    register
+    register,
   } = props.route.params.detailActivedTruongCLB;
-   
 
-  const idResigter = register[0].id
+  const [statusActive, setStatusActive] = useState();
+
+  const showStatusActive = (act_status) => {
+    switch (act_status) {
+      case 1:
+        setStatusActive("Đợi duyệt");
+        break;
+
+      case 2:
+        setStatusActive("Đã duyệt");
+        break;
+
+      case 3:
+        setStatusActive("Đã kết thúc");
+        break;
+
+      case 4:
+        setStatusActive("Đã hủy");
+        break;
+
+      case 5:
+        setStatusActive("Đang diễn ra");
+        break;
+
+      default:
+        setStatusActive("Trạng thái đã lỗi");
+        break;
+    }
+  };
+
+  useEffect(() => {
+    showStatusActive(act_status);
+  }, [act_status]);
+
+  const idResigter = register[0].id;
 
   const cancelActive = () => {
-    dispatch(CancelActiveAction(idResigter))
+    dispatch(CancelActiveAction(idResigter));
   };
 
   // cancel
@@ -53,12 +86,17 @@ export default function DetailActivedTruongCLB(props) {
     dispatch({ type: CANCEL_ACTIVE_RESET });
   }, [dispatch]);
 
-  console.log(reponseSuccessCancel, loadingCancel, errorCancel, 'DetailActivedTruongCLB')
+  console.log(
+    reponseSuccessCancel,
+    loadingCancel,
+    errorCancel,
+    "DetailActivedTruongCLB"
+  );
   useEffect(() => {
     if (errorCancel != null && loadingCancel == false) {
       Alert.alert("Thông báo", errorCancel);
       dispatch({ type: CANCEL_ACTIVE_RESET });
-    } else if(reponseSuccessCancel == true && loadingCancel == false){
+    } else if (reponseSuccessCancel == true && loadingCancel == false) {
       Alert.alert("Bạn đã hủy đăng kí thực hiện thành công");
       navigation.dispatch(
         CommonActions.reset({
@@ -78,12 +116,11 @@ export default function DetailActivedTruongCLB(props) {
 
   const yesBtnCancel = () => {
     setDialogCancel(!dialogCancel);
-    cancelActive()
+    cancelActive();
   };
 
-
   const isoDate = act_time;
-  const formatAct_time = moment(isoDate).format('DD/MM/YYYY');
+  const formatAct_time = moment(isoDate).format("DD/MM/YYYY");
 
   return (
     <ScrollView style={styles.container}>
@@ -133,8 +170,7 @@ export default function DetailActivedTruongCLB(props) {
             style={{
               width: "100%",
               flexDirection: "row",
-              justifyContent: 'space-between',
-              
+              justifyContent: "space-between",
             }}
           >
             <Text
@@ -170,12 +206,12 @@ export default function DetailActivedTruongCLB(props) {
               borderColor: Color.colorTextMain,
               paddingTop: 26,
               paddingBottom: 13,
-              justifyContent: 'space-between',
+              justifyContent: "space-between",
             }}
           >
             <View
               style={{
-                width: '50%'
+                width: "50%",
               }}
             >
               <Text style={styles.contentText}>{act_name}</Text>
@@ -183,8 +219,8 @@ export default function DetailActivedTruongCLB(props) {
 
             <View
               style={{
-                width: '35%',        
-                alignSelf: 'flex-end',
+                width: "35%",
+                alignSelf: "flex-end",
                 backgroundColor: Color.colorBtn,
               }}
             >
@@ -252,6 +288,29 @@ export default function DetailActivedTruongCLB(props) {
               }}
             >
               {amount}
+            </Text>
+          </View>
+
+          <View style={{ width: "100%", marginBottom: 20 }}>
+            <Text
+              style={{
+                color: Color.colorTextMain,
+                fontSize: FontSize.sizeMain,
+                fontWeight: 500,
+                marginRight: 20,
+              }}
+            >
+              Trạng thái hoạt động
+            </Text>
+
+            <Text
+              style={{
+                color: Color.colorTextMain,
+                fontSize: FontSize.sizeMain,
+                fontWeight: 400,
+              }}
+            >
+              {statusActive}
             </Text>
           </View>
 
@@ -332,50 +391,53 @@ export default function DetailActivedTruongCLB(props) {
             justifyContent: "center",
           }}
         >
-          {/* btn cancel */}
-          <TouchableOpacity
-            style={styles.btnCancel}
-            onPress={showHideDialogCancel}
-          >
-            <Text style={styles.resigter}>Hủy</Text>
-            <Dialog.Container visible={dialogCancel}>
-              <Dialog.Title
-                style={{ color: Color.colorTextMain, fontWeight: "700" }}
-              >
-                XÁC NHẬN
-              </Dialog.Title>
-              <Dialog.Description style={{ color: "black" }}>
-                Bạn có chắc muốn hủy tham gia?
-              </Dialog.Description>
-              <Dialog.Button
-                label="No"
-                onPress={showHideDialogCancel}
-                style={[
-                  styles.btnCancel,
-                  {
+          {act_status == 2 ? (
+            <TouchableOpacity
+              style={styles.btnCancel}
+              onPress={showHideDialogCancel}
+            >
+              <Text style={styles.resigter}>Hủy</Text>
+              <Dialog.Container visible={dialogCancel}>
+                <Dialog.Title
+                  style={{ color: Color.colorTextMain, fontWeight: "700" }}
+                >
+                  XÁC NHẬN
+                </Dialog.Title>
+                <Dialog.Description style={{ color: "black" }}>
+                  Bạn có chắc muốn hủy tham gia?
+                </Dialog.Description>
+                <Dialog.Button
+                  label="No"
+                  onPress={showHideDialogCancel}
+                  style={[
+                    styles.btnCancel,
+                    {
+                      width: 60,
+                      height: 40,
+                      marginRight: 30,
+                      fontWeight: 500,
+                      fontSize: 18,
+                    },
+                  ]}
+                />
+                <Dialog.Button
+                  label="Yes"
+                  onPress={yesBtnCancel}
+                  style={{
                     width: 60,
                     height: 40,
-                    marginRight: 30,
+                    marginRight: 50,
+                    borderRadius: 5,
+                    backgroundColor: "#d9ebfe",
                     fontWeight: 500,
                     fontSize: 18,
-                  },
-                ]}
-              />
-              <Dialog.Button
-                label="Yes"
-                onPress={yesBtnCancel}
-                style={{
-                  width: 60,
-                  height: 40,
-                  marginRight: 50,
-                  borderRadius: 5,
-                  backgroundColor: "#d9ebfe",
-                  fontWeight: 500,
-                  fontSize: 18,
-                }}
-              />
-            </Dialog.Container>
-          </TouchableOpacity>
+                  }}
+                />
+              </Dialog.Container>
+            </TouchableOpacity>
+          ) : (
+            ""
+          )}
         </View>
       </ImageBackground>
     </ScrollView>
