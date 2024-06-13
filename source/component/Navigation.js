@@ -168,7 +168,6 @@ const TruongCLB = () => {
       <Stack.Screen name="from2EditActiveTruongCLB" component={From2EditActiveTruongCLB} />
 
       <Stack.Screen name="detailActivedTruongCLB" component={DetailActivedTruongCLB} />
-      <Stack.Screen name="listStudentRegisterDT" component={ListStudentRegisterDT} />
       <Stack.Screen name="listStudentRegisterTruongCLB" component={ListStudentRegisterTruongCLB} />
       <Stack.Screen name="detailStudentRegisterTruongCLB" component={DetailStudentRegisterTruongCLB} />
       <Stack.Screen name="changePassword" component={ChangePassword} />
@@ -201,7 +200,7 @@ const DoanTruong = () => {
 
       <Stack.Screen name="listApproveSvDT" component={ListApproveSvDT} />
       <Stack.Screen name="detailStudentRegisterDT" component={DetailStudentRegisterDT} />
-
+      <Stack.Screen name="listStudentRegisterDT" component={ListStudentRegisterDT} />
       <Stack.Screen name="changePassword" component={ChangePassword} />
     </Stack.Navigator>
   );
