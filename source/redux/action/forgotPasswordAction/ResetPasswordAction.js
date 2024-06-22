@@ -15,6 +15,7 @@ export default ResetPasswordAction = (otp, newPassword) => {
     dispatch({ type: RESET_PASSWORD_REQUEST });
     try {
       console.log("chưa call api màn ResetPasswordAction");
+
       const res = await axios.post(`${UrlApi}${endPointResetPassword}`, {
         otp: otp,
         password: newPassword,

@@ -116,6 +116,7 @@ const MainComponent = ({ navigation }) => {
     console.log(navigateContinue, loading, error, 'màn forgotpassword2');
     if (error != null && loading == false ) {
       Alert.alert("Thông báo", error);
+      dispatch({type: RESET_PASSWORD_RESET})
     } else if (navigateContinue == true && loading == false) {
       Alert.alert("Bạn đã đổi mật khẩu thành công");
       navigation.dispatch(
@@ -124,6 +125,7 @@ const MainComponent = ({ navigation }) => {
           routes: [{ name: "login" }],
         })
       );
+      dispatch({type: RESET_PASSWORD_RESET})
     }
   }, [navigateContinue, loading, error]);
 

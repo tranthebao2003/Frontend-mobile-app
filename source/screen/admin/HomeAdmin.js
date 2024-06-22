@@ -28,6 +28,11 @@ function HomeAdmin(props) {
   const showHideDialogChangePassword = () => {
     setDialogChangePassword(!dialogChangePassword);
   };
+
+  const yesDialogChangePassword = () => {
+    setDialogChangePassword(!dialogChangePassword);
+    navigation.navigate("changePassword")
+  }
   return (
     <ImageBackground
       source={require("../../resource/iconLogin/bg.png")}
@@ -353,7 +358,7 @@ function HomeAdmin(props) {
                 />
                 <Dialog.Button
                   label="Yes"
-                  onPress={() => navigation.navigate("changePassword")}
+                  onPress={yesDialogChangePassword}
                   style={{
                     width: 60,
                     height: 40,

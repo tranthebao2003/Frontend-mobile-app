@@ -16,6 +16,7 @@ import Color from "./Color";
 import { screenWidth, screenHeight } from "./DimensionsScreen";
 import { useDispatch, useSelector } from "react-redux";
 import ChangePaswordAction from "../redux/action/ChangePaswordAction";
+import {LogoutAction} from "../redux/action/LoginAction";
 import Spinner from "react-native-loading-spinner-overlay";
 import { CommonActions } from "@react-navigation/native";
 import { CHANGE_PASSWORD_RESET } from "../redux/types/TypesChangePasword";
@@ -118,7 +119,7 @@ const MainComponent = ({ navigation }) => {
       dispatch({ type: CHANGE_PASSWORD_RESET });
     } else if (reponseSuccess == true && loading == false) {
       Alert.alert("Bạn đã đổi mật khẩu thành công");
-      navigation.dispatch(CommonActions.goBack());
+      navigation.goBack();
       dispatch({ type: CHANGE_PASSWORD_RESET });
     }
   }, [reponseSuccess, loading, error]);

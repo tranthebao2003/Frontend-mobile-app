@@ -26,13 +26,11 @@ export const LoginAction = (userName, password) => {
       await AsyncStorage.setItem('token', token); // Lưu trữ token trong local storage
       await AsyncStorage.setItem('role', role.toString()); // Lưu trữ token trong local storage
 
-
       let loading = false
       dispatch({
         type: LOGIN_SUCCESS,
         payload: {token, role, loading},
       });
-
       
     } catch (error) {
         // Sử dụng console.error thay vì console.log trong 

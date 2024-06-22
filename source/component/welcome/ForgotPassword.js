@@ -186,9 +186,6 @@ return (
     {/* btn login and forgot password */}
 
     <View style={styles.containerBtnLoginFooter}>
-      {/* <TouchableOpacity style={styles.btnLogin} onPress={() => alert("lấy lại mk")}>
-        <Text style={styles.login}>CONTINUE</Text>
-      </TouchableOpacity> */}
 
       <TouchableOpacity style={styles.btnLogin} onPress={btnGetOtp}>
         <Text style={styles.login}>NHẬN MÃ OTP</Text>
