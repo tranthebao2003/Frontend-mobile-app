@@ -10,6 +10,7 @@ import {
   Modal,
   TextInput,
   Keyboard,
+  Alert
 } from "react-native";
 import React, { useState, useEffect } from "react";
 import FontSize from "../../../component/FontSize";
@@ -81,10 +82,8 @@ export default function ListOrganizedActiveAdmin({ navigation }) {
 
       // console.log(filterForMonthYear.slice(0, limit))
       setActiveOrganize(filterForMonthYear.slice(0, limitActive));
-    } else {
-      if ((error != null && loading == false, reponseSuccess == false)) {
-        alert("Bạn vui lòng thoát app để vào lại");
-      }
+    } else if (error != null && loading == false && reponseSuccess == false) {
+      Alert.alert("Lỗi", error)  
     }
   }, [data, error, loading, reponseSuccess, dateOrganize, limitActive]);
 

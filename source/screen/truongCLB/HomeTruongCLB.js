@@ -79,10 +79,10 @@ function HomeTruongCLB(props) {
             borderColor: Color.colorTextMain
           }}
         >
-          {/* two item Top */}
+          {/* three item Top */}
           <View
             style={{
-              width: screenWidth,
+              width: 0.93*screenWidth,
               justifyContent: "space-between",
               flexDirection: "row",
               marginBottom: 30,

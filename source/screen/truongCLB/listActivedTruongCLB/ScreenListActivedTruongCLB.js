@@ -7,7 +7,8 @@ import {
     ImageBackground,
     TextInput,
     FlatList,
-    TouchableOpacity
+    TouchableOpacity,
+    Alert
   } from 'react-native';
 import React, { useState, useEffect} from 'react';
 import FontSize from '../../../component/FontSize';
@@ -44,12 +45,10 @@ export default function ScreenListActivedTruongCLB({navigation}) {
   useEffect(() => {
     if (activeParticipated) {
       setActive(activeParticipated);
-    } else {
-      if(error !== ''){
-        alert('Bạn vui lòng thoát app để vào lại')
-      }
+    } else if (error != null && loading == false) {
+      Alert.alert("Lỗi", error)  
     }
-  }, [activeParticipated]);
+  }, [activeParticipated, error, loading]);
 
   // Lọc danh sách dựa trên searchText
   useEffect(() => {

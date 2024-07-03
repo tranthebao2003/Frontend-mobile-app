@@ -53,6 +53,11 @@ function ProfileTruongCLB(props) {
     setDialogChangePassword(!dialogChangePassword);
   };
 
+  const yesDialogChangePassword = () => {
+    setDialogChangePassword(!dialogChangePassword);
+    navigation.navigate("changePassword")
+  }
+
   return (
     <SafeAreaView style={{ flex: 1, zIndex: 0 }}>
       <StatusBar barStyle="auto"></StatusBar>
@@ -441,7 +446,7 @@ function ProfileTruongCLB(props) {
                 />
                 <Dialog.Button
                   label="Yes"
-                  onPress={() => navigation.navigate("changePassword")}
+                  onPress={yesDialogChangePassword}
                   style={{
                     width: 60,
                     height: 40,

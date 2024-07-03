@@ -44,12 +44,10 @@ export default function ScreenListActived({navigation}) {
   useEffect(() => {
     if (activeParticipated) {
       setActive(activeParticipated);
-    } else {
-      if(error !== ''){
-        alert('Bạn vui lòng thoát app để vào lại')
-      }
+    }else if (error != null && loading == false) {
+      Alert.alert("Lỗi", error);
     }
-  }, [activeParticipated]);
+  }, [activeParticipated, error, loading]);
 
   // Lọc danh sách dựa trên searchText
   useEffect(() => {

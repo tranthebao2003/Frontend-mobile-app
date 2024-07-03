@@ -63,26 +63,9 @@ export default function DetailActiveTruongCLB(props) {
       dispatch({ type: REGISTER_ACTIVE_RESET });
     } else if(reponseSuccess == true && loading == false){
       Alert.alert("Bạn đã đăng kí thực hiện thành công");
-      navigation.dispatch(
-        CommonActions.reset({
-          index: 0,
-          routes: [{ name: "uiTapSv" }],
-        })
-      );
-      dispatch({ type: REGISTER_ACTIVE_RESET });
+      navigation.goBack()
     }
   }, [error, loading, reponseSuccess]);
-
-  // btn cancel
-  const [dialogCancel, setDialogCancel] = useState(false);
-  const showHideDialogCancel = () => {
-    setDialogCancel(!dialogCancel);
-  };
-
-  const yesBtnCancel = () => {
-    setDialogCancel(!dialogCancel);
-    cancelActive()
-  };
 
   // btn resigter
   const [dialogResigter, setDialogRegister] = useState(false);
@@ -177,7 +160,6 @@ export default function DetailActiveTruongCLB(props) {
           <View
             style={{
               width: "100%",
-              // alignItems: "center",
               flexDirection: "row",
               borderTopWidth: 0.5,
               borderColor: Color.colorTextMain,

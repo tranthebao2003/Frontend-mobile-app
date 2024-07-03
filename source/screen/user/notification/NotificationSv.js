@@ -35,12 +35,10 @@ function NotificationSv() {
   useEffect(() => {
     if (notification) {
       setGetNotification(notification);
-    } else {
-      if(errorNotification != null){
-        alert('Bạn vui lòng thoát app để vào lại')
-      }
+    }else if (errorNotification != null && loadingNotification == false) {
+      Alert.alert("Lỗi", errorNotification);
     }
-  }, [notification]);
+  }, [notification, errorNotification, loadingNotification]);
 
   // console.log(infoUser, 'infoUser màn profileSv')
 

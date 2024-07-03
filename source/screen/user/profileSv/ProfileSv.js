@@ -33,6 +33,11 @@ function Profile(props) {
   const { loading, infoUser, error} = useSelector(state => state.infoUser)
   // console.log(infoUser, 'infoUser màn profileSv')
 
+  const yesDialogChangePassword = () => {
+    setDialogChangePassword(!dialogChangePassword);
+    navigation.navigate("changePassword")
+  }
+
   const {
     last_name,
     first_name,
@@ -414,7 +419,7 @@ function Profile(props) {
                 />
                 <Dialog.Button
                   label="Yes"
-                  onPress={() => navigation.navigate("changePassword")}
+                  onPress={yesDialogChangePassword}
                   style={{
                     width: 60,
                     height: 40,

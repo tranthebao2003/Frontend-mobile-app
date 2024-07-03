@@ -38,12 +38,10 @@ import {
   useEffect(() => {
     if (listActive) {
       setActiveCreated(listActive);
-    } else {
-      if(error !== ''){
-        alert('Bạn vui lòng thoát app để vào lại')
-      }
+    }else if (error != null && loading == false) {
+      Alert.alert("Lỗi", error);
     }
-  }, [listActive]);
+  }, [listActive, error, loading]);
   
   // Lọc danh sách dựa trên act_status == 2
   useEffect(() => {

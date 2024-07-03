@@ -43,12 +43,10 @@ export default function ListActiveCreatedAdmin({navigation}) {
   useEffect(() => {
     if (listActive) {
       setActiveCreated(listActive);
-    } else {
-      if(error !== ''){
-        alert('Bạn vui lòng thoát app để vào lại')
-      }
+    } else if (error != null && loading == false) {
+      Alert.alert("Lỗi", error);
     }
-  }, [listActive]);
+  }, [listActive, loading, error]);
   
   // Lọc danh sách dựa trên searchText
   useEffect(() => {

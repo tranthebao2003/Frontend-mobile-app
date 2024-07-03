@@ -48,12 +48,10 @@ export default function ListStudentRegisterTruongCLB(props) {
   useEffect(() => {
     if (listStudent && loadingStudent == false) {
       setResigter(listStudent);
-    } else {
-      if (errorStudent != null && loadingStudent == false) {
-        alert("Bạn vui lòng thoát app để vào lại");
-      }
+    } else if (errorStudent != null && loadingStudent == false) {
+      Alert.alert("Lỗi", error);
     }
-  }, [listStudent]);
+  }, [listStudent, errorStudent, loadingStudent]);
 
   return (
     <View style={styles.container}>

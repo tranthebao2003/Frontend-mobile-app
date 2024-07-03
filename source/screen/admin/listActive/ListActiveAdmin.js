@@ -8,6 +8,7 @@ import {
   TextInput,
   FlatList,
   Keyboard,
+  Alert
 } from 'react-native';
 import React, { useState, useEffect, createContext} from 'react';
 import FontSize from '../../../component/FontSize';
@@ -27,7 +28,6 @@ const dispatch = useDispatch()
 const { loading, listActive, error} = useSelector(state => state.listActiveReducer)
 // console.log(infoUser, 'infoUser màn profileSv')
 
-
 const urlAllActive = 'activities'
 // Khởi tạo useState để lưu trữ dữ liệu
 const [active, setActive] = useState([]);
@@ -43,12 +43,11 @@ useEffect(() => {
 useEffect(() => {
   if (listActive) {
     setActive(listActive);
-  } else {
-    if(error !== ''){
-      alert('Bạn vui lòng thoát app để vào lại')
-    }
+  } else if (error != null && loading == false) {
+    Alert.alert("Lỗi", error)  
   }
-}, [listActive]);
+  
+}, [listActive, loading, error]);
 
 // Lọc danh sách dựa trên searchText
 useEffect(() => {
@@ -63,8 +62,8 @@ useEffect(() => {
   setFilterActive(filteredActives());
 }, [searchText, active]);
 
-console.log(active, 'active màn screenList');
-console.log(filterActive, 'filtered active màn screenList');
+// console.log(active, 'active màn screenList');
+// console.log(filterActive, 'filtered active màn screenList');
 
 // console.log (active.length, 'active màn screenList')
 

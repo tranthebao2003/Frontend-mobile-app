@@ -8,6 +8,7 @@ import {
   TouchableOpacity,
   FlatList,
   Keyboard,
+  Alert
 } from "react-native";
 import React, { useState, useEffect } from "react";
 import FontSize from "../../../component/FontSize";
@@ -47,12 +48,10 @@ export default function ListActiveApproveAdmin(props) {
   useEffect(() => {
     if (listActive) {
       setActive(listActive);
-    } else {
-      if (error != null) {
-        alert("Bạn vui lòng thoát app để vào lại");
-      }
+    } else if (error != null && loading == false) {
+      Alert.alert("Lỗi", error)  
     }
-  }, [listActive]);
+  }, [listActive, loading, error]);
 
   // Lọc danh sách dựa trên searchText
   useEffect(() => {

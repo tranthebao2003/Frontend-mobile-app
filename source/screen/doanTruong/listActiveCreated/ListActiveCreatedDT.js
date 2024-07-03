@@ -7,7 +7,8 @@ import {
   ImageBackground,
   TextInput,
   FlatList,
-  Keyboard
+  Keyboard,
+  Alert
 } from 'react-native';
 import React, { useState, useEffect} from 'react';
 import FontSize from '../../../component/FontSize';
@@ -43,12 +44,10 @@ useEffect(() => {
 useEffect(() => {
   if (listActive) {
     setActiveCreated(listActive);
-  } else {
-    if(error !== ''){
-      alert('Bạn vui lòng thoát app để vào lại')
-    }
+  } else if (error != null && loading == false) {
+    Alert.alert("Lỗi", error)  
   }
-}, [listActive]);
+}, [listActive, loading, error]);
 
 // Lọc danh sách dựa trên searchText
 useEffect(() => {

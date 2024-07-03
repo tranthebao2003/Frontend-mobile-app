@@ -31,7 +31,7 @@ import  DetailActiveTruongCLB  from '../screen/truongCLB/detailActiveTruongCLB/D
 import  ListActiveCreatedTruongCLB  from '../screen/truongCLB/listActiveCreatedTruongCLB/ListActiveCreatedTruongCLB';
 import  DetailActiveCreated  from '../screen/truongCLB/detailActiveCreated/DetailActiveCreated';
 
-import  ListApproveSvTruongCLB  from '../screen/truongCLB/listApproveTruongCLB//ListApproveSvTruongCLB';
+import  ListApproveSvTruongCLB  from '../screen/truongCLB/listApproveTruongCLB/ListApproveSvTruongCLB';
 import  DetailApproveSvTruongCLB  from '../screen/truongCLB/detailApproveSvTruongCLB/DetailApproveSvTruongCLB';
 
 import  ListThongKeHoatDong  from '../screen/truongCLB/thongKeHoatDong/ListThongKeHoatDong';
