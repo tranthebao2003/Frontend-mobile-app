@@ -49,17 +49,6 @@ export default function ListOrganizedActiveAdmin({ navigation }) {
     setdateOrganize(reversedStrOrganize);
   };
 
-  const filterActiveThongKe = () => {
-    const [month, year] = dateOrganize.split("-");
-
-    const monthYearLimit = {
-      year: parseInt(year, 10),
-      month: parseInt(month, 10),
-      limit: parseInt(limitActive, 10),
-    };
-    dispatch(ThongKeAdminDTAction(monthYearLimit));
-  };
-
   useEffect(() => {
     const [month, year] = dateOrganize.split("-");
 
@@ -269,37 +258,50 @@ export default function ListOrganizedActiveAdmin({ navigation }) {
           />
         </View>
 
-        {/* btn lọc hoạt động, limit active */}
-        <View
-          style={{
-            flexDirection: "row",
-            justifyContent: "space-between",
-            alignItems: "center",
-          }}
-        >
-          <TouchableOpacity
-            style={[
-              styles.btnCancel,
-              {
-                borderWidth: dateOrganize == "MM/YYYY" ? 0 : 1,
-                borderColor: Color.colorApproveAll,
-              },
-            ]}
-            onPress={filterActiveThongKe}
-            disabled={dateOrganize == "MM/YYYY" ? true : false}
-          >
-            <Text
-              style={[
-                styles.resigter,
-                {
-                  color:
-                    dateOrganize == "MM/YYYY" ? "gray" : Color.colorApproveAll,
-                },
-              ]}
-            >
-              Lọc hoạt động
-            </Text>
-          </TouchableOpacity>
+        {/* posision, logo */}
+        <View style={styles.containerPositionLogo}>
+          <Image
+            source={require("../../../resource/iconHomeAdmin/iconAdmin.png")}
+            style={{
+              height: 44,
+              width: 44,
+              position: "absolute",
+              left: 13,
+              top: 12,
+              zIndex: 2,
+            }}
+            resizeMode="contain"
+          ></Image>
+          <Text style={styles.headerAdmin}>Admin</Text>
+        </View>
+
+        <View style={{ width: "100%" }}>
+          <Image
+            source={require("../../../resource/iconLogin/lotLogo2.png")}
+            style={{
+              height: 68,
+              width: 68,
+              position: "absolute",
+              right: 40,
+              bottom: 0,
+              borderRadius: 8,
+              zIndex: 1,
+            }}
+            resizeMode="contain"
+          ></Image>
+          <Image
+            source={require("../../../resource/iconLogin/logo.png")}
+            style={{
+              height: 60,
+              width: 60,
+              position: "absolute",
+              right: 45,
+              bottom: 2,
+              borderRadius: 16,
+              zIndex: 2,
+            }}
+            resizeMode="contain"
+          ></Image>
         </View>
       </ImageBackground>
     </View>
@@ -410,5 +412,21 @@ const styles = StyleSheet.create({
     fontSize: 22,
     color: Color.colorTextMain,
     marginTop: 5,
+  },
+  containerPositionLogo: {
+    width: 0.8 * screenWidth,
+    marginTop: 12,
+    paddingVertical: 18,
+    paddingLeft: 20,
+    backgroundColor: Color.colorBgUiTap,
+    borderRadius: 10,
+    elevation: 2,
+    shadowColor: "black",
+  },
+  headerAdmin: {
+    fontSize: FontSize.sizeMain + 2,
+    fontWeight: "600",
+    color: Color.colorTextMain,
+    marginLeft: 50,
   },
 });

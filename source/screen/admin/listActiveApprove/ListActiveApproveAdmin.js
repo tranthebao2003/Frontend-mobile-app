@@ -5,9 +5,7 @@ import {
   StatusBar,
   Image,
   ImageBackground,
-  TouchableOpacity,
   FlatList,
-  Keyboard,
   Alert
 } from "react-native";
 import React, { useState, useEffect } from "react";
@@ -17,7 +15,6 @@ import { screenWidth, screenHeight } from "../../../component/DimensionsScreen";
 import ActiveApproveItemAdmin from "./ActiveApproveItemAdmin";
 import { useDispatch, useSelector } from "react-redux";
 import { ListActiveAction } from "../../../redux/action/ListActiveAction";
-import Dialog from "react-native-dialog";
 import Spinner from "react-native-loading-spinner-overlay";
 
 export default function ListActiveApproveAdmin(props) {
@@ -206,8 +203,8 @@ const styles = StyleSheet.create({
     width: screenWidth,
   },
   header: {
-    fontSize: FontSize.sizeHeader - 3,
-    fontWeight: "600",
+    fontSize: FontSize.sizeHeader,
+    fontWeight: "700",
     color: Color.colorTextMain,
     width: (2 / 4) * screenWidth,
   },

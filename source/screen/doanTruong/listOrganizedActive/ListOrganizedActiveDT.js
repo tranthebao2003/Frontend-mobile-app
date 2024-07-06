@@ -48,17 +48,6 @@ export default function ListOrganizedActiveDT({ navigation }) {
     setdateOrganize(reversedStrOrganize);
   };
 
-  const filterActiveThongKe = () => {
-    const [month, year] = dateOrganize.split("-");
-
-    const monthYearLimit = {
-      year: parseInt(year, 10),
-      month: parseInt(month, 10),
-      limit: parseInt(limitActive, 10),
-    };
-    dispatch(ThongKeAdminDTAction(monthYearLimit));
-  };
-
   useEffect(() => {
     const [month, year] = dateOrganize.split("-");
 
@@ -267,38 +256,51 @@ export default function ListOrganizedActiveDT({ navigation }) {
             keyExtractor={(item) => item.id}
           />
         </View>
-
-        {/* btn lọc hoạt động, limit active */}
-        <View
+{/* posision, logo */}
+<View style={styles.containerPositionLogo}>
+        <Image
+          source={require("../../../resource/iconHomeDoanTruong/chucVu1.png")}
           style={{
-            flexDirection: "row",
-            justifyContent: "space-between",
-            alignItems: "center",
+            height: 44,
+            width: 57,
+            position: "absolute",
+            left: 8,
+            top: 8,
+            borderRadius: 16,
+            zIndex: 2,
           }}
-        >
-          <TouchableOpacity
-            style={[
-              styles.btnCancel,
-              {
-                borderWidth: dateOrganize == "MM/YYYY" ? 0 : 1,
-                borderColor: Color.colorApproveAll,
-              },
-            ]}
-            onPress={filterActiveThongKe}
-            disabled={dateOrganize == "MM/YYYY" ? true : false}
-          >
-            <Text
-              style={[
-                styles.resigter,
-                {
-                  color:
-                    dateOrganize == "MM/YYYY" ? "gray" : Color.colorApproveAll,
-                },
-              ]}
-            >
-              Lọc hoạt động
-            </Text>
-          </TouchableOpacity>
+          resizeMode="contain"
+        ></Image>
+          <Text style={styles.headerDoanTruong}>Đoàn trường</Text>
+        </View>
+
+        <View style={{width: '100%',}}>
+        <Image
+          source={require("../../../resource/iconLogin/lotLogo2.png")}
+          style={{
+            height: 70,
+            width: 70,
+            position: "absolute",
+            right: 40,
+            bottom: 0,
+            borderRadius: 8,
+            zIndex: 1,
+          }}
+          resizeMode="contain"
+        ></Image>
+        <Image
+          source={require("../../../resource/iconLogin/logo.png")}
+          style={{
+            height: 62,
+            width: 62,
+            position: "absolute",
+            right: 43,
+            bottom: 2,
+            borderRadius: 16,
+            zIndex: 2,
+          }}
+          resizeMode="contain"
+        ></Image>
         </View>
       </ImageBackground>
     </View>
@@ -409,5 +411,22 @@ const styles = StyleSheet.create({
     fontSize: 22,
     color: Color.colorTextMain,
     marginTop: 5,
+  },
+
+  containerPositionLogo: {
+    width: 0.8*screenWidth,
+    marginTop: 13,
+    paddingVertical: 20,
+    paddingLeft: 20,
+    backgroundColor: Color.colorBgUiTap,
+    borderRadius: 10,
+    elevation: 2,
+    shadowColor: 'black',
+  },
+  headerDoanTruong: {
+    fontSize: FontSize.sizeMain + 2,
+    fontWeight: "600",
+    color: Color.colorTextMain,
+    marginLeft: 50
   },
 });

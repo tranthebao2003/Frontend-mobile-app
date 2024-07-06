@@ -188,8 +188,8 @@ const styles = StyleSheet.create({
     width: screenWidth,
   },
   header: {
-    fontSize: FontSize.sizeHeader - 3,
-    fontWeight: "600",
+    fontSize: FontSize.sizeHeader,
+    fontWeight: "700",
     color: Color.colorTextMain,
     width: (2 / 4) * screenWidth,
   },
